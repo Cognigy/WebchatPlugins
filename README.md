@@ -1,5 +1,8 @@
-# Introduction
+# Cognigy Webchat Plugins
+This repository contains example plugins for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).
+Additionally, it contains a guide to get you started for plugin development.
 
+## Introduction
 This guide will help getting you started building cognigy webchat plugins.
 While this page is focused primarily on basic concepts, you may want to jump in and [build a plugin](./docs/get-started.md), see some explanatory [examples](./docs/examples.md) or dive into the [API reference](./docs/api-reference.md).
 
@@ -8,27 +11,27 @@ While this page is focused primarily on basic concepts, you may want to jump in 
 - [API Reference](./docs/api-reference.md)
 
 
-# Plugin Concepts
+## Plugin Concepts
 
-## Display Types
-### Inline Message
+### Display Types
+#### Inline Message
 By default, messages will get rendered `inline`, with an avatar next to it, aligned to the side of the message origin.
 
 ![Inline Message](./assets/message-plugin-inline.png)  
 
 
-### Fullscreen Message
+#### Fullscreen Message
 Message plugins can utilize a 'fullscreen' mechanism that will render it fullscreen, filling out all the viewport of the webchat. This can be used to create dialog-like mechanics where the user's attention can be locked onto the next step.
 
 ![Fullscreen Message](./assets/message-plugin-fullscreen.png)
 
-## Fullwidth Message
+### Fullwidth Message
 When displaying content that needs space and is not directly percieved as a message (such as images, event notifications, qr codes), a plugin can be configured to be displayed fullwidth, without an avatar, alignment and padding. 
 
 ![Fullwidth Message](./assets/message-plugin-fullwidth.png)
 
 
-## Plugins as Middlewares
+### Plugins as Middlewares
 
 For every message, the webchat decides how to render it by iterating over all the registered message plugins.
 Every plugin contains a mechanism that can decide whether it matches a message or not.
