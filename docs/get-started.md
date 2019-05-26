@@ -20,7 +20,7 @@ Open your `package.json` file and add a new "build" job at the "scripts" field:
     ...,
     "scripts": {
         ...,
-        "build": "parcel --out-file webchat-plugin.js src/index.jsx"
+        "build": "parcel build --out-file webchat-plugin.js src/index.jsx"
     },
     ...
 }
