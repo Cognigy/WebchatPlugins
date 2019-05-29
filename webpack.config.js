@@ -8,7 +8,7 @@ module.exports = {
         filename: 'webchat.js'
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.json']
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
     },
     node: {
         Buffer: false
