@@ -1,0 +1,21 @@
+{
+  "name": "signatureplugin",
+  "version": "1.0.0",
+  "description": "Cognigy Webchat Signature Pad Plugin",
+  "main": "build/plugin.js",
+  "scripts": {
+    "build": "parcel build --out-file signature.js src/index.jsx"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/react": "^16.8.18",
+    "parcel": "^1.12.3"
+  },
+  "dependencies": {
+    "memoize-one": "^5.0.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-signature-canvas": "^1.0.1"
+  }
+}
