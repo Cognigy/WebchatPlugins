@@ -5,11 +5,7 @@
   "main": "index.js",
   "scripts": {
     "flightseat-picker": "webpack --config webpack.production.js --entry ./plugins/flightseat-picker/ --output dist/flightseat-picker.webchat-plugin.js",
-    "flightseat-picker-legacy": "webpack --config webpack.production.legacy.js --entry ./plugins/flightseat-picker/ --output dist/flightseat-picker.webchat-plugin.legacy.js",
-    "dialog-example": "webpack --config webpack.production.js --entry ./plugins/dialog-example/ --output dist/dialog-example.webchat-plugin.js",
-    "dialog-example-legacy": "webpack --config webpack.production.legacy.js --entry ./plugins/dialog-example/ --output dist/dialog-example.webchat-plugin.legacy.js",
-    "password-prompt": "webpack --config webpack.production.js --entry ./plugins/password-prompt/ --output dist/password-prompt.webchat-plugin.js",
-    "password-prompt-legacy": "webpack --config webpack.production.legacy.js --entry ./plugins/password-prompt/ --output dist/password-prompt.webchat-plugin.legacy.js"
+    "flightseat-picker-legacy": "webpack --config webpack.production.legacy.js --entry ./plugins/flightseat-picker/ --output dist/flightseat-picker.webchat-plugin.legacy.js"
   },
   "repository": {
     "type": "git",
@@ -23,7 +19,6 @@
   "homepage": "https://github.com/Cognigy/CognigyWebchatPlugins#readme",
   "dependencies": {
     "classnames": "^2.2.6",
-    "memoize-one": "^5.0.4",
     "react": "^16.8.6"
   },
   "devDependencies": {
