@@ -42,7 +42,7 @@ This numpad display numbers from 0 - 9, plus decimal markers and a minus for neg
   "_plugin": {
     "type": "numpad",
     "numpadType": "number",
-    "position": "center"
+    "position": "center",
     "buttonText": "pick a number",
     "decimal": 5,
     "negative": false,
