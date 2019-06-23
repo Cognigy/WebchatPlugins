@@ -2,8 +2,7 @@
 This repository contains a datatable plugin for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).
 It wraps the [MUI Datatables](https://github.com/gregnb/mui-datatables) component for use in the Cognigy Webchat.
 
-<img src="./assets/datatable_fullscreen.png" width="300">
-<img src="./assets/datatable_inline.png" width="300">
+<img src="./assets/datatable_fullscreen.png" width="300">&nbsp;<img src="./assets/datatable_inline.png" width="300">
 
 ## Installation
 
