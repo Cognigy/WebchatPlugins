@@ -1,10 +1,10 @@
 {
-  "name": "signatureplugin",
+  "name": "numpadplugin",
   "version": "1.0.0",
-  "description": "Cognigy Webchat Signature Plugin",
+  "description": "Cognigy Webchat Numpad Plugin",
   "main": "build/plugin.js",
   "scripts": {
-    "build": "parcel build --out-file numpad.js src/index.jsx"
+    "build": "parcel build --out-file numpad.webchat-plugin.js src/index.jsx"
   },
   "author": "",
   "license": "ISC",
