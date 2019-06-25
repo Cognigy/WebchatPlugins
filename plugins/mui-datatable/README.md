@@ -1,5 +1,5 @@
-# Cognigy Webchat Datatable Plugin
-This repository contains a datatable plugin for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).
+# Cognigy Webchat MUI Datatable Plugin
+This repository contains a material ui datatable plugin for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).
 It wraps the [MUI Datatables](https://github.com/gregnb/mui-datatables) component for use in the Cognigy Webchat.
 
 <img src="./assets/datatable_fullscreen.png" width="300">&nbsp;<img src="./assets/datatable_inline.png" width="300">
@@ -8,7 +8,7 @@ It wraps the [MUI Datatables](https://github.com/gregnb/mui-datatables) componen
 
 1. Clone this repo
 2. Install all necessary dependencies via `nmp i`
-3. Run `npm run build` - this will create a `dist/datatable.webchat-plugin.js` plugin file for you
+3. Run `npm run build` - this will create a `dist/muidatatable.webchat-plugin.js` plugin file for you
 4. Use that file in your Cognigy Webchat as described in the [Cognigy Docs](https://docs.cognigy.com/docs/using-additional-webchat-plugins).
 
 ## Calling the Plugin from Cognigy

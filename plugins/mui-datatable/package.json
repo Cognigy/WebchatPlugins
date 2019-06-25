@@ -1,10 +1,10 @@
 {
-  "name": "datatable",
+  "name": "mui-datatable",
   "version": "1.0.0",
-  "description": "Cognigy Webchat Datatable Plugin",
+  "description": "Cognigy Webchat MUI Datatable Plugin",
   "main": "build/plugin.js",
   "scripts": {
-    "build": "parcel build --out-file datatable.webchat-plugin.js src/index.jsx"
+    "build": "parcel build --out-file muidatatable.webchat-plugin.js src/index.jsx"
   },
   "author": "",
   "license": "ISC",
