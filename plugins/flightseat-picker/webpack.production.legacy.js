@@ -1,4 +1,4 @@
-const config = require('./webpack.production');
+const config = require('../../webpack.production');
 
 config.entry.unshift('whatwg-fetch', '@babel/polyfill');
 config.output.filename = 'webchat-legacy.bundle.js';
