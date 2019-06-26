@@ -1,4 +1,4 @@
-# Cognigy Webchat Dialog Example OPlugin
+# Cognigy Webchat Dialog Example Plugin
 This repository contains a dialog example plugin for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).
 It is meant to be used as a starting point when building a dialog-like plugin for the Cognigy Webchat.
 The Dialog is styled based on the Webchat's `theme` for seamless integration.
