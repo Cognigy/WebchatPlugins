@@ -1,0 +1,17 @@
+{
+  "name": "file-upload",
+  "version": "1.0.0",
+  "description": "This repository contains a file upload plugin for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).",
+  "main": "index.jsx",
+  "scripts": {
+    "build": "parcel watch --out-file dist/file-upload.webchat-plugin.js src/index.jsx"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "memoize-one": "^5.0.4",
+    "parcel": "^1.12.3",
+    "react": "^16.8.6"
+  },
+  "dependencies": {}
+}
