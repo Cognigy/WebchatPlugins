@@ -1,0 +1,19 @@
+{
+  "name": "counter-example",
+  "version": "1.0.0",
+  "description": "An Example for a simple counter webchat plugin",
+  "main": "index.jsx",
+  "scripts": {
+    "build": "parcel build --out-file dist/counter-example.webchat-plugin.js src/index.jsx"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "memoize-one": "^5.0.4",
+    "parcel": "^1.12.3",
+    "react": "^16.8.6"
+  },
+  "alias": {
+    "react": "./alias/react"
+  }
+}

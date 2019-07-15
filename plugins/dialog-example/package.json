@@ -12,5 +12,8 @@
     "memoize-one": "^5.0.4",
     "parcel": "^1.12.3",
     "react": "^16.8.6"
+  },
+  "alias": {
+    "react": "./alias/react"
   }
 }
