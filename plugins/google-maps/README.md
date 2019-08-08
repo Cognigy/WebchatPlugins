@@ -1,8 +1,7 @@
 # Cognigy Webchat Google Maps Plugin
 This repository contains a google maps plugin for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).
-It wraps the [React Signature Canvas](https://github.com/agilgur5/react-signature-canvas) component for use in the Cognigy Webchat.
 
-![Webchat Signature Plugin](./assets/google-maps-Webchat.PNG)
+![Webchat Google Maps Plugin](./assets/google-maps-Webchat.PNG)
 
 ## Installation
 
