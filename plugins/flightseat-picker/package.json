@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "flightseat-picker": "webpack --config webpack.production.js --entry ./plugins/flightseat-picker/ --output dist/flightseat-picker.webchat-plugin.js",
-    "flightseat-picker-legacy": "webpack --config webpack.production.legacy.js --entry ./plugins/flightseat-picker/ --output dist/flightseat-picker.webchat-plugin.legacy.js"
+    "flightseat-picker-legacy": "webpack --config webpack.production.legacy.js --entry ./plugins/flightseat-picker/ --output dist/flightseat-picker.webchat-plugin.legacy.js",
+    "google-maps": "webpack --config webpack.production.js --entry ./plugins/google-maps/ --output dist/google-maps.webchat-plugin.js"
   },
   "repository": {
     "type": "git",
@@ -18,8 +19,12 @@
   },
   "homepage": "https://github.com/Cognigy/CognigyWebchatPlugins#readme",
   "dependencies": {
+    "@google/maps": "^0.5.5",
     "classnames": "^2.2.6",
-    "react": "^16.8.6"
+    "google-map-react": "^1.1.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "request-promise": "^4.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
