@@ -1,0 +1,23 @@
+{
+  "name": "mui-datatable",
+  "version": "1.0.0",
+  "description": "Cognigy Webchat MUI Datatable Plugin",
+  "main": "build/plugin.js",
+  "scripts": {
+    "build": "parcel build --out-file muidatatable.webchat-plugin.js src/index.jsx"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/react": "^16.8.18",
+    "parcel": "^1.12.3"
+  },
+  "dependencies": {
+    "@material-ui/core": "^3.9.3",
+    "@material-ui/icons": "^3.0.2",
+    "memoize-one": "^5.0.4",
+    "mui-datatables": "^2.5.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
+}
