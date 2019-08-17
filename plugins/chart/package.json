@@ -1,0 +1,27 @@
+{
+  "name": "chart",
+  "version": "1.0.0",
+  "description": "A Webchat Plugin that can draw charts",
+  "main": "index.jsx",
+  "scripts": {
+    "build": "parcel build --out-file dist/chart.webchat-plugin.js src/index.tsx",
+    "watch": "parcel watch --out-file dist/chart.webchat-plugin.js src/index.tsx"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/recharts": "^1.1.20",
+    "memoize-one": "^5.0.4",
+    "parcel": "^1.12.3",
+    "react": "^16.8.6",
+    "typescript": "^3.5.3"
+  },
+  "alias": {
+    "react": "./alias/react"
+  },
+  "dependencies": {
+    "react-dom": "^16.9.0",
+    "react-use-dimensions": "^1.2.1",
+    "recharts": "^1.7.1"
+  }
+}
