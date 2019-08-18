@@ -5,7 +5,7 @@ import { ChartPluginProps } from '..';
 export interface ComposedChartData {
     lines: LineProps[];
     bars: BarProps[];
-    chart: ComposedChartProps[];
+    chart: ComposedChartProps;
     tooltip?: TooltipProps;
     xAxis: XAxisProps;
     yAxis: YAxisProps;
