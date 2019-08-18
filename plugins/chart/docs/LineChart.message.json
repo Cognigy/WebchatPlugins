@@ -1,0 +1,113 @@
+{
+    "text": "",
+    "data": {
+        "_plugin": {
+            "type": "chart",
+            "chartType": "line",
+            "chart": {
+                "data": [
+                    {
+                        "date": "12.3.",
+                        "price": 132.39
+                    },
+                    {
+                        "date": "20.3.",
+                        "price": 138.52
+                    },
+                    {
+                        "date": "28.3.",
+                        "price": 139.64
+                    },
+                    {
+                        "date": "5.4.",
+                        "price": 157.41
+                    },
+                    {
+                        "date": "13.4.",
+                        "price": 164.57
+                    },
+                    {
+                        "date": "21.4.",
+                        "price": 173.17
+                    },
+                    {
+                        "date": "29.4.",
+                        "price": 156.6
+                    },
+                    {
+                        "date": "7.5.",
+                        "price": 172.83
+                    },
+                    {
+                        "date": "15.5.",
+                        "price": 218.28
+                    },
+                    {
+                        "date": "23.5.",
+                        "price": 244.55
+                    },
+                    {
+                        "date": "31.5.",
+                        "price": 255.38
+                    },
+                    {
+                        "date": "8.6.",
+                        "price": 250.64
+                    },
+                    {
+                        "date": "16.6.",
+                        "price": 268.11
+                    },
+                    {
+                        "date": "24.6.",
+                        "price": 307.95
+                    },
+                    {
+                        "date": "2.7.",
+                        "price": 295.26
+                    },
+                    {
+                        "date": "10.7.",
+                        "price": 307.78
+                    },
+                    {
+                        "date": "18.7.",
+                        "price": 210.84
+                    },
+                    {
+                        "date": "26.7.",
+                        "price": 219.49
+                    },
+                    {
+                        "date": "3.8.",
+                        "price": 217.8
+                    },
+                    {
+                        "date": "11.8.",
+                        "price": 206.5
+                    }
+                ]
+            },
+            "lines": [
+                {
+                    "dataKey": "price",
+                    "unit": "$",
+                    "dot": false,
+                    "type": "monotoneX",
+                    "strokeWidth": 2
+                }
+            ],
+            "tooltip": true,
+            "xAxis": {
+                "dataKey": "date"
+            },
+            "yAxis": {
+                "domain": [
+                    "dataMin - 8",
+                    "dataMax + 8"
+                ],
+                "hide": true
+            }
+        }
+    }
+}
