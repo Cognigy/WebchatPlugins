@@ -1,0 +1,11 @@
+{
+    "text": "",
+    "data": {
+        "_plugin": {
+            "type": "chart",
+            "chartType": "single",
+            "value": 10424.55,
+            "unit": "$"
+        }
+    }
+}
