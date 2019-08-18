@@ -1,7 +1,8 @@
 import * as React from 'react';
-import LineChart from './components/LineChart';
+import ComposedChart from './components/ComposedChart';
 
-export type ChartType = 'line';
+export type ChartType = 'line' | 'bar' | 'pie' | 'single';
+
 export interface ChartPluginMessage<T = any> {
     data: {
         _plugin: {
@@ -18,7 +19,8 @@ const Chart = (props: ChartPluginProps) => {
     const chart = (() => {
         switch (props.message.data._plugin.chartType) {
             case 'line':
-                return <LineChart {...props} />        
+            case 'bar':
+                return <ComposedChart {...props} />        
         }
 
         return null;
