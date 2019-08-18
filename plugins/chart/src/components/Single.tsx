@@ -20,15 +20,21 @@ export default (props: ChartPluginProps<SingleData>) => {
         }
     });
 
+    const wrapperStyles = React.useMemo(() => ({
+        height: 100,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: primaryColor,
+        padding: unitSize * 2,
+        fontSize: unitSize * 6
+    }), []);
+
     return (
-        <div style={{ height: 200, display: 'flex', justifyContent: 'center', alignItems: 'center', color: primaryColor, padding: unitSize * 2 }}>
-            {/* {value} */}
+        <div style={wrapperStyles}>
             <animated.span>{springValue.interpolate(x => x.toFixed(2))}</animated.span>
             {unit && (
-                <>
-                    {' '}
-                    <span>{unit}</span>
-                </>
+                <span>{' '}{unit}</span>
             )}
         </div>
     )
