@@ -1,6 +1,7 @@
 import * as React from 'react';
 import ComposedChart from './components/ComposedChart';
 import PieChart from './components/PieChart';
+import Single from './components/Single';
 
 export type ChartType = 'line' | 'bar' | 'pie' | 'single';
 
@@ -24,7 +25,10 @@ const Chart = (props: ChartPluginProps) => {
                 return <ComposedChart {...props} />;
                 
             case 'pie':
-                return <PieChart {...props} />
+                return <PieChart {...props} />;
+
+            case 'single':
+                return <Single {...props} />;
         }
 
         return null;
