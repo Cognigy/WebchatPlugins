@@ -1,24 +1,28 @@
 import * as React from 'react';
-import { LineChart, Line, Tooltip, LineProps, ContentRenderer, TooltipProps, LineType, ResponsiveContainer, YAxis, XAxis, XAxisProps, YAxisProps } from 'recharts';
+import { Line, Tooltip, LineProps, TooltipProps, ResponsiveContainer, YAxis, XAxis, XAxisProps, YAxisProps, ComposedChart, BarProps, ComposedChartProps, Bar } from 'recharts';
 import { ChartPluginProps } from '..';
 
-export interface LineChartData {
-    data: any;
+export interface ComposedChartData {
     lines: LineProps[];
-    tooltip?: boolean;
+    bars: BarProps[];
+    chart: ComposedChartProps[];
+    tooltip?: TooltipProps;
     xAxis: XAxisProps;
     yAxis: YAxisProps;
 }
 
-export default (props: ChartPluginProps<LineChartData>) => {
-    const { data, lines, tooltip, xAxis, yAxis } = props.message.data._plugin;
-    const { unitSize, primaryColor, shadow } = props.theme;
+export default (props: ChartPluginProps<ComposedChartData>) => {
+    const { chart, lines, bars, tooltip, xAxis, yAxis } = props.message.data._plugin;
+    const { unitSize, primaryColor } = props.theme;
 
     const $lines = (lines || [])
-        .map(line => <Line key={'' + line.dataKey} stroke={primaryColor} {...line} />);
+        .map(line => <Line key={'line-' + line.dataKey} stroke={primaryColor} {...line} />);
+
+    const $bars = (bars || [])
+        .map(bar => <Bar key={'bar-' + bar.dataKey} fill={primaryColor} {...bar} />);
 
     const $tooltip = tooltip
-        ? <Tooltip />
+        ? <Tooltip {...tooltip} />
         : null;
 
     const $xAxis = <XAxis minTickGap={unitSize * 2} {...xAxis} />;
@@ -26,20 +30,21 @@ export default (props: ChartPluginProps<LineChartData>) => {
 
     return (
         <ResponsiveContainer width='100%' height={200}>
-            <LineChart
-                data={data}
+            <ComposedChart
                 margin={{
                     left: unitSize * 2,
                     right: unitSize * 2,
                     top: unitSize,
                     bottom: unitSize
                 }}
+                {...chart}
             >
                 {$lines}
+                {$bars}
                 {$tooltip}
                 {$xAxis}
                 {$yAxis}
-            </LineChart>
+            </ComposedChart>
         </ResponsiveContainer>
     )
 }
