@@ -1,4 +1,4 @@
-const upload = (config, file) => {
+export const upload = async (config, file) => {
     const { service } = config;
 
     switch (service) {
@@ -12,8 +12,4 @@ const upload = (config, file) => {
             .then(() => downloadUrl)
         }
     }
-}
-
-module.exports = {
-    upload
 }

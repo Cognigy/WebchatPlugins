@@ -77,7 +77,10 @@ const button = theme => ({
   
   const content = theme => ({
     ...padding(theme),
-    flexGrow: 1
+    flexGrow: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   })
   
   const footer = theme => ({
