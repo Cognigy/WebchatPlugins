@@ -16,6 +16,7 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "react-dropzone": "^10.1.7"
   },
   "alias": {

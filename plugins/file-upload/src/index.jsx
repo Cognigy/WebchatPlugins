@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import * as React from 'react';
 import memoize from 'memoize-one';
 
@@ -15,7 +16,7 @@ const FileUpload = props => {
         const file = files[0];
 
         try {
-            const downloadUrl = await upload(props.message.data._plugin.payload, file);
+            const downloadUrl = await upload(props.message.data._plugin, file);
             props.onSendMessage('', {
                 file: downloadUrl
             });
@@ -58,7 +59,7 @@ const FileUpload = props => {
     } = props;
 
     const {
-        payload,
+        service,
         titleText,
         dragClickLabel,
         dropLabel,
@@ -81,7 +82,7 @@ const FileUpload = props => {
                 ...dialogStyles
             }}
         >
-            {payload.service === 'aws-s3' && (
+            {service === 'amazon-s3' && (
                 <>
                     <header style={headerStyles}>
                         {titleText || 'File Upload'}

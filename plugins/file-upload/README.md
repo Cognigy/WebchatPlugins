@@ -1,27 +1,41 @@
-# Cognigy Webchat Dialog Example Plugin
-This repository contains a dialog example plugin for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).
-It is meant to be used as a starting point when building a dialog-like plugin for the Cognigy Webchat.
-The Dialog is styled based on the Webchat's `theme` for seamless integration.
+# File Upload Plugin
+This Plugin enables bots to request files from users.
+The User will see a button to open a file upload dialog.
+In the Dialog, the user can then select a file to upload (drag n drop is supported).
+The File will be uploaded to a predefined destination of a third-party service (e.g. Amazon S3).
 
-## Installation
+![file upload button](./docs/file-upload-button.png)
+![file upload dialog](./docs/file-upload-dialog.png)
 
-1. Clone this repo
-2. Install all necessary dependencies via `npm i`
-3. Run `npm run build` - this will create a `dist/dialog-example.webchat-plugin.js` plugin file for you
-4. Use that file in your Cognigy Webchat as described in the [Cognigy Docs](https://docs.cognigy.com/docs/using-additional-webchat-plugins).
-
-## Calling the Plugin from Cognigy
-You can call the plugin from within Cognigy by sending a data message using a Say Node.
-
-```
+## Result Message
+After uploading, the plugin will send a hidden message to the bot with an URL to the file in `ci.data.file`.
+```typescript
 {
-  "_plugin": {
-    "type": "dialog",
+  data: {
+    file: 'https://example.com/url-to-file'
   }
 }
 ```
 
-The message will render a button that is used to open the dialog.
-When the button is clicked, the message will be switched over to fullscreen mode.
-Within fullscreen mode, the message will render different markup that displays a top bar, a content area and a footer with cancel and submit buttons.
-Upon clicking one of the buttons in the footer, the dialog will close.
+
+## Upload to Amazon S3
+Allows users to upload a file to an Amazon S3 Bucket using a [Presigned URL](https://docs.aws.amazon.com/AmazonS3/latest/dev/PresignedUrlUploadObject.html).
+The Plugin will need a presigned `uploadUrl` for uploading the file, as well as a presigned `downloadUrl` to get read access to the file after uploading.
+
+
+### Message Data Structure
+```typescript
+interface UploadToS3BucketData {
+  _plugin: {
+        type: 'file-upload';
+        service: 'amazon-s3';
+
+        // presigned upload url
+        uploadUrl: string;
+        
+        // presigned download url
+        downloadUrl: string;
+    }
+}
+```
+[Upload to Amazon S3 Example Message](./docs/AmazonS3.message.json)
