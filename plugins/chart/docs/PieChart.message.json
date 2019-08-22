@@ -1,0 +1,41 @@
+{
+    "text": "",
+    "data": {
+        "_plugin": {
+            "type": "chart",
+            "chartType": "pie",
+            "chart": {},
+            "pies": [
+                {
+                    "data": [
+                        {
+                            "name": "btc",
+                            "usd": 1234567890
+                        },
+                        {
+                            "name": "eth",
+                            "usd": 987654321
+                        },
+                        {
+                            "name": "iota",
+                            "usd": 87654321
+                        }
+                    ],
+                    "cells": [
+                        {
+                            "fill": "#2ab"
+                        },
+                        {
+                            "fill": "#289"
+                        },
+                        {
+                            "fill": "#256"
+                        }
+                    ],
+                    "dataKey": "usd"
+                }
+            ],
+            "tooltip": true
+        }
+    }
+}

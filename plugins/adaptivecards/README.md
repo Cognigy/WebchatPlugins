@@ -2,7 +2,7 @@
 This repository contains a Microsoft [Adaptive Cards](https://adaptivecards.io/) plugin for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).
 It wraps the [react-adaptivecards](https://github.com/gatewayapps/react-adaptivecards) component for use in the Cognigy Webchat.
 
-![Webchat Adaptive Card Plugin](./assets/signature.jpg)
+![Webchat Adaptive Card Plugin](./assets/adaptive.png)
 
 ## Installation
 

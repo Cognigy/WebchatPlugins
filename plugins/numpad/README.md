@@ -9,7 +9,7 @@ It wraps the [React NumPad](https://www.npmjs.com/package/react-numpad) componen
 
 1. Clone this repo
 2. Install all necessary dependencies via `nmp i`
-3. Run `npm run build` - this will create a `dist/numpad.js` plugin file for you
+3. Run `npm run build` - this will create a `dist/numpad.webchat-plugin.js` plugin file for you
 4. Use that file in your Cognigy Webchat as described in the [Cognigy Docs](https://docs.cognigy.com/docs/using-additional-webchat-plugins).
 
 ## Calling the Plugin from Cognigy

@@ -1,0 +1,33 @@
+{
+    "text": "",
+    "data": {
+        "_plugin": {
+            "type": "chart",
+            "chartType": "bar",
+            "chart": {
+                "data": [
+                    {
+                        "coin": "bitcoin",
+                        "eur": 9396.17,
+                        "usd": 10424.55
+                    }
+                ]
+            },
+            "bars": [
+                {
+                    "dataKey": "eur"
+                },
+                {
+                    "dataKey": "usd"
+                }
+            ],
+            "tooltip": true,
+            "xAxis": {
+                "dataKey": "coin"
+            },
+            "yAxis": {
+                "hide": true
+            }
+        }
+    }
+}
