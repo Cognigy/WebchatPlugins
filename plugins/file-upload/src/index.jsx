@@ -1,4 +1,4 @@
-import 'babel-polyfill';
+import 'idempotent-babel-polyfill';
 import * as React from 'react';
 import memoize from 'memoize-one';
 
