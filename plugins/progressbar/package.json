@@ -1,0 +1,22 @@
+{
+  "name": "progressbarplugin",
+  "version": "1.0.0",
+  "description": "Cognigy Webchat Load Indicator Plugin",
+  "main": "build/plugin.js",
+  "scripts": {
+    "build": "parcel build --out-file progressbar.webchat-plugin.js src/index.jsx"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/react": "^16.8.18",
+    "parcel": "^1.12.3"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "memoize-one": "^5.0.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-stepper-horizontal": "^1.0.11"
+  }
+}
