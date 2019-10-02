@@ -7,7 +7,7 @@
     "build": "parcel build --out-file dist/counter-example.webchat-plugin.js src/index.jsx"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "memoize-one": "^5.0.4",
     "parcel": "^1.12.3",

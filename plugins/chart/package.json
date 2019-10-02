@@ -8,7 +8,7 @@
     "watch": "parcel watch --out-file dist/chart.webchat-plugin.js src/index.tsx"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/recharts": "^1.1.20",
     "memoize-one": "^5.0.4",
