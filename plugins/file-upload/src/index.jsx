@@ -82,7 +82,7 @@ const FileUpload = props => {
                 ...dialogStyles
             }}
         >
-            {(service === 'amazon-s3' || 'azure') && (
+            {(service === 'amazon-s3' || service === 'azure') && (
                 <>
                     <header style={headerStyles}>
                         {titleText || 'File Upload'}
