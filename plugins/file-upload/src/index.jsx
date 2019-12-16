@@ -10,18 +10,22 @@ import { useDropzone } from 'react-dropzone';
 const getStylesMemo = memoize(getStyles);
 
 const FileUpload = props => {
+    const [isUploading, setIsUploading] = React.useState(false);
+
     // handles change events for the file input
     // starts the upload
     const onDrop = React.useCallback(async files => {
         const file = files[0];
-
         try {
+            setIsUploading(true);
             const downloadUrl = await upload(props.message.data._plugin, file);
+            setIsUploading(false);
             props.onSendMessage('', {
                 file: downloadUrl
             });
         } catch (e) {
             console.error('uploading file failed', e)
+            setIsUploading(false);
         }
     }, []);
 
@@ -82,33 +86,65 @@ const FileUpload = props => {
                 ...dialogStyles
             }}
         >
-            {(service === 'amazon-s3' || service === 'azure') && (
-                <>
-                    <header style={headerStyles}>
-                        {titleText || 'File Upload'}
-                    </header>
-                    <main style={contentStyles} {...getRootProps()}>
-                        <input {...getInputProps()} />
-                        {isDragActive
-                            ? <p>{dragClickLabel || 'Drop the file here'}</p>
-                            : <p>{dropLabel || 'Drag a file here, or click to select one'}</p>
-
-                        }
-                    </main>
-                    <footer style={footerStyles}>
-                        <button
-                            type='button'
-                            onClick={onDismissFullscreen}
-                            style={cancelButtonStyles}
-                        >
-                            {cancelButtonLabel || 'cancel'}
-                        </button>
-                    </footer>
-                </>
-            )}
+            {(service === 'amazon-s3' || service === 'azure') &&
+                (!isUploading ? (
+                    <>
+                        <header style={headerStyles}>{titleText || 'File Upload'}</header>
+                        <main style={contentStyles} {...getRootProps()}>
+                            <input {...getInputProps()} />
+                            {isDragActive ? (
+                                <p>{dragClickLabel || 'Drop the file here'}</p>
+                            ) : (
+                                    <p>{dropLabel || 'Drag a file here, or click to select one'}</p>
+                                )}
+                        </main>
+                        <footer style={footerStyles}>
+                            <button
+                                type='button'
+                                onClick={onDismissFullscreen}
+                                style={cancelButtonStyles}
+                            >
+                                {cancelButtonLabel || 'cancel'}
+                            </button>
+                        </footer>
+                    </>
+                ) : (
+                        <Spinner theme={theme} />
+                    ))}
         </div>
-    )
-}
+    );
+};
+
+const Spinner = ({ theme }) => {
+    const { spinnerContainerStyles } = getStylesMemo(theme);
+    return (
+        <div style={spinnerContainerStyles}>
+            <svg
+                width='38'
+                height='38'
+                viewBox='0 0 38 38'
+                xmlns='http://www.w3.org/2000/svg'
+                stroke={theme.greyContrastColor}
+            >
+                <g fill='none' fillRule='evenodd'>
+                    <g transform='translate(1 1)' strokeWidth='2'>
+                        <circle strokeOpacity='.5' cx='18' cy='18' r='18' />
+                        <path d='M36 18c0-9.94-8.06-18-18-18'>
+                            <animateTransform
+                                attributeName='transform'
+                                type='rotate'
+                                from='0 18 18'
+                                to='360 18 18'
+                                dur='1s'
+                                repeatCount='indefinite'
+                            />
+                        </path>
+                    </g>
+                </g>
+            </svg>
+        </div>
+    );
+};
 
 const fileUploadPlugin = {
     match: 'file-upload',

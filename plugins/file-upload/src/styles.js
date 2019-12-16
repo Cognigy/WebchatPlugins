@@ -91,6 +91,15 @@ const button = theme => ({
     backgroundColor: 'white',
     boxShadow: theme.shadow,
   })
+
+  const spinnerContainer = theme => ({
+    alignItems: 'center',
+    backgroundColor: theme.greyColor,
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'center',
+    width: '100%',
+  })
   
   export const getStyles = theme => {
     const openDialogButtonStyles = openDialogButton(theme);
@@ -100,6 +109,7 @@ const button = theme => ({
     const submitButtonStyles = submitButton(theme);
     const cancelButtonStyles = cancelButton(theme);
     const dialogStyles = dialog(theme);
+    const spinnerContainerStyles = spinnerContainer(theme);
   
     return {
       openDialogButtonStyles,
@@ -108,6 +118,7 @@ const button = theme => ({
       footerStyles,
       submitButtonStyles,
       cancelButtonStyles,
-      dialogStyles
+      dialogStyles,
+      spinnerContainerStyles
     }
   };
