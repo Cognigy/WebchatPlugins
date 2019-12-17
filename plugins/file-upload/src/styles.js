@@ -78,6 +78,7 @@ const button = theme => ({
   const content = theme => ({
     ...padding(theme),
     flexGrow: 1,
+    flexDirection: 'column',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -100,6 +101,13 @@ const button = theme => ({
     justifyContent: 'center',
     width: '100%',
   })
+
+  const errorMessage = theme => ({
+    color: theme.errorColor || '#b74e4e',
+    display: 'block',
+    ...padding(theme),
+    textAlign: 'center'
+  })
   
   export const getStyles = theme => {
     const openDialogButtonStyles = openDialogButton(theme);
@@ -110,6 +118,7 @@ const button = theme => ({
     const cancelButtonStyles = cancelButton(theme);
     const dialogStyles = dialog(theme);
     const spinnerContainerStyles = spinnerContainer(theme);
+    const errorMessageStyles = errorMessage(theme);
   
     return {
       openDialogButtonStyles,
@@ -119,6 +128,7 @@ const button = theme => ({
       submitButtonStyles,
       cancelButtonStyles,
       dialogStyles,
-      spinnerContainerStyles
+      spinnerContainerStyles,
+      errorMessageStyles
     }
   };

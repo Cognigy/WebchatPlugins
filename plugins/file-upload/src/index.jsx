@@ -11,11 +11,32 @@ const getStylesMemo = memoize(getStyles);
 
 const FileUpload = props => {
     const [isUploading, setIsUploading] = React.useState(false);
+    const [isRejected, setIsRejected] = React.useState(false);
+
+    const {
+        isFullscreen,
+        onSetFullscreen,
+        theme,
+        message,
+    } = props;
+
+    const {
+        openButtonLabel,
+        sizeLimit,
+        fileSizeLimitErrorMessage
+    } = message.data._plugin;
 
     // handles change events for the file input
     // starts the upload
     const onDrop = React.useCallback(async files => {
         const file = files[0];
+
+        if (file.size > sizeLimit * 1000 * 1000) {
+            setIsRejected(true);
+            return;
+        } 
+
+        setIsRejected(false);
         try {
             setIsUploading(true);
             const downloadUrl = await upload(props.message.data._plugin, file);
@@ -33,15 +54,15 @@ const FileUpload = props => {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
     const {
-        isFullscreen,
-        onSetFullscreen,
-        theme,
-        message
-    } = props;
+        errorMessageStyles,
+    } = getStylesMemo(theme);
 
-    const {
-        openButtonLabel
-    } = message.data._plugin;
+    const SizeLimitError = () => (
+            <label style={errorMessageStyles}>
+                {fileSizeLimitErrorMessage || `File exceeds max file size of ${sizeLimit} MB. Choose another file.`}
+            </label>
+        );
+
 
     if (!isFullscreen) {
         const { openDialogButtonStyles } = getStylesMemo(theme);
@@ -67,7 +88,7 @@ const FileUpload = props => {
         titleText,
         dragClickLabel,
         dropLabel,
-        cancelButtonLabel
+        cancelButtonLabel,
     } = message.data._plugin;
 
     const {
@@ -97,6 +118,9 @@ const FileUpload = props => {
                             ) : (
                                     <p>{dropLabel || 'Drag a file here, or click to select one'}</p>
                                 )}
+                            {isRejected ? (
+                                <SizeLimitError />
+                            ) : null}
                         </main>
                         <footer style={footerStyles}>
                             <button
