@@ -9,6 +9,8 @@ import { useDropzone } from 'react-dropzone';
 // only re-calculate if theme changed
 const getStylesMemo = memoize(getStyles);
 
+let pluginBusy = false;
+
 const FileUpload = props => {
     const [isUploading, setIsUploading] = React.useState(false);
     const [isRejected, setIsRejected] = React.useState(false);
@@ -34,13 +36,15 @@ const FileUpload = props => {
         if (file.size > sizeLimit * 1000 * 1000) {
             setIsRejected(true);
             return;
-        } 
+        }
 
         setIsRejected(false);
         try {
             setIsUploading(true);
+            pluginBusy = true;
             const downloadUrl = await upload(props.message.data._plugin, file);
             setIsUploading(false);
+            pluginBusy = false;
             props.onSendMessage('', {
                 file: downloadUrl
             });
@@ -58,10 +62,10 @@ const FileUpload = props => {
     } = getStylesMemo(theme);
 
     const SizeLimitError = () => (
-            <label style={errorMessageStyles}>
-                {fileSizeLimitErrorMessage || `File exceeds max file size of ${sizeLimit} MB. Choose another file.`}
-            </label>
-        );
+        <label style={errorMessageStyles}>
+            {fileSizeLimitErrorMessage || `File exceeds max file size of ${sizeLimit} MB. Choose another file.`}
+        </label>
+    );
 
 
     if (!isFullscreen) {
@@ -108,7 +112,7 @@ const FileUpload = props => {
             }}
         >
             {(service === 'amazon-s3' || service === 'azure') &&
-                (!isUploading ? (
+                (!isUploading && !pluginBusy ? (
                     <>
                         <header style={headerStyles}>{titleText || 'File Upload'}</header>
                         <main style={contentStyles} {...getRootProps()}>
@@ -133,7 +137,10 @@ const FileUpload = props => {
                         </footer>
                     </>
                 ) : (
-                        <Spinner theme={theme} />
+                        <>
+                            <header style={headerStyles}>{titleText || 'File Upload'}</header>
+                            <Spinner theme={theme} />
+                        </>
                     ))}
         </div>
     );
