@@ -4,8 +4,20 @@ import MUIDataTable from "mui-datatables";
 
 import { getStyles } from './styles';
 
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
 // only re-calculate if theme changed
 const getStylesMemo = memoize(getStyles);
+
+const getMuiDatatableTheme = createMuiTheme({
+    overrides: {
+        MuiModal: {
+            root: {
+                zIndex: 10000
+            }
+        },
+    }
+});
 
 const dismissedMessages = [];
 
@@ -69,12 +81,14 @@ const DataTable = (props) => {
                     <main style={contentStyles}>
                         {props.message.data._plugin.subtitleText}
                         <div style={{'background-color': '#ffffff'}}>
-                        <MUIDataTable
-                            title={tableTitle}
-                            data={tableData}
-                            columns={tableColumns}
-                            options={tableOptions}
-                            />
+                        <MuiThemeProvider theme={getMuiDatatableTheme}>
+                                <MUIDataTable
+                                    title={tableTitle}
+                                    data={tableData}
+                                    columns={tableColumns}
+                                    options={tableOptions}
+                                />
+                            </MuiThemeProvider>
                         </div>
                     </main>
                     <footer style={footerStyles}>
