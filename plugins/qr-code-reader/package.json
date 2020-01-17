@@ -1,0 +1,25 @@
+{
+  "name": "qr-code",
+  "version": "1.0.0",
+  "description": "Cognigy Webchat QR Code Scanner Plugin",
+  "main": "build/plugin.js",
+  "scripts": {
+    "build": "parcel build --out-file qr-code.webchat-plugin.js src/index.jsx"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^16.8.18",
+    "parcel": "^1.12.4"
+  },
+  "dependencies": {
+    "jquery": "^3.4.1",
+    "memoize-one": "^5.1.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-qr-reader": "^2.2.1"
+  },
+  "alias": {
+    "react": "./alias/react"
+  }
+}
