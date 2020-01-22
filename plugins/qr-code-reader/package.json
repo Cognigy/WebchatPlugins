@@ -6,7 +6,7 @@
   "scripts": {
     "build": "parcel build --out-file qr-code.webchat-plugin.js src/index.jsx"
   },
-  "author": "",
+  "author": "Cognigy GmbH",
   "license": "MIT",
   "devDependencies": {
     "@types/react": "^16.8.18",
