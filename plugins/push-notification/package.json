@@ -1,0 +1,17 @@
+{
+  "name": "push-notification",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.jsx",
+  "scripts": {
+    "build": "parcel build --out-file push-notification-plugin.js src/index.jsx"
+  },
+  "author": "Cognigy GmbH",
+  "license": "MIT",
+  "devDependencies": {
+    "parcel": "^1.12.4"
+  },
+  "dependencies": {
+    "react": "^16.12.0"
+  }
+}
