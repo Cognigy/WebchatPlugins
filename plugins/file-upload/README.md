@@ -7,6 +7,10 @@ The File will be uploaded to a predefined destination of a third-party service (
 ![file upload button](./docs/file-upload-button.png)
 ![file upload dialog](./docs/file-upload-dialog.png)
 
+## Using the Custom Module
+To trigger the file-upload plugin in the Webchat, you need to send a specifically formated message from Cognigy. 
+We do provide Flow Nodes for triggering an upload dialog via a [Custom Module](https://github.com/Cognigy/CustomModules/tree/master/modules/file-upload-plugin). Using this, you can automatically generate and send the messages needed by the Webchat Plugin. 
+
 ## Result Message
 After uploading, the plugin will send a hidden message to the bot with an URL to the file in `ci.data.file`.
 ```typescript
