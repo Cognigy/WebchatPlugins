@@ -9,7 +9,20 @@ export const upload = async (config, file) => {
                 method: 'PUT',
                 body: file
             })
-            .then(() => downloadUrl)
+                .then(() => downloadUrl)
+        }
+        case 'azure': {
+            const { baseURL, sasSignature, containerName } = config;
+            const uploadUrl =  baseURL+containerName+'/'+file.name+sasSignature
+            const downloadUrl = uploadUrl;
+            return fetch(uploadUrl, {
+                method: 'PUT',
+                body: file,
+                headers: {
+                    'x-ms-blob-type': 'BlockBlob'
+                },
+            })
+                .then(() => downloadUrl )
         }
     }
 }

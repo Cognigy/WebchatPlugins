@@ -19,10 +19,10 @@ You can specify following optional parameters:
   "_plugin": {
     type: "google-maps",
     center: {
-        lat: "latitude",
-        lng: "longitude"
+        lat: latitude,
+        lng: longitude
     },
-    zoom: "zoom",
+    zoom: zoom,
     bootstrapURLKeys: "secret.api_key"
   }
 }

@@ -7,7 +7,7 @@
     "build": "parcel build --out-file numpad.webchat-plugin.js src/index.jsx"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/react": "^16.8.18",
     "parcel": "^1.12.3"

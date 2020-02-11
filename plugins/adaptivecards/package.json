@@ -7,15 +7,16 @@
     "build": "parcel build --out-file adaptivecards.webchat-plugin.js src/index.jsx"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/react": "^16.8.18",
     "parcel": "^1.12.3"
   },
   "dependencies": {
     "memoize-one": "^5.0.4",
-    "react": "^16.8.6",
-    "react-adaptivecards": "^0.1.3",
-    "react-dom": "^16.8.6"
+    "react-adaptivecards": "^0.1.3"
+  },
+  "alias": {
+    "react": "./alias/react"
   }
 }
