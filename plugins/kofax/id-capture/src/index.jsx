@@ -91,7 +91,6 @@ const IDCapture = (props) => {
      */
     const handleClickOpen = () => {
         onSetFullscreen();
-        window.reduxStore.dispatch({ type: 'CAPTURE_ID', captureID: true });
     }
 
     
@@ -143,14 +142,14 @@ const IDCapture = (props) => {
         <div
             {...attributes}
             style={{
-                ...attributes.styles,
+                // ...attributes.styles,
                 ...dialogStyles
             }}
         >
             <header style={headerStyles}>
                 {headerText || "Capture ID"}
             </header>
-            <iframe src="/web-capture/kofax.html" title="web-capture" frameBorder="0" style={contentStyles}></iframe>
+            {/* <iframe src="/web-capture/kofax.html" title="web-capture" frameBorder="0" style={contentStyles}></iframe> */}
             <footer style={footerStyles}>
                 <button
                     type='button'
@@ -166,8 +165,8 @@ const IDCapture = (props) => {
                 <button
                     type='button'
                     // Disable the submit button if there are no extracted information
-                    disabled={PERSONAL_DATA === {}}
-                    onClick={() => {                   
+                    disabled={PERSONAL_DATA.firstname === undefined}
+                    onClick={() => {   
                          // Send back the extracted information to Cognigy.AI to handle it
                          onSendMessage('', { personalData: PERSONAL_DATA, faceImage: `data:image/jpeg;base64,${IMAGES.face.image}` })
  
@@ -178,7 +177,7 @@ const IDCapture = (props) => {
                     }}
                     style={submitButtonStyles}
                 >
-                    {props.message.data._plugin.submitButtonText || "submit"}
+                    {submitButtonText || "submit"}
                 </button>
             </footer>
         </div>
