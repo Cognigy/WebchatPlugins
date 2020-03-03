@@ -6,6 +6,11 @@ import { getStyles } from './styles';
 let PERSONAL_DATA = {};
 let IMAGES = {};
 
+/**
+ * Capitalize the extracted text to get typical written text.
+ * Result = FIRSTNAME -> Firstname
+ * @param {String} text 
+ */
 function capitalizeFLetter(text) {
     try {
         text = text.toLowerCase();
@@ -24,7 +29,8 @@ window.handlePersonalData = (results) => {
 
     const { fields, processedImages } = results[0];
 
-    console.log(fields)
+    // Log the extracted information for developing reasons
+    console.log("Extracted information: \n"  + fields)
 
     // extract the perso info from result fields
     let persoData = {
@@ -43,7 +49,7 @@ window.handlePersonalData = (results) => {
 
     };
 
-
+    // Get the extracted images and store it to the IMAGES object
     IMAGES = {
         id: processedImages,
         face: {
@@ -55,15 +61,18 @@ window.handlePersonalData = (results) => {
             valid: fields[19].valid
         }
     } 
+
+    // Get the extracted personal information and store it to the PERSONAL_DATA object
     PERSONAL_DATA = persoData;
 }
 
 
-// only re-calculate if theme changed
+// Get the provided styles for the webchat plugin
 const getStylesMemo = memoize(getStyles);
 
 const IDCapture = (props) => {
 
+    // Get global webchat plugin properties
     const {
         isFullscreen,
         onSetFullscreen,
@@ -71,23 +80,40 @@ const IDCapture = (props) => {
         message
     } = props;
 
+    // Get Custom Module arguments as properties
+    const { data } = message;
+    const { _plugin } = data;
+    const { buttonText, displayDialogButton, cancelButtonText, submitButtonText, headerText, contextStore } = _plugin;
+
+    
+    /**
+     * Open the webchat plugin if the displayOpenButton prop is provided as true
+     */
     const handleClickOpen = () => {
         onSetFullscreen();
         window.reduxStore.dispatch({ type: 'CAPTURE_ID', captureID: true });
     }
 
-    if (!isFullscreen) {
-        const { openDialogButtonStyles } = getStylesMemo(theme);
-
-        return (
-            <button
-                onClick={handleClickOpen}
-                style={openDialogButtonStyles}
-            >
-                {message.data._plugin.buttonText}
-            </button>
-        )
+    
+    // Check if a button to open the plugin should be displayed or if the plugin should be displayed directly
+    if (displayDialogButton) {
+        if (!isFullscreen) {
+            const { openDialogButtonStyles } = getStylesMemo(theme);
+    
+            return (
+                <button
+                    onClick={handleClickOpen}
+                    style={openDialogButtonStyles}
+                >
+                    {buttonText}
+                </button>
+            )
+        }
+    } else if (!displayDialogButton) {
+        // Directly open the capture id view
+        handleClickOpen();
     }
+
 
     /**
      * If this message is displayed in "fullscreen" mode
@@ -122,7 +148,7 @@ const IDCapture = (props) => {
             }}
         >
             <header style={headerStyles}>
-                {props.message.data._plugin.headerText || "Capture ID"}
+                {headerText || "Capture ID"}
             </header>
             <iframe src="/web-capture/kofax.html" title="web-capture" frameBorder="0" style={contentStyles}></iframe>
             <footer style={footerStyles}>
@@ -131,29 +157,24 @@ const IDCapture = (props) => {
                     onClick={onDismissFullscreen}
                     style={cancelButtonStyles}
                     onClick={() => {
-                        console.log('abort id capture')
+                        // Send empty information back to Cognigy.AI to show that the user aborted the process
                         onSendMessage('', { personalData: {}, faceImage: {image: '', valid: false} })
                     }}
                 >
-                    {props.message.data._plugin.cancelButtonText || "cancel"}
+                    {cancelButtonText || "cancel"}
                 </button>
                 <button
                     type='button'
-                    onClick={() => {
-                        console.log({ personalData: PERSONAL_DATA })
-                        try {
-                            onSendMessage('', { personalData: PERSONAL_DATA, faceImage: `data:image/jpeg;base64,${IMAGES.face.image}` })
-                            window.reduxStore.dispatch({ type: 'IMAGES', images: IMAGES})
-                        } catch (e) {
-                            {
-                                window.navigator.language === 'de'
-                                ?
-                                alert('Bitte wählen Sie die Ihren Personalausweis aus, um den Vorgang abzuschließen. Ansonsten können Sie den Vorgang auch abbrechen.')
-                                :
-                                alert('Please choose your personal identity card to finish the process. Otherwise you can abort this step, if you do not want to scan your id.')
-                            }
-                        }
-                        
+                    // Disable the submit button if there are no extracted information
+                    disabled={PERSONAL_DATA === {}}
+                    onClick={() => {                   
+                         // Send back the extracted information to Cognigy.AI to handle it
+                         onSendMessage('', { personalData: PERSONAL_DATA, faceImage: `data:image/jpeg;base64,${IMAGES.face.image}` })
+ 
+                        /**
+                         * If your web application uses REDUX, you can store the extracted information to show it in the application.
+                         * window.reduxStore.dispatch({ type: 'IMAGES', images: IMAGES})
+                        */  
                     }}
                     style={submitButtonStyles}
                 >
@@ -169,8 +190,7 @@ const idcapturePlugin = {
     component: IDCapture
 }
 
-// create if it does not exist yet
-
+// Create webchat plugins object if it does not exist yet
 if (!window.cognigyWebchatMessagePlugins) {
     window.cognigyWebchatMessagePlugins = []
 }
