@@ -4,12 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npm run build-only && npm run copy",
-    "build-only": "parcel build --out-file id-capture-plugin.js src/index.jsx",
-    "copy": "cp ./dist/id-capture-plugin.js ./../../public/"
+    "build": "npm run build-only",
+    "build-only": "parcel build --out-file id-capture-plugin.js src/index.jsx"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Cognigy GmbH",
+  "license": "MIT",
   "devDependencies": {
     "parcel": "^1.12.3"
   },
