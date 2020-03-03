@@ -1,0 +1,20 @@
+{
+  "name": "id-capture",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build-only && npm run copy",
+    "build-only": "parcel build --out-file id-capture-plugin.js src/index.jsx",
+    "copy": "cp ./dist/id-capture-plugin.js ./../../public/"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^1.12.3"
+  },
+  "dependencies": {
+    "memoize-one": "^5.0.5",
+    "react": "^16.9.0"
+  }
+}
