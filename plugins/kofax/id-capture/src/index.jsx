@@ -1,71 +1,9 @@
 import * as React from 'react'
 import memoize from 'memoize-one';
-
 import { getStyles } from './styles';
 
 let PERSONAL_DATA = {};
 let IMAGES = {};
-
-/**
- * Capitalize the extracted text to get typical written text.
- * Result = FIRSTNAME -> Firstname
- * @param {String} text 
- */
-function capitalizeFLetter(text) {
-    try {
-        text = text.toLowerCase();
-        return text[0].toUpperCase() + text.slice(1);
-    }catch (e) {
-        return "";
-    }
-    
-}
-
-/**
- * Function for sending the extracted field values from the iFrame to this component
- * @param {List} results the extracted results
-*/
-window.handlePersonalData = (results) => {
-
-    const { fields, processedImages } = results[0];
-
-    // Log the extracted information for developing reasons
-    console.log("Extracted information: \n"  + fields)
-
-    // extract the perso info from result fields
-    let persoData = {
-        firstname: capitalizeFLetter(fields[8].text),
-        lastname: capitalizeFLetter(fields[10].text),
-        middlename: capitalizeFLetter(fields[9].text),
-        nationality: capitalizeFLetter(fields[14].text),
-        city: capitalizeFLetter(fields[22].text),
-        zip: fields[24].text,
-        birthday: fields[12].text,
-        address: capitalizeFLetter(fields[21].text),
-        country: capitalizeFLetter(fields[2].text),
-        countryshort: fields[3].text,
-        nationalityshort: fields[15].text,
-        documenttype: fields[0].text,
-
-    };
-
-    // Get the extracted images and store it to the IMAGES object
-    IMAGES = {
-        id: processedImages,
-        face: {
-            image: fields[18].text,
-            valid: fields[18].valid
-        },
-        signature: {
-            iamge: fields[19].text,
-            valid: fields[19].valid
-        }
-    } 
-
-    // Get the extracted personal information and store it to the PERSONAL_DATA object
-    PERSONAL_DATA = persoData;
-}
-
 
 // Get the provided styles for the webchat plugin
 const getStylesMemo = memoize(getStyles);
@@ -83,9 +21,9 @@ const IDCapture = (props) => {
     // Get Custom Module arguments as properties
     const { data } = message;
     const { _plugin } = data;
-    const { buttonText, displayDialogButton, cancelButtonText, submitButtonText, headerText, contextStore } = _plugin;
+    const { buttonText, displayDialogButton, cancelButtonText, submitButtonText, headerText, rttiUrl } = _plugin;
 
-    
+
     /**
      * Open the webchat plugin if the displayOpenButton prop is provided as true
      */
@@ -93,12 +31,12 @@ const IDCapture = (props) => {
         onSetFullscreen();
     }
 
-    
+
     // Check if a button to open the plugin should be displayed or if the plugin should be displayed directly
     if (displayDialogButton) {
         if (!isFullscreen) {
             const { openDialogButtonStyles } = getStylesMemo(theme);
-    
+
             return (
                 <button
                     onClick={handleClickOpen}
@@ -135,30 +73,68 @@ const IDCapture = (props) => {
         contentStyles,
         footerStyles,
         submitButtonStyles,
-        cancelButtonStyles
+        cancelButtonStyles,
+        captureButtonText,
+        scannedText
     } = getStylesMemo(theme);
 
     return (
         <div
             {...attributes}
             style={{
-                // ...attributes.styles,
                 ...dialogStyles
             }}
         >
             <header style={headerStyles}>
                 {headerText || "Capture ID"}
             </header>
-            {/* <iframe src="/web-capture/kofax.html" title="web-capture" frameBorder="0" style={contentStyles}></iframe> */}
+
+            <div style={contentStyles}>
+                <div id="text-message" style={{
+                    textAlign: 'center'
+                }}>
+                    <h1></h1>
+                </div>
+                {/* The Capture Button */}
+                <div
+                    style={{
+                        textAlign: 'center',
+                        paddingTop: '10px',
+                        paddingBottom: '10px'
+                    }}
+                >
+                    <button
+                        id="capture-button"
+                        className="capture-button"
+                    //onClick={captureDocument}
+                    >
+                        {captureButtonText || "Capture"}
+                    </button>
+                </div>
+                {/* Info text */}
+                <div
+                    id="info-message"
+                    style={{
+                        textAlign: 'center'
+                    }}
+                >
+                    {scannedText || "Scanned Sited: "}
+                    <strong>0</strong>
+                </div>
+
+                {/* The advanced Capture Container */}
+                <div id="image-capture"></div>
+                {/* The Review Container */}
+                <div id="image-review"></div>
+
+                <div id="loader"></div>
+            </div>
+
             <footer style={footerStyles}>
                 <button
                     type='button'
-                    onClick={onDismissFullscreen}
                     style={cancelButtonStyles}
-                    onClick={() => {
-                        // Send empty information back to Cognigy.AI to show that the user aborted the process
-                        onSendMessage('', { personalData: {}, faceImage: {image: '', valid: false} })
-                    }}
+                    onClick={onDismissFullscreen}
                 >
                     {cancelButtonText || "cancel"}
                 </button>
@@ -166,14 +142,9 @@ const IDCapture = (props) => {
                     type='button'
                     // Disable the submit button if there are no extracted information
                     disabled={PERSONAL_DATA.firstname === undefined}
-                    onClick={() => {   
-                         // Send back the extracted information to Cognigy.AI to handle it
-                         onSendMessage('', { personalData: PERSONAL_DATA, faceImage: `data:image/jpeg;base64,${IMAGES.face.image}` })
- 
-                        /**
-                         * If your web application uses REDUX, you can store the extracted information to show it in the application.
-                         * window.reduxStore.dispatch({ type: 'IMAGES', images: IMAGES})
-                        */  
+                    onClick={() => {
+                        // Send back the extracted information to Cognigy.AI to handle it
+                        onSendMessage('', { personalData: PERSONAL_DATA, faceImage: `data:image/jpeg;base64,${IMAGES.face.image}` })
                     }}
                     style={submitButtonStyles}
                 >
