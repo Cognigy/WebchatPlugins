@@ -30,7 +30,7 @@ const QRCodeScanner = (props) => {
                 onClick={onSetFullscreen}
                 style={openDialogButtonStyles}
             >
-                {props.message.data._plugin.submitButtonText || "Scan QR Code"}
+                {props.message.data._plugin.buttonText || "Scan QR Code"}
             </button>
         )
     }
@@ -83,7 +83,7 @@ const QRCodeScanner = (props) => {
             }}
         >
             <header style={headerStyles}>
-            {props.message.data._plugin.submitButtonText || "QR Code Scanner"}
+            {props.message.data._plugin.title || "QR Code Scanner"}
             </header>
             <main style={contentStyles}>
                 <div>
@@ -102,7 +102,7 @@ const QRCodeScanner = (props) => {
                     onClick={onDismissFullscreen}
                     style={cancelButtonStyles}
                 >
-                    {props.message.data._plugin.submitButtonText || "cancel"}
+                    {props.message.data._plugin.cancelButtonText || "cancel"}
                 </button>
                 <button
                     disabled={code === null}
