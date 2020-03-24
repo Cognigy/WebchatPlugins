@@ -3,23 +3,16 @@ import AdaptiveCard from 'react-adaptivecards';
 
 import { updateAdaptiveCardCSSCheaply } from './styles';
 
-// map to remember which message had already been resolved
-const resolvedCognigyMessages = new Map();
+const AdaptiveCards = (props) => {
+    const { theme, onSendMessage, message } = props;
 
-class AdaptiveCards extends React.Component {
-    render() {
-        const {
-            theme,
-            onSendMessage,
-            message
-        } = this.props;
-
+    React.useEffect(() => {
         updateAdaptiveCardCSSCheaply(theme);
+    }, []);
 
-        const {
-            payload
-        } = message.data._plugin;
+    const cardPayload = message.data._plugin.payload;
 
+    const card = React.useMemo(() => {
         const onActionSubmit = (params) => {
             onSendMessage("", { "adaptivecards": params && params.data });
         }
@@ -28,22 +21,20 @@ class AdaptiveCards extends React.Component {
             "fontFamily": theme.fontFamily
         }
 
-        if (resolvedCognigyMessages && !resolvedCognigyMessages.has(message.traceId)) {
-            resolvedCognigyMessages.set(message.traceId, (
-                <AdaptiveCard
-                    payload={payload}
-                    onActionSubmit={onActionSubmit}
-                    hostConfig={hostConfig}
-                />
-            ));
-        }
-
         return (
-            <div className='adaptivecard-wrapper'>
-                {resolvedCognigyMessages.get(message.traceId)}
-            </div>
-        )
-    }
+            <AdaptiveCard
+                payload={cardPayload}
+                onActionSubmit={onActionSubmit}
+                hostConfig={hostConfig}
+            />
+        );
+    }, [cardPayload]);
+
+    return (
+        <div className='adaptivecard-wrapper'>
+            {card}
+        </div>
+    )
 }
 
 const adaptivecardsPlugin = {
