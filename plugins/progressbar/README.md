@@ -14,30 +14,28 @@ It wraps the [React NumPad](https://www.npmjs.com/package/react-numpad) componen
 ## Calling the Plugin from Cognigy
 You can call the plugin from within Cognigy by sending a data message using a Say Node.
 
-```
+```json
 {
   "_plugin": {
     "type": "progress",
-    "data": {
-      "color": "#097d32",
-      "circleFontSize": 18,
-      "titleFontSize": 9,
-      "steps": [
-        {
-          "title": "Capture ID"
-        },
-        {
-          "title": "Review & Apply"
-        },
-        {
-          "title": "Results"
-        },
-        {
-          "title": "E-Sign and Fund"
-        }
-      ],
-      "active": 0
-    }
+    "color": "#097d32",
+    "circleFontSize": 18,
+    "titleFontSize": 9,
+    "steps": [
+      {
+        "title": "Capture ID"
+      },
+      {
+        "title": "Review & Apply"
+      },
+      {
+        "title": "Results"
+      },
+      {
+        "title": "E-Sign and Fund"
+      }
+    ],
+    "activeStep": 0
   }
 }
 ```

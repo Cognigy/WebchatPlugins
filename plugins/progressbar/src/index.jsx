@@ -2,29 +2,24 @@ import * as React from 'react';
 import Stepper from 'react-stepper-horizontal';
 
 const ProgressBar = (props) => {
-    // if not fullscreen, show button that can switch to fullscreen
-   
-    const { 
-        onSendMessage,
-        theme,
-        message
-    } = props;
-      
-    // const scale = {
-    //     transform: 'scale(0.7)'
-    // }
 
-    let steps = message.data._plugin.data.steps;
-    let color = message.data._plugin.data.color;
-    let circleFontSize = message.data._plugin.data.circleFontSize;
-    let titleFontSize = message.data._plugin.data.titleFontSize;
-    let activeStep = message.data._plugin.data.active;
+    // get plugin configuration from Cognigy
+    const { message } = props;
+    const { data } = message;
+    const { _plugin } = data;
+    const { steps, color, circleFontSize, titleFontSize, activeStep } = _plugin;
 
     return (
-        <div>
-          <Stepper size={16} completeColor={color} activeColor={color} circleFontSize={circleFontSize} titleFontSize={titleFontSize} steps={ steps } activeStep={ activeStep } />
-        </div>
-      );
+        <Stepper
+            size={16}
+            completeColor={color}
+            activeColor={color}
+            circleFontSize={circleFontSize}
+            titleFontSize={titleFontSize}
+            steps={steps}
+            activeStep={activeStep}
+        />
+    );
 }
 
 const progressBarPlugin = {
@@ -40,16 +35,3 @@ if (!window.cognigyWebchatMessagePlugins) {
 }
 
 window.cognigyWebchatMessagePlugins.push(progressBarPlugin);
-
-// const style = {
-//     width: '100%',
-//     display: 'flex',
-//     flexDirection: 'column',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     color: '#bfbfbf'
-// }
-
-// const imgStyle = {
-//     width: '50%'
-// }
