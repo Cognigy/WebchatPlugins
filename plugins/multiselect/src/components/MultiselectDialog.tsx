@@ -18,16 +18,19 @@ const DialogRoot = styled.div(() => ({
     overflow: 'hidden'
 }));
 
-const Header = styled(Background)(() => ({
-    boxSizing: 'border-box',
-    display: 'flex',
-    flexDirection: 'column',
-    flexShrink: 0,
-    fontSize: 16,
-    fontWeight: 700,
-    width: '100%',
-    zIndex: 2
-}));
+const Header = React.memo(
+    styled(Background)(() => ({
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexDirection: 'column',
+        flexShrink: 0,
+        fontSize: 16,
+        fontWeight: 700,
+        width: '100%',
+        zIndex: 2
+    })),
+    () => true
+);
 
 const Content = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -36,12 +39,15 @@ const Content = styled('div')(({ theme }) => ({
     overflow: 'hidden'
 }));
 
-const Footer = styled.div(({ theme }) => ({
-    backgroundColor: 'white',
-    display: 'flex',
-    paddingTop: theme.unitSize,
-    paddingBottom: theme.unitSize
-}));
+const Footer = React.memo(
+    styled.div(({ theme }) => ({
+        backgroundColor: 'white',
+        display: 'flex',
+        paddingTop: theme.unitSize,
+        paddingBottom: theme.unitSize
+    })),
+    () => true
+);
 
 const Title = styled.div(({ theme }) => ({
     color: theme.primaryContrastColor,
@@ -89,23 +95,25 @@ const ChosenOptionList = styled('div')(({ theme }) => ({
     maxHeight: '33%'
 }));
 
-const Option = styled.button(({ theme }) => ({
-    backgroundColor: 'transparent',
-    border: 'none',
-    color: theme.greyContrastColor,
-    cursor: 'pointer',
-    paddingTop: theme.unitSize,
-    paddingBottom: theme.unitSize,
-    paddingLeft: theme.unitSize * 2,
-    paddingRight: theme.unitSize * 2,
-    textAlign: 'left',
-    userSelect: 'none',
+const Option = React.memo(
+    styled.button(({ theme }) => ({
+        backgroundColor: 'transparent',
+        border: 'none',
+        color: theme.greyContrastColor,
+        cursor: 'pointer',
+        paddingTop: theme.unitSize,
+        paddingBottom: theme.unitSize,
+        paddingLeft: theme.unitSize * 2,
+        paddingRight: theme.unitSize * 2,
+        textAlign: 'left',
+        userSelect: 'none',
 
-    '&:hover, &:focus': {
-        backgroundColor: theme.greyWeakColor,
-        outline: 'none'
-    }
-}));
+        '&:hover, &:focus': {
+            backgroundColor: theme.greyWeakColor,
+            outline: 'none'
+        }
+    }))
+);
 
 const Button = styled('button')(({ theme }) => ({
     backgroundColor: theme.greyColor,
@@ -207,10 +215,10 @@ const MultiselectDialog: React.FC<IMultiselectProps> = props => {
             event.preventDefault();
         }
         /*
-         * Up Arrow key, select previous option, or focus the input 
+         * Up Arrow key, select previous option, or focus the input
          */
         if (keyCode === 38) {
-            setSelectedIndex(index => index > 0 ? index - 1: -1);
+            setSelectedIndex(index => (index > 0 ? index - 1 : -1));
         }
         /*
          * Down Arrow key, select next option
@@ -226,8 +234,9 @@ const MultiselectDialog: React.FC<IMultiselectProps> = props => {
         }
     };
 
-    const handleOptionClick = (event, value) => {
+    const handleOptionClick = React.useMemo(() => (event) => {
         event.preventDefault();
+        const value = event.target.textContent || event.target.value;
 
         /*
          * Remove from chosen list
@@ -241,7 +250,7 @@ const MultiselectDialog: React.FC<IMultiselectProps> = props => {
          * Add to chosen list
          */
         setChosenOptions(selected => [...selected, value]);
-    };
+    }, [chosenOptions]);
 
     const handleSubmit = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -264,7 +273,7 @@ const MultiselectDialog: React.FC<IMultiselectProps> = props => {
                         onChange={event => setInputValue(event.target.value)}
                         onKeyDown={event =>
                             event.keyCode === 13 && allowUserAnswers
-                                ? handleOptionClick(event, inputValue)
+                                ? handleOptionClick(event)
                                 : null
                         }
                         placeholder={inputPlaceholder || 'Select an option or enter your own'}
@@ -276,7 +285,7 @@ const MultiselectDialog: React.FC<IMultiselectProps> = props => {
                         {filteredOptions.map((option, index) => (
                             <Option
                                 ref={index === selectedIndex ? optionInFocusRef : null}
-                                onClick={event => handleOptionClick(event, option)}
+                                onClick={handleOptionClick}
                                 key={index}
                                 tabIndex={0}
                             >
@@ -285,10 +294,10 @@ const MultiselectDialog: React.FC<IMultiselectProps> = props => {
                         ))}
                     </OptionsList>
                     <ChosenOptionList>
-                        {chosenOptions.map(option => (
+                        {chosenOptions.map((option, index) => (
                             <Option
-                                key={option}
-                                onClick={event => handleOptionClick(event, option)}
+                                key={index}
+                                onClick={handleOptionClick}
                                 tabIndex={1}
                             >
                                 {option}
