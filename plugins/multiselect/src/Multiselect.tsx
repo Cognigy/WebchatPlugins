@@ -1,11 +1,9 @@
 import * as React from 'react';
 import MultiselectDialog from './components/MultiselectDialog';
-// import ToolbarSecondaryButton from '@cognigy/webchat/src/webchat-ui/components/presentational/ToolbarSecondaryButton';
 import { MessageComponentProps } from '@cognigy/webchat/src/common/interfaces/message-plugin';
 import { IBotMessage } from '@cognigy/webchat/src/common/interfaces/message';
 import MessageBubble from '@cognigy/webchat/src/webchat-ui/components/presentational/MessageBubble';
 import { styled } from '@cognigy/webchat/src/webchat-ui/style';
-
 
 interface IMultiselectMessage extends IBotMessage {
     data: {
@@ -46,7 +44,6 @@ const Multiselect: React.FC<IMultiselectProps> = props => {
                 <OpenButton theme={props.theme} onClick={props.onSetFullscreen} style={{marginTop: props.theme.unitSize * 2}}>
                     {props.message.data._plugin.openButtonLabel}
                 </OpenButton>
-                {/* <div style={{ flexBasis: '100%', height: 0}}></div> */}
             </div>
         );
     }

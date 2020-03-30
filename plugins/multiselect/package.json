@@ -8,7 +8,7 @@
     "watch": "parcel watch --out-file dist/multiselect.webchat-plugin.js src/index.tsx"
   },
   "devDependencies": {
-    "memoize-one": "^5.0.4",
+    "@cognigy/webchat": "git+https://git@github.com/Cognigy/WebchatWidget.git#v2.16.0",
     "parcel": "^1.12.4",
     "react": "^16.13.1"
   },

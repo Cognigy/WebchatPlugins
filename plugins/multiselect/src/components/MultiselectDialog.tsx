@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import tinycolor from 'tinycolor2';
-
 import mod from '../utils/modulo';
 import matcher from '../utils/matcher';
 
