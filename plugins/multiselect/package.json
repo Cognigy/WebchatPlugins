@@ -1,0 +1,18 @@
+{
+  "name": "multiselect",
+  "version": "1.0.0",
+  "description": "Multiselect plugin for [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).",
+  "browser": "dist/multiselect.webchat-plugin.js",
+  "scripts": {
+    "build": "parcel build --out-file dist/multiselect.webchat-plugin.js src/index.tsx --experimental-scope-hoisting",
+    "watch": "parcel watch --out-file dist/multiselect.webchat-plugin.js src/index.tsx"
+  },
+  "devDependencies": {
+    "memoize-one": "^5.0.4",
+    "parcel": "^1.12.4",
+    "react": "^16.13.1"
+  },
+  "alias": {
+    "react": "./alias/react"
+  }
+}
