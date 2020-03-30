@@ -75,7 +75,7 @@ const OptionsList = styled.div(() => ({
     flexShrink: 1,
     overflowY: 'auto',
     overflowX: 'hidden',
-    flexBasis: '100%',
+    flexBasis: '100%'
 }));
 
 const ChosenOptionList = styled('div')(({ theme }) => ({
@@ -86,7 +86,7 @@ const ChosenOptionList = styled('div')(({ theme }) => ({
     flexShrink: 0,
     flexDirection: 'column',
     overflowX: 'auto',
-    maxHeight: '33%',
+    maxHeight: '33%'
 }));
 
 const Option = styled.button(({ theme }) => ({
@@ -116,13 +116,13 @@ const Button = styled('button')(({ theme }) => ({
     flexGrow: 1,
     height: 40,
     margin: `${theme.unitSize * 0.5}px ${theme.unitSize}px !important`,
-    padding: `${theme.unitSize}px ${theme.unitSize * 2}px`,
+    padding: `${theme.unitSize}px ${theme.unitSize * 2}px`
 }));
 
 const CancelButton = styled(Button)(({ theme }) => ({
     backgroundColor: 'transparent',
     border: `1px solid ${theme.primaryColor}`,
-    color: theme.primaryColor,
+    color: theme.primaryColor
 }));
 
 const SubmitButton = styled(Button)(({ theme }) => ({
@@ -140,7 +140,7 @@ const MultiselectDialog: React.FC<IMultiselectProps> = props => {
         cancelButtonLabel,
         inputPlaceholder,
         options,
-        submitButtonLabel,
+        submitButtonLabel
     } = props.message.data._plugin;
 
     const [inputValue, setInputValue] = React.useState<string>('');
@@ -149,7 +149,7 @@ const MultiselectDialog: React.FC<IMultiselectProps> = props => {
 
     const [chosenOptions, setChosenOptions] = React.useState<string[]>([]);
 
-    const [selectedIndex, setSelectedIndex] = React.useState(null);
+    const [selectedIndex, setSelectedIndex] = React.useState(-1);
 
     /*
      * Filter the options
@@ -185,30 +185,45 @@ const MultiselectDialog: React.FC<IMultiselectProps> = props => {
      */
     React.useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
-        // setSelectedIndex(filteredOptions.length);
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         };
     }, [filteredOptions]);
 
     React.useEffect(() => {
-        if (selectedIndex) {
-            optionInFocus.current?.focus();
+        if (selectedIndex === -1) {
+            textInputRef.current?.focus();
         } else {
-            textInput.current?.focus();
+            optionInFocusRef.current?.focus();
         }
     }, [selectedIndex]);
 
-    const optionInFocus = React.useRef<HTMLButtonElement>(null);
+    const optionInFocusRef = React.useRef<HTMLButtonElement>(null);
+    const textInputRef = React.useRef<HTMLInputElement>(null);
 
-    const textInput = React.useRef<HTMLInputElement>(null);
-
-    const handleKeyDown = event => {
+    const handleKeyDown = (event: KeyboardEvent) => {
         const { keyCode } = event;
-        if ([38, 40, 27].includes(keyCode)) event.preventDefault();
-        if (keyCode === 38) setSelectedIndex(index => mod(index - 1, filteredOptions.length)); // Arrow UP
-        if (keyCode === 40) setSelectedIndex(index => mod(index + 1, filteredOptions.length)); // Arrow Down
-        if (keyCode === 27) setSelectedIndex(null); // Escape
+        if ([38, 40, 27].indexOf(keyCode) !== -1) {
+            event.preventDefault();
+        }
+        /*
+         * Up Arrow key, select previous option, or focus the input 
+         */
+        if (keyCode === 38) {
+            setSelectedIndex(index => index > 0 ? index - 1: -1);
+        }
+        /*
+         * Down Arrow key, select next option
+         */
+        if (keyCode === 40) {
+            setSelectedIndex(index => mod(index + 1, filteredOptions.length));
+        }
+        /*
+         * Escape key
+         */
+        if (keyCode === 27) {
+            setSelectedIndex(-1);
+        }
     };
 
     const handleOptionClick = (event, value) => {
@@ -248,19 +263,21 @@ const MultiselectDialog: React.FC<IMultiselectProps> = props => {
                         className="webchat-multiselect-input"
                         onChange={event => setInputValue(event.target.value)}
                         onKeyDown={event =>
-                            event.keyCode === 13 ? handleOptionClick(event, inputValue) : null
+                            event.keyCode === 13 && allowUserAnswers
+                                ? handleOptionClick(event, inputValue)
+                                : null
                         }
                         placeholder={inputPlaceholder || 'Select an option or enter your own'}
-                        onFocus={() => setSelectedIndex(null)}
-                        ref={textInput}
+                        onFocus={() => setSelectedIndex(-1)}
+                        ref={textInputRef}
                         tabIndex={2}
                     />
                     <OptionsList>
                         {filteredOptions.map((option, index) => (
                             <Option
-                                ref={index === selectedIndex ? optionInFocus : null}
+                                ref={index === selectedIndex ? optionInFocusRef : null}
                                 onClick={event => handleOptionClick(event, option)}
-                                key={option}
+                                key={index}
                                 tabIndex={0}
                             >
                                 {option}
