@@ -28,8 +28,7 @@ const Header = React.memo(
         fontWeight: 700,
         width: '100%',
         zIndex: 2
-    })),
-    () => true
+    }))
 );
 
 const Content = styled('div')(({ theme }) => ({
@@ -41,12 +40,11 @@ const Content = styled('div')(({ theme }) => ({
 
 const Footer = React.memo(
     styled.div(({ theme }) => ({
-        backgroundColor: 'white',
+        backgroundColor: theme.greyStrongColor,
         display: 'flex',
         paddingTop: theme.unitSize,
         paddingBottom: theme.unitSize
-    })),
-    () => true
+    }))
 );
 
 const Title = styled.div(({ theme }) => ({
@@ -59,17 +57,16 @@ const Title = styled.div(({ theme }) => ({
 }));
 
 const TextInput = styled.input(({ theme }) => ({
-    background: 'white',
+    background: theme.greyStrongColor,
     border: 0,
     borderBottom: '1px solid #0002',
+    boxSizing: 'border-box',
     display: 'block',
     flexGrow: 0,
-    boxSizing: 'border-box',
+    outline: 'none',
     padding: theme.unitSize * 2,
     paddingBottom: theme.unitSize * 1.75,
-    outline: 'none',
     '&:focus': {
-        // borderColor: '#0003',
         boxShadow: theme.shadow
     }
 }));
@@ -77,22 +74,26 @@ const TextInput = styled.input(({ theme }) => ({
 const OptionsList = styled.div(() => ({
     borderBottom: '1px solid #0001',
     display: 'flex',
+    flexBasis: '100%',
     flexDirection: 'column',
     flexShrink: 1,
     overflowY: 'auto',
-    overflowX: 'hidden',
-    flexBasis: '100%'
+    overflowX: 'hidden'
 }));
 
 const ChosenOptionList = styled('div')(({ theme }) => ({
-    background: 'white',
+    background: theme.greyStrongColor,
     boxShadow: theme.shadow,
     display: 'flex',
     flexGrow: 1,
     flexShrink: 0,
     flexDirection: 'column',
+    maxHeight: '33%',
     overflowX: 'auto',
-    maxHeight: '33%'
+
+    '& > button': {
+        color: theme.greyContrastColor
+    }
 }));
 
 const Option = React.memo(
@@ -108,9 +109,13 @@ const Option = React.memo(
         textAlign: 'left',
         userSelect: 'none',
 
-        '&:hover, &:focus': {
+        '&:focus': {
             backgroundColor: theme.greyWeakColor,
             outline: 'none'
+        },
+
+        '&:first-of-type': {
+            marginTop: theme.unitSize * 0.5
         }
     }))
 );
@@ -234,23 +239,26 @@ const MultiselectDialog: React.FC<IMultiselectProps> = props => {
         }
     };
 
-    const handleOptionClick = React.useMemo(() => (event) => {
-        event.preventDefault();
-        const value = event.target.textContent || event.target.value;
+    const handleOptionClick = React.useMemo(
+        () => event => {
+            event.preventDefault();
+            const value = event.target.textContent || event.target.value;
 
-        /*
-         * Remove from chosen list
-         */
-        if (chosenOptions.includes(value)) {
-            setChosenOptions(selected => [...selected.filter(option => option !== value)]);
-            return;
-        }
+            /*
+             * Remove from chosen list
+             */
+            if (chosenOptions.includes(value)) {
+                setChosenOptions(selected => [...selected.filter(option => option !== value)]);
+                return;
+            }
 
-        /*
-         * Add to chosen list
-         */
-        setChosenOptions(selected => [...selected, value]);
-    }, [chosenOptions]);
+            /*
+             * Add to chosen list
+             */
+            setChosenOptions(selected => [value, ...selected]);
+        },
+        []
+    );
 
     const handleSubmit = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -295,11 +303,7 @@ const MultiselectDialog: React.FC<IMultiselectProps> = props => {
                     </OptionsList>
                     <ChosenOptionList>
                         {chosenOptions.map((option, index) => (
-                            <Option
-                                key={index}
-                                onClick={handleOptionClick}
-                                tabIndex={1}
-                            >
+                            <Option key={index} onClick={handleOptionClick} tabIndex={1}>
                                 {option}
                             </Option>
                         ))}

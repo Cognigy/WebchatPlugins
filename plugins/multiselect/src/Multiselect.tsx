@@ -9,19 +9,19 @@ interface IMultiselectMessage extends IBotMessage {
     data: {
         _plugin: {
             type: 'multiselect';
+            allowUserAnswers: boolean;
+            cancelButtonLabel: string;
+            inputPlaceholder: string;
             options: string[];
             openButtonLabel: string;
-            cancelButtonLabel: string;
             submitButtonLabel: string;
-            inputPlaceholder: string;
-            allowUserAnswers: boolean;
         };
     };
 }
 
 const OpenButton = styled.button(({ theme }) => ({
     borderColor: theme.primaryColor,
-    cursor: "pointer",
+    cursor: 'pointer',
     height: 40,
     padding: `${theme.unitSize}px ${theme.unitSize * 2}px`,
     borderRadius: theme.unitSize * 2,
@@ -38,10 +38,19 @@ const Multiselect: React.FC<IMultiselectProps> = props => {
     if (!props.isFullscreen) {
         return (
             <div>
-                <MessageBubble theme={props.theme} align="left" className="regular-message bot" color="primary">
+                <MessageBubble
+                    theme={props.theme}
+                    align="left"
+                    className="regular-message bot"
+                    color="primary"
+                >
                     {props.message.text}
                 </MessageBubble>
-                <OpenButton theme={props.theme} onClick={props.onSetFullscreen} style={{marginTop: props.theme.unitSize * 2}}>
+                <OpenButton
+                    theme={props.theme}
+                    onClick={props.onSetFullscreen}
+                    style={{ marginTop: props.theme.unitSize * 2 }}
+                >
                     {props.message.data._plugin.openButtonLabel}
                 </OpenButton>
             </div>
