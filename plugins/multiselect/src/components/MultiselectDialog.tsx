@@ -257,7 +257,7 @@ const MultiselectDialog: React.FC<IMultiselectProps> = props => {
              */
             setChosenOptions(selected => [value, ...selected]);
         },
-        []
+        [chosenOptions]
     );
 
     const handleSubmit = (e: React.MouseEvent) => {
