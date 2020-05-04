@@ -1,0 +1,28 @@
+{
+  "name": "rating",
+  "version": "1.0.0",
+  "description": "Enable user ratings in the webchat",
+  "main": "build/plugin.js",
+  "scripts": {
+    "build": "parcel build --out-file rating.webchat-plugin.js src/index.jsx"
+  },
+  "keywords": [
+    "Rating"
+  ],
+  "author": "Cognigy GmbH",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^16.8.18",
+    "parcel": "^1.12.3"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.9.12",
+    "@material-ui/lab": "^4.0.0-alpha.51",
+    "@material-ui/styles": "^4.9.10",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "alias": {
+    "react": "./alias/react"
+  }
+}
