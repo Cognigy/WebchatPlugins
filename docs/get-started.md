@@ -22,11 +22,24 @@ Open your `package.json` file and add a new "build" job at the "scripts" field:
         ...,
         "build": "parcel build --out-file webchat-plugin.js src/index.jsx"
     },
+    "alias": {
+        "react": "./alias/react"
+    }
     ...
 }
 ```
 
+- create a folder called `alias`
+- in this new folder, create a file called `react.js`
+- insert the following code in it:
 
+```js
+if (!window.__COGNIGY_WEBCHAT)
+    throw new Error('Cognigy Webchat v2.7 or higher has to be loaded before this plugin');
+
+module.exports = window.__COGNIGY_WEBCHAT.React;
+```
+- this configuration will prevent React version errors, which could appear because of different versions in the Cognigy Webchat and your Webchat Plugin. This configuration says that the browser always has to use the Webchat React version to compile the code
 - create src/index.jsx
 
 
