@@ -39,7 +39,7 @@ if (!window.__COGNIGY_WEBCHAT)
 
 module.exports = window.__COGNIGY_WEBCHAT.React;
 ```
-- this configuration will prevent React version errors, which could appear because of different versions in the Cognigy Webchat and your Webchat Plugin. This configuration says that the browser always has to use the Webchat React version to compile the code
+- this configuration will make the webchat plugin use the webchat's built-in react version
 - create src/index.jsx
 
 
