@@ -1,3 +1,5 @@
+# Releases
+
 Name  | Description  | Download  | Version  |
 |---|---|---|---|
 | File Upload  |  Upload user files in the webchat |  [Download](https://github.com/Cognigy/WebchatPlugins/releases/download/fileUpload1.0.0/file-upload.webchat-plugin.js) |  1.0.0 |
