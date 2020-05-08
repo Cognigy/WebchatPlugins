@@ -9,6 +9,7 @@ While this page is focused primarily on basic concepts, you may want to jump in 
 - [Get Started](./docs/get-started.md) 
 - [Examples](./docs/examples.md)
 - [API Reference](./docs/api-reference.md)
+- [Releases](./RELEASES.md)
 
 
 ## Plugin Concepts
