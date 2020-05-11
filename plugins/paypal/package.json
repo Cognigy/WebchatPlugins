@@ -1,0 +1,22 @@
+{
+  "name": "paypal",
+  "version": "1.0.0",
+  "description": "Provide PayPal payments in your webchat",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "parcel build --out-file paypal-webchat-plugin.js src/index.js"
+  },
+  "keywords": [
+    "paypal"
+  ],
+  "author": "Cognigy GmbH",
+  "license": "MIT",
+  "devDependencies": {
+    "parcel": "^1.12.4"
+  },
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-paypal-button-v2": "^2.6.2"
+  }
+}
