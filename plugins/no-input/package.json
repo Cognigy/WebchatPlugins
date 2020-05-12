@@ -1,0 +1,17 @@
+{
+  "name": "no-input",
+  "version": "1.0.0",
+  "description": "An input plugin that displays no text input for click-only bots",
+  "main": "index.jsx",
+  "scripts": {
+    "build": "parcel build --out-file dist/no-input.webchat-plugin.js src/index.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "parcel": "^1.12.4"
+  },
+  "alias": {
+    "react": "./alias/react"
+  }
+}
