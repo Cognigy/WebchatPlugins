@@ -1,15 +1,7 @@
 const noInputPlugin = {
     type: 'rule',
-    rule: () => {   
-        console.log('rule');
-
-        return true;
-    },
-    component: () => {
-        console.log('component');
-
-        return null;
-    }
+    rule: () => true,
+    component: () =>  null
 };
 
 if (!window.cognigyWebchatInputPlugins) {
