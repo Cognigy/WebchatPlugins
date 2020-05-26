@@ -9,23 +9,28 @@ const PayPal = (props) => {
 
 	return (
 		<PayPalButton
-		
 			amount={amount}
 			// shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
 			onSuccess={(details, data) => {
-				alert("Transaction completed by " + details.payer.name.given_name);
-
 				// send success data to cognigy
 				onSendMessage('', {
 					paypal: {
+						message: "success",
 						details,
 						data
 					}
 				})
 			}}
-			catchError={(err) => console.log(err)}
+			catchError={(err) => onSendMessage('', {
+				paypal: {
+					message: "error",
+					details: null,
+					data: err
+				}
+			})}
 			onCancel={(data) => onSendMessage('', {
 				paypal: {
+					message: "cancel",
 					details: null,
 					data
 				}
