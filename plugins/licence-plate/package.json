@@ -1,0 +1,23 @@
+{
+  "name": "licence-plate",
+  "version": "1.0.0",
+  "description": "Provide searching for a licence plate",
+  "main": "src/index.jsx",
+  "scripts": {
+    "build": "parcel build --out-file licence-plate-webchat-plugin.js src/index.jsx"
+  },
+  "keywords": [
+    "licence"
+  ],
+  "author": "Cognigy GmbH",
+  "license": "MIT",
+  "devDependencies": {
+    "parcel": "^1.12.4"
+  },
+  "dependencies": {
+    "react": "^16.13.1"
+  },
+  "alias": {
+    "react": "./alias/react"
+}
+}
