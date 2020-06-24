@@ -9,7 +9,7 @@ It wraps the [react-adaptivecards](https://github.com/gatewayapps/react-adaptive
 1. Clone this repo
 2. Install all necessary dependencies via `nmp i`
 3. Run `npm run build` - this will create a `dist/adaptivecards.webchat-plugin.js` plugin file for you
-4. Use that file in your Cognigy Webchat as described in [Get Started](https://github.com/Cognigy/WebchatPlugins/blob/master/docs/get-started.md).
+4. Use that file in your Cognigy Webchat as described in [Webchat Embedding](https://github.com/Cognigy/WebchatWidget/blob/master/docs/embedding.md#using-webchat-plugins).
 
 ## Calling the Plugin from Cognigy
 You can call the plugin from within Cognigy by sending a data message using a Say Node.
