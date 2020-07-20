@@ -115,6 +115,64 @@ if (!window.cognigyWebchatMessagePlugins) {
 window.cognigyWebchatMessagePlugins.push(messageDataPlugin);
 ```
 
+## Input
+
+```jsx
+import * as React from "react";
+import SendIcon from '@material-ui/icons/Send';
+import IconButton from '@material-ui/core/IconButton';
+
+const InputPlugin = (props) => {
+
+    const { onSendMessage, config } = props;
+
+    // Autosuggest will pass through all these props to the input.
+    const inputProps = {
+        placeholder: config.settings.inputPlaceholder,
+        value,
+        onChange: onChange
+    };
+
+    const sendCognigyMessage = () => {
+        if (value.length !== 0) {
+            onSendMessage(value, null);
+            setValue('');
+        }
+    }
+
+    return (
+        <div style={{
+            display: 'flex',
+            flexDirection: 'row'
+        }}>
+            <input {...inputProps} />
+            <IconButton
+                style={{
+                    borderTop: '1px solid black',
+                    borderRadius: 0
+                }}
+                onClick={sendCognigyMessage}
+            >
+                <SendIcon />
+            </IconButton>
+        </div>
+    );
+
+}
+
+const inputPlugin = {
+    type: 'rule',
+    rule: () => true,
+    component: InputPlugin
+}
+
+if (!window.cognigyWebchatInputPlugins) {
+    window.cognigyWebchatInputPlugins = []
+}
+
+window.cognigyWebchatInputPlugins.push(inputPlugin);
+```
+
 ## Dialog
 Displays a Button that opens a Dialog when clicked.
 The user can then dismiss or submit the dialog with buttons.
