@@ -9,17 +9,6 @@ If set to a string, it will match based on whether a message's `message.data._pl
 Using `message.data._plugin.type` to match the plugin is a convention we try to push (but not enforce).
 It is therefore also possible to provice an own matching function instead of a string, which will get a message as an argument and should return `true` if this plugin should be used, otherwise `false`.
 
-#### `type: string & rule: () => boolean`
-If you want to use an input webchat plugin, you need to use the following configuration:
-```jsx
-{
-    type: 'rule',
-    rule: () => true,
-    component: Component
-}
-```
-With this information, the plugin is executed automatically after rendering the webchat on the webpage. 
-
 #### `component`
 A React component that is responsible for rendering the message.
 It will receive the message as well as additional api hooks via [props](#message-component-props).
@@ -67,6 +56,19 @@ In fullwidth mode, the message will not have an avatar beside it.
 #### `passthrough: boolean`
 If this is set to `true`, the webchat will continue matching other plugins after this one, even if this plugin matches. 
 This way, one message can trigger multiple plugins.
+
+## Input Plugins
+
+#### `type: string & rule: () => boolean`
+If you want to use an input webchat plugin, you need to use the following configuration:
+```jsx
+{
+    type: 'rule',
+    rule: () => true,
+    component: Component
+}
+```
+With this information, the plugin is executed automatically after rendering the webchat on the webpage. 
 
 ---
 
