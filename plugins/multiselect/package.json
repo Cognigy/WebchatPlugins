@@ -11,7 +11,8 @@
     "@cognigy/webchat": "git+https://git@github.com/Cognigy/WebchatWidget.git#v2.16.0",
     "@types/react": "^16.9.27",
     "parcel": "^1.12.4",
-    "react": "^16.13.1"
+    "react": "^16.13.1",
+    "typescript": "^3.9.7"
   },
   "alias": {
     "react": "./alias/react"
