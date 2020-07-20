@@ -125,6 +125,7 @@ import IconButton from '@material-ui/core/IconButton';
 const InputPlugin = (props) => {
 
     const { onSendMessage, config } = props;
+    const [value, setValue] = React.useState('');
 
     const inputProps = {
         placeholder: config.settings.inputPlaceholder,
@@ -135,13 +136,13 @@ const InputPlugin = (props) => {
             display: 'flex',
             flexDirection: 'row'
         }}>
-            <input {...inputProps} />
+            <input {...inputProps} onChange={(e) => setValue(e.target.value)}/>
             <IconButton
                 style={{
                     borderTop: '1px solid black',
                     borderRadius: 0
                 }}
-                onClick={() => {}}
+                onClick={() => onSendMessage(value)}
             >
                 <SendIcon />
             </IconButton>
