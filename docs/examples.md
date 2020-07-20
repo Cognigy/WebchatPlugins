@@ -126,19 +126,9 @@ const InputPlugin = (props) => {
 
     const { onSendMessage, config } = props;
 
-    // Autosuggest will pass through all these props to the input.
     const inputProps = {
         placeholder: config.settings.inputPlaceholder,
-        value,
-        onChange: onChange
     };
-
-    const sendCognigyMessage = () => {
-        if (value.length !== 0) {
-            onSendMessage(value, null);
-            setValue('');
-        }
-    }
 
     return (
         <div style={{
@@ -151,13 +141,12 @@ const InputPlugin = (props) => {
                     borderTop: '1px solid black',
                     borderRadius: 0
                 }}
-                onClick={sendCognigyMessage}
+                onClick={() => {}}
             >
                 <SendIcon />
             </IconButton>
         </div>
     );
-
 }
 
 const inputPlugin = {
