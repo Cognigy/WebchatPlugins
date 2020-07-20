@@ -57,6 +57,19 @@ In fullwidth mode, the message will not have an avatar beside it.
 If this is set to `true`, the webchat will continue matching other plugins after this one, even if this plugin matches. 
 This way, one message can trigger multiple plugins.
 
+## Input Plugins
+
+#### `type: string & rule: () => boolean`
+If you want to use an input webchat plugin, you need to use the following configuration:
+```jsx
+{
+    type: 'rule',
+    rule: () => true,
+    component: Component
+}
+```
+With this information, the plugin is executed automatically after rendering the webchat on the webpage. 
+
 ---
 
 

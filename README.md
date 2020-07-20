@@ -20,6 +20,11 @@ By default, messages will get rendered `inline`, with an avatar next to it, alig
 
 ![Inline Message](./assets/message-plugin-inline.png)  
 
+#### Input
+If one needs to provide specific input text fields, the input plugin can be used. With this type, various input features can be implemented -- such as an auto-complete field. 
+
+![Input](./assets/input-plugin-rule.png)
+
 
 #### Fullscreen Message
 Message plugins can utilize a 'fullscreen' mechanism that will render it fullscreen, filling out all the viewport of the webchat. This can be used to create dialog-like mechanics where the user's attention can be locked onto the next step.
