@@ -1,0 +1,23 @@
+{
+  "name": "dropdown",
+  "version": "1.0.0",
+  "description": "DropDown webchat plug-in",
+  "main": "./src/index.jsx",
+  "scripts": {
+    "build": "parcel build --out-file dropdown.webchat-plugin.js ./src/index.jsx"
+  },
+  "alias": {
+    "react": "./alias/react"
+  },
+  "author": "Cognigy GmbH",
+  "license": "MIT",
+  "devDependencies": {
+    "parcel": "^1.12.4"
+  },
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-select": "^3.1.0",
+    "semantic-ui-react": "^0.88.2"
+  }
+}
