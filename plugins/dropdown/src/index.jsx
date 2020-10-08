@@ -16,7 +16,14 @@ const dropDown = (props) => {
 	const { message, onSendMessage } = props;
 	const { data } = message;
 	const { _plugin } = data;
-	const { items } = _plugin;
+	const {items}  = _plugin;
+
+  const options = items.map(item => {
+    return {
+      label: item,
+      value: item
+    }
+  })
 
   const [selectedValue, setSelectedValue] = React.useState('');
 
@@ -24,13 +31,15 @@ const dropDown = (props) => {
     setSelectedValue(selectedOption);
   }
 
+  // console.log(items)
+
   return (
     <div style={divStyle}>
       <link
         rel="stylesheet"
-        href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
+        href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
       />
-      <Select options={items}
+      <Select options={options}
         onChange={handleChange}
       />
       <div style={divPaddingTop}>
