@@ -8,7 +8,7 @@ Enable user ratings in your webchat conversation.
     - `npm i`
     - `npm run build`
 2. Now, you should find a folder called `dist` which contains a `rating.webchat-plugin.js` file. This file whether needs to be included into your `index.html` file which opens the webchat or uploaded to a cloud storage to add it to the Cognigy Webchat Configuration in the Webchat Endpoint.
-3. In your Cognigy.AI project, you need to define a Flow that starts the webchat plugin. Therefore, use the following JSON data as Data informatoin in the SAY Node:
+3. In your Cognigy.AI agent, you need to define a Flow that starts the webchat plugin. Therefore, use the following JSON data as Data informatoin in the SAY Node:
 
 ```json
 {
@@ -16,14 +16,19 @@ Enable user ratings in your webchat conversation.
     "type": "rating",
     "title": "Please rate us",
     "initialRating": 2,
-    "size": "medium",
+    "size": "medium", // 'small', 'medium', 'large'
+    "variant": "star", // 'star', 'heart', 'emoji'
     "maxRatingValue": 5,
-    "precision": 1,
+    "precision": 1, // '1' or '0.5' for rating values like 3.5
     "rateButtonText": "Send Rating"
   }
 }
 ```
 
-After the above SAY node was executed by Cognigy.AI, it should show the following content in your webchat:
+After the above SAY node was executed by Cognigy.AI, it should show one of the following contents in your webchat:
 
-<img src="./docs/1.png"></img>
+<img src="./docs/star.png"></img>
+
+<img src="./docs/heart.png"></img>
+
+<img src="./docs/emoji.png"></img>
