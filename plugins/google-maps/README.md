@@ -14,16 +14,32 @@ This repository contains a google maps plugin for the [Cognigy Webchat](https://
 You can call the plugin from within Cognigy by sending a data message using a Say Node.
 You can specify following optional parameters:
 
-```
+
+```js
 {
   "_plugin": {
     type: "google-maps",
     center: {
-        lat: latitude,
-        lng: longitude
+        lat: 51.259823489,
+        lng: 6.23432432
     },
-    zoom: zoom,
-    bootstrapURLKeys: "secret.api_key"
+    zoom: 12,
+    apikey: "" //Google Maps JavaScript API Key
+  }
+}
+```
+
+Please make sure that the values in `data` match the following interface:
+```ts
+interface {
+  _plugin: {
+    type: "google-maps";
+    center: {
+      lat: number;
+      lng: number;
+    },
+    zoom: number;
+    apikey: string; // Google Maps JavaScript API Key
   }
 }
 ```
