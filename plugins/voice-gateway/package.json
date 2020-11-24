@@ -1,0 +1,29 @@
+{
+  "name": "voice-gateway",
+  "version": "1.0.0",
+  "description": "Call the Cognigy Voice Gateway",
+  "main": "build/plugin.js",
+  "scripts": {
+    "build": "parcel build --out-file voice-gateway.webchat-plugin.js src/index.jsx"
+  },
+  "keywords": [
+    "Voice Gateway"
+  ],
+  "author": "Cognigy GmbH",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^16.8.18",
+    "parcel": "^1.12.3"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.9.12",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.51",
+    "@material-ui/styles": "^4.10.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "alias": {
+    "react": "./alias/react"
+  }
+}
