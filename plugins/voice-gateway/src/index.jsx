@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 const VoiceGateway = (props) => {
 
 	// get info from Cogngiy data
-	const { message } = props;
+	const { message, onDismissFullscreen } = props;
 	const { data } = message;
 	const { _plugin } = data;
 	const { number, name } = _plugin;
@@ -47,53 +47,100 @@ const VoiceGateway = (props) => {
 	// get styles
 	const classes = useStyles(activeCall);
 
-	/**
-	 * Audiocodes config
-	 */
-	let c2c_serverConfig = {
-		domain: 'examples.com',                // AudioCodes SBC domain name, used to build SIP headers From/To
-		addresses: ['wss://examples.com'],    // AudioCodes SBC secure web socket address (can be multiple)
-		iceServers: ['74.125.140.127:19302', '74.125.143.127:19302']                        // Addresses for STUN servers. Can be empty
-	};
+	React.useEffect(() => {
+		c2c_phone.setAcLogger(c2c_ac_log);
+		c2c_phone.setJsSipLogger(c2c_js_log);
+		c2c_ac_log('------ Date: %s -------', new Date().toDateString());
+		c2c_ac_log('Browser: ' + c2c_phone.getBrowserName() + ' Internal name: ' + c2c_phone.getBrowser());
+		c2c_ac_log('SIP: %s', JsSIP.C.USER_AGENT);
+		c2c_ac_log('AudioCodes API: %s', c2c_phone.version());
 
-	let c2c_config = {
-		call: number, // Call to this user name (or phone number).
-		caller: name, // Caller user name (One word according SIP RFC 3261). 
-		callerDN: 'Anonymous', // Caller display name (words sequence).
-		type: 'audio',         // 'audio' or 'video'
-		videoSize: { width: '320px', height: '240px' }, // video size (for video call) 
-		// also can be used default {width: '', height: ''}
-		messageDisplayTime: 5, // A message will be displayed during this time (seconds).
-		restoreCallMaxDelay: 20, // After page reloading, call can be restored within the time interval (seconds).
 
-		keepAlivePing: 15,        // To detect websocket disconnection and and keep alive NAT connection, send CRLF ping interval (seconds) 
-		keepAlivePong: 15,        // Wait pong response interval (seconds)
-		keepAliveStats: 60,       // Each n pongs print to console log min and max pong delay
-		keepAliveDist: false      // Print to console log also pong distribution.
-	};
+		// Check WebRTC support    
+		if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+			c2c_info('No WebRTC');
+			c2c_disableWidget('WebRTC API is not supported in this browser !');
+			return;
+		}
 
-	let c2c_soundConfig = {
-		generateTones: {
-			// Phone ringing, busy and other tones vary in different countries.
-			// Please see: https://www.itu.int/ITU-T/inr/forms/files/tones-0203.pdf
-			ringingTone: [{ f: 400, t: 1.5 }, { t: 3.5 }],
-			busyTone: [{ f: 400, t: 0.5 }, { t: 0.5 }],
-			disconnectTone: [{ f: 400, t: 0.5 }, { t: 0.5 }],
-		},
-		play: {
-			outgoingCallProgress: { name: 'ringingTone', loop: true, volume: 0.2 },
-			busy: { name: 'busyTone', volume: 0.2, repeat: 4 },
-			disconnect: { name: 'disconnectTone', volume: 0.2, repeat: 3 },
-		},
-	};
+		if (location.protocol !== 'https:' && location.protocol !== 'file:') {
+			c2c_ac_log('Warning: for the URL used "' + location.protocol + '" protocol');
+		}
 
-	document.addEventListener("DOMContentLoaded", function (event) {
-		c2c_init();
-	});
+		// Gui initialization
+		window.addEventListener('beforeunload', c2c_onBeforeUnload);
+		// c2c_setButtonForCall();
 
-	const call = () => {
-		setActiveCall(!activeCall);
+		// Prepare audio player
+		c2c_audioPlayer.init(c2c_ac_log);
+
+		c2c_audioPlayer.generateTonesSuite(c2c_soundConfig.generateTones)
+			.then(() => {
+				c2c_ac_log('audioPlayer: tones are generated');
+			})
+			.catch(e => {
+				c2c_ac_log('audioPlayer: error during tone generation', e);
+			});
+
+		// Restore call after page reload
+		let data = localStorage.getItem('c2c_restoreCall');
+		if (data !== null) {
+			localStorage.removeItem('c2c_restoreCall');
+
+			c2c_restoreCall = JSON.parse(data);
+			let delay = Math.ceil(Math.abs(c2c_restoreCall.time - new Date().getTime()) / 1000);
+			if (delay > c2c_config.c2c_restoreCallMaxDelay) {
+				c2c_ac_log('No restore call, delay is too long (' + delay + ' seconds)');
+				c2c_restoreCall = null;
+			} else {
+				c2c_ac_log('Trying to restore call', c2c_restoreCall);
+				c2c_call();
+			}
+		}
+	}, []);
+
+
+	const handleCall = () => {
+
+		// c2c_info('Connecting', true);
+		c2c_audioPlayer.stop();
+		// c2c_setButtonForCalling();
+		c2c_enableSound()
+			.then(() => {
+				return c2c_phone.checkAvailableDevices();
+			})
+			.then(() => {
+
+				c2c_initSIP({ user: c2c_config.caller, displayName: c2c_config.callerDN, password: '' });
+
+				// start the call
+				setActiveCall(true);
+
+			})
+			.catch((e) => {
+				c2c_ac_log('Check available devices error:', e);
+				// c2c_info(e, true);
+				// c2c_setButtonForCall();
+				// end the call
+				setActiveCall(false);
+			});
 	}
+
+	const handleHangup = () => {
+
+		// Check if user wants to hangup
+		if (activeCall) {
+			c2c_enableSound();
+			if (c2c_activeCall !== null) {
+				c2c_activeCall.terminate();
+				c2c_activeCall = null;
+			}
+
+			// end the call
+			setActiveCall(false);
+		}
+	}
+
 
 	return (
 		<div
@@ -108,15 +155,10 @@ const VoiceGateway = (props) => {
 				className={classes.buttonDiv}
 				id="c2c_div"
 			>
-				{/* <script src="./js/adapter-latest.js"></script> */}
-				<script src="./js/ac_webrtc.min.js"></script>
-				<script src="./js/audio_player.js"></script>
-				<script src="./js/c2c.js"></script>
-
 				<IconButton
 					id="c2c_button"
 					className={classes.callButton}
-					onClick={call}
+					onClick={activeCall ? handleHangup : handleCall}
 				>
 					{
 						activeCall
