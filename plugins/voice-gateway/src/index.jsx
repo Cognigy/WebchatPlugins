@@ -40,7 +40,7 @@ const useStyles = makeStyles({
 const VoiceGateway = (props) => {
 
 	// get info from Cogngiy data
-	const { message, onDismissFullscreen } = props;
+	const { message, onSendMessage, isFullscreen, onSetFullsceen } = props;
 	const { data } = message;
 	const { _plugin } = data;
 	const { number, name } = _plugin;
@@ -311,6 +311,9 @@ const VoiceGateway = (props) => {
 		}
 	}
 
+	if (!isFullscreen) {
+		return <div><CallEndIcon /></div>
+	}
 
 	return (
 		<div
@@ -320,7 +323,9 @@ const VoiceGateway = (props) => {
 				className={classes.closeButtonDiv}
 			>
 				<IconButton
-					onClick={() => onDismissFullscreen()}
+					onClick={() => onSendMessage('', {
+						"voiceGateway": "call ended"
+					})}
 				>
 					<CloseIcon />
 				</IconButton>
@@ -333,10 +338,10 @@ const VoiceGateway = (props) => {
 			</Typography>
 			<div
 				className={classes.buttonDiv}
-				id="c2c_div"
+				// id="c2c_div"
 			>
 				<IconButton
-					id="c2c_button"
+					// id="c2c_button"
 					className={classes.callButton}
 					onClick={activeCall ? handleHangup : handleCall}
 				>
