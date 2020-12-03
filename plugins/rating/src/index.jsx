@@ -47,11 +47,11 @@ const customIcons = {
 function IconContainer(props) {
 	const { value, ...other } = props;
 	return <span {...other}>{customIcons[value].icon}</span>;
-  }
-  
-  IconContainer.propTypes = {
+}
+
+IconContainer.propTypes = {
 	value: PropTypes.number.isRequired,
-  };
+};
 
 const UserRating = (props) => {
 
@@ -59,9 +59,10 @@ const UserRating = (props) => {
 	const { message, onSendMessage } = props;
 	const { data } = message;
 	const { _plugin } = data;
-	const { title, initialRating, size, maxRatingValue, precision, rateButtonText, variant } = _plugin;
+	const { title, initialRating, size, maxRatingValue, precision, rateButtonText, variant, thankYouText } = _plugin;
 
 	const [value, setValue] = React.useState(initialRating);
+	const [isRated, setIsRated] = React.useState(false);
 
 	return (
 		<div style={{
@@ -118,10 +119,18 @@ const UserRating = (props) => {
 							}}
 						/>
 			}
-			<Button
-				variant="outlined"
-				onClick={() => onSendMessage(JSON.stringify(value), { rating: value })}
-			>{rateButtonText}</Button>
+			{
+				!isRated
+					?
+					<Button
+						variant="outlined"
+						// onClick={() => onSendMessage(JSON.stringify(value), { rating: value })}
+						onClick={() => setIsRated(true)}
+					>{rateButtonText}</Button>
+					: 
+				thankYouText.length !== 0 ? <Typography component="legend">{thankYouText}</Typography> : null
+			}
+
 		</div>
 	)
 
@@ -131,7 +140,7 @@ const ratingPlugin = {
 	match: 'rating',
 	component: UserRating,
 	options: {
-		fullwidth: true
+		fullscreen: true
 	}
 }
 
