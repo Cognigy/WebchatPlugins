@@ -1,0 +1,19 @@
+div.hosted-field {
+	height: 24;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 0.375rem 0.75rem;
+	display: block;
+	font-weight: 400;
+	font-size: 24px;
+	border: 1px solid #ced4da;
+	border-radius: 0.25rem;
+	line-height: 1.5;
+	/* background-color: #fff;
+	background-clip: padding-box; */
+	margin-bottom: 4px;
+	/* background: #fff;
+	background-size: 200% 100%;
+	background-position: right bottom;
+	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; */
+}
