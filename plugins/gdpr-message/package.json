@@ -1,0 +1,24 @@
+{
+  "name": "gdpr-message",
+  "version": "1.0.0",
+  "description": "Display a fullscreen GDPR message",
+  "main": "build/plugin.js",
+  "scripts": {
+    "build": "parcel build --out-file gdpr-message.webchat-plugin.js src/index.jsx"
+  },
+  "author": "Cognigy GmbH",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^16.8.18",
+    "parcel": "^1.12.4"
+  },
+  "dependencies": {
+    "jquery": "^3.4.1",
+    "memoize-one": "^5.1.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "alias": {
+    "react": "./alias/react"
+  }
+}
