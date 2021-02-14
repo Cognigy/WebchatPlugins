@@ -1,8 +1,8 @@
-# Push Notification Webchat Plugin
+# Stripe Payments Webchat Plugin
 
-With this Webchat Plugin you can send custom push notifications to your current ongoing webchat session.
+With this Webchat Plugin one can provide online payments with [Stripe](https://www.stripe.com).
 
-To execute the webchat plugin in your conversation, whether use a **Say** Node in Cognigy.AI or the **Code** Node, such as in the following example:
+To execute the webchat plugin in a conversation, whether use a **Say** Node in Cognigy.AI or the **Code** Node, such as in the following example:
 
 ```json
 {
