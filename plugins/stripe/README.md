@@ -8,7 +8,9 @@ To execute the webchat plugin in your conversation, whether use a **Say** Node i
 {
   "_plugin": {
     "type": "stripe",
-    "amount": 25,
+    "successMessage": "Thanks for the payment.",
+    "submitButtonText": "Bezahlen",
+    "errorMessage": "The payment failed.",
     "stripePK": "pk_test_6pRNASCoBOKtIshFeQd4XMUh"
   }
 }
