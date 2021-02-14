@@ -91,7 +91,7 @@ const Field = ({
 	</div>
 );
 
-const SubmitButton = ({ processing, error, children, disabled }) => (
+const SubmitButton = ({ processButtonText, processing, error, children, disabled }) => (
 	<button
 		style={{
 			display: 'block',
@@ -113,7 +113,7 @@ const SubmitButton = ({ processing, error, children, disabled }) => (
 		type="submit"
 		disabled={processing || disabled}
 	>
-		{processing ? 'Processing...' : children}
+		{processing ? processButtonText : children}
 	</button>
 );
 
@@ -151,7 +151,7 @@ const ErrorMessage = ({ children }) => (
 
 const CheckoutForm = (props) => {
 
-	const { submitButtonText, errorMessage, successMessage, stripePK } = props;
+	const { submitButtonText, onSendMessage, processButtonText } = props;
 
 	const stripe = useStripe();
 	const elements = useElements();
@@ -193,8 +193,16 @@ const CheckoutForm = (props) => {
 
 		if (payload.error) {
 			setError(payload.error);
+			// send error message to cognigy
+			onSendMessage('', {
+				stripeResult: 'error'
+			});
 		} else {
 			setPaymentMethod(payload.paymentMethod);
+			// send success message  to cognigy
+			onSendMessage('', {
+				stripeResult: 'success'
+			})
 		}
 	};
 
@@ -204,15 +212,7 @@ const CheckoutForm = (props) => {
 			textAlign: 'center',
 			animation: 'fade 200ms ease-out'
 		}}>
-			<div style={{
-				color: 'black',
-				fontWeight: 500,
-				marginBottom: '8px',
-				fontSize: '17px',
-				textAlign: 'center'
-			}} role="alert">
-				{successMessage || "Payment was successful"}
-			</div>
+			<div></div>
 		</div>
 	) : (
 			<form onSubmit={handleSubmit}>
@@ -279,7 +279,7 @@ const CheckoutForm = (props) => {
 					/>
 				</fieldset>
 				{error && <ErrorMessage>{error.message}</ErrorMessage>}
-				<SubmitButton processing={processing} error={error} disabled={!stripe}>
+				<SubmitButton processButtonText={processButtonText} processing={processing} error={error} disabled={!stripe}>
 					{submitButtonText || "Pay"}
 				</SubmitButton>
 			</form>
@@ -303,15 +303,15 @@ const stripePromise = (stripePK) => loadStripe(stripePK);
 const StripePayment = (props) => {
 
 	// get info from Cogngiy data
-	const { message } = props;
+	const { message, onSendMessage } = props;
 	const { data } = message;
 	const { _plugin } = data;
-	const { submitButtonText, successMessage, errorMessage, stripePK } = _plugin;
+	const { submitButtonText, stripePK, processButtonText } = _plugin;
 
 	return (
 		<div className="AppWrapper">
 			<Elements stripe={stripePromise(stripePK)} options={ELEMENTS_OPTIONS}>
-				<CheckoutForm submitButtonText={submitButtonText} stripePK={stripePK} successMessage={successMessage} errorMessage={errorMessage} />
+				<CheckoutForm processButtonText={processButtonText} onSendMessage={onSendMessage} submitButtonText={submitButtonText} />
 			</Elements>
 		</div>
 	)

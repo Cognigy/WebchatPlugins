@@ -8,9 +8,8 @@ To execute the webchat plugin in your conversation, whether use a **Say** Node i
 {
   "_plugin": {
     "type": "stripe",
-    "successMessage": "Thanks for the payment.",
-    "submitButtonText": "Bezahlen",
-    "errorMessage": "The payment failed.",
+    "processButtonText": "Processing...",
+    "submitButtonText": "Pay",
     "stripePK": "pk_test_6pRNASCoBOKtIshFeQd4XMUh"
   }
 }
@@ -18,4 +17,28 @@ To execute the webchat plugin in your conversation, whether use a **Say** Node i
 
 After the above SAY node was executed by Cognigy.AI, it should show one of the following contents in your webchat:
 
-<img src="./docs/stripe.png"></img>
+<img src="./docs/cognigyStripeExample.png"></img>
+
+## Result
+
+The plugin will return a data message in order to notify Cognigy.AI about the result:
+
+**Success:**
+
+```json
+{
+  "stripeResult": "success"
+}
+```
+
+**Error:**
+
+```json
+{
+  "stripeResult": "error"
+}
+```
+
+Now one could use a Lookup node and check the response:
+
+<img src="./docs/cognigyFlowStripe.png"></img>
