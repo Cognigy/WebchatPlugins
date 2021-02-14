@@ -8,6 +8,7 @@ To execute the webchat plugin in a conversation, whether use a **Say** Node in C
 {
   "_plugin": {
     "type": "stripe",
+    "option": "credit",
     "processButtonText": "Processing...",
     "submitButtonText": "Pay",
     "stripePK": "pk_test_6pRNASCoBOKtIshFeQd4XMUh"
@@ -15,9 +16,24 @@ To execute the webchat plugin in a conversation, whether use a **Say** Node in C
 }
 ```
 
+**Options:**
+
+- Credit Card
+  - `"option": "credit"`
+- IBAN
+  - `"option": "iban"`
+
+
 After the above SAY node was executed by Cognigy.AI, it should show one of the following contents in your webchat:
 
-<img src="./docs/cognigyStripeExample.png"></img>
+**Credit Card:**
+
+<img width="50%" src="./docs/cognigyStripeExample.png"></img>
+
+**IBAN:**
+
+<img width="50%" src="./docs/cognigyStripeIBANExample.png"></img>
+
 
 ## Result
 
