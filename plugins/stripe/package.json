@@ -1,0 +1,23 @@
+{
+  "name": "stripe",
+  "version": "1.0.0",
+  "description": "Use Stripe payment options in the webchat",
+  "main": "src/index.jsx",
+  "scripts": {
+    "build": "parcel build --out-file stripe.webchat-plugin.js src/index.jsx"
+  },
+  "author": "Alexander Teusz",
+  "license": "MIT",
+  "devDependencies": {
+    "parcel": "^1.12.4"
+  },
+  "dependencies": {
+    "@stripe/react-stripe-js": "^1.2.2",
+    "@stripe/stripe-js": "^1.12.1",
+    "react": "^16.12.0",
+    "regenerator-runtime": "^0.13.7"
+  },
+  "alias": {
+    "react": "./alias/react"
+  }
+}
