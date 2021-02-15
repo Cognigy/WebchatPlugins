@@ -26,13 +26,21 @@ const button = theme => ({
   
   const submitButton = theme => ({
     ...primaryButton(theme),
-    flexGrow: 2,
-    marginLeft: theme.unitSize * 2
+    flexGrow: 4,
+    marginLeft: "5%"
+  })
+
+  const gdprButton = theme => ({
+    ...primaryButton(theme),
+    background: "transparent",
+    color: "black"
   })
   
   const cancelButton = theme => ({
     ...button(theme),
-    flexGrow: 1
+    flexGrow: 1,
+    marginRight: "5%",
+    marginLeft: "5%"
   })
   
   const openDialogButton = theme => ({
@@ -71,13 +79,16 @@ const button = theme => ({
     fontWeight: 'bolder',
   
     boxShadow: theme.shadow,
-  
+    justifyContent: "center",
     zIndex: 2
   })
   
   const content = theme => ({
     ...padding(theme),
-    flexGrow: 1
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
   })
   
   const footer = theme => ({
@@ -92,6 +103,7 @@ const button = theme => ({
   export const getStyles = theme => {
     const openDialogButtonStyles = openDialogButton(theme);
     const headerStyles = header(theme);
+    const gdprButtonStyles = gdprButton(theme);
     const contentStyles = content(theme);
     const footerStyles = footer(theme);
     const submitButtonStyles = submitButton(theme);
@@ -105,6 +117,7 @@ const button = theme => ({
       footerStyles,
       submitButtonStyles,
       cancelButtonStyles,
-      dialogStyles
+      dialogStyles,
+      gdprButtonStyles
     }
   };

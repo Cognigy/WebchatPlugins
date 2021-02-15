@@ -13,7 +13,7 @@ const GDPRMessage = (props) => {
     } = props;
 
     if (!isFullscreen) {
-      
+
         return <div>
 
         </div>
@@ -31,13 +31,19 @@ const GDPRMessage = (props) => {
         contentStyles,
         footerStyles,
         submitButtonStyles,
-        cancelButtonStyles
+        cancelButtonStyles,
+        gdprButtonStyles
     } = getStylesMemo(theme);
 
-    const handleSubmit = () => {
-        onSendMessage('',{
-            accepted_gdpr: true
+    const handleSubmit = (result) => {
+        onSendMessage('', {
+            accepted_gdpr: result
         });
+        onDismissFullscreen();
+    }
+
+    const handleGDPButton = (payload) => {
+        onSendMessage(payload, {});
         onDismissFullscreen();
     }
 
@@ -50,28 +56,62 @@ const GDPRMessage = (props) => {
             }}
         >
             <header style={headerStyles}>
-            {props.message.data._plugin.title || "GDPR"}
+                {props.message.data._plugin.title || "GDPR"}
             </header>
             <main style={contentStyles}>
-                <div>
-                {props.message.data._plugin.message || "Please accept our GDPR notice in order to get the full user experience."}
+            <div
+                    style={{
+                        lineHeight: "1.5",
+                        marginTop: "10%",
+                        textAlign: "center",
+                        whiteSpace: 'pre-line'
+                    }}
+                >
+                    <b style={{opacity: ".7"}}>{props.message.data._plugin.subtitle || "Select an option"}</b>
+                </div>
+                <div
+                    style={{
+                        lineHeight: "1.5",
+                        marginTop: "10%",
+                        textAlign: "justify",
+                        whiteSpace: 'pre-line'
+                    }}
+                >
+                    {props.message.data._plugin.message || "Please accept our GDPR notice in order to get the full user experience."}
+                </div>
+                <div
+                    style={{
+                        lineHeight: "1.5",
+                        marginTop: "5%",
+                        fontWeight: "bold"
+                    }}
+                >
+                    {props.message.data._plugin.question || "Is this okay for you?"}
                 </div>
             </main>
             <footer style={footerStyles}>
-                <button
+            <button
                     type='button'
-                    onClick={onDismissFullscreen}
-                    style={cancelButtonStyles}
-                >
-                    {props.message.data._plugin.cancelButtonText || "Abort"}
-                </button>
-                <button
-                    type='button'
-                    onClick={handleSubmit}
+                    onClick={() => handleSubmit(true)}
                     style={submitButtonStyles}
                 >
-                    {props.message.data._plugin.submitButtonText || "Accept"}
+                    {props.message.data._plugin.submitButtonText || "Yes"}
                 </button>
+                <button
+                    type='button'
+                    onClick={() => handleSubmit(false)}
+                    style={cancelButtonStyles}
+                >
+                    {props.message.data._plugin.cancelButtonText || "No"}
+                </button>
+
+                <button
+                        type='button'
+                        onClick={() => handleGDPButton(props.message.data._plugin.gdprButtonPayload)}
+                        style={gdprButtonStyles}
+                    >
+                        {props.message.data._plugin.gdprButtonText || "GDPR"}
+                    </button>
             </footer>
         </div>
     )
