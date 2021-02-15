@@ -121,7 +121,7 @@ const UserRating = (props) => {
 			<Button
 				variant="outlined"
 				disabled={value === null}
-				onClick={() => onSendMessage(`${JSON.stringify(value)} ${payload}`, { rating: value }, { label: JSON.stringify(value)})}
+				onClick={() => onSendMessage(`${JSON.stringify(value)} ${payload || ''}`, { rating: value }, { label: JSON.stringify(value)})}
 			>{rateButtonText}</Button>
 		</div>
 	)
