@@ -201,13 +201,15 @@ const CreditCardCheckoutForm = (props) => {
             setError(payload.error);
             // send error message to cognigy
             onSendMessage('', {
-                stripeResult: 'error'
+                stripeResult: 'error',
+                error: payload.error
             });
         } else {
             setPaymentMethod(payload.paymentMethod);
             // send success message  to cognigy
             onSendMessage('', {
-                stripeResult: 'success'
+                stripeResult: 'success',
+                result: payload.paymentMethod
             })
         }
     };

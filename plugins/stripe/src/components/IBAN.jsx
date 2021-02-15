@@ -130,7 +130,8 @@ const IBANCheckoutForm = (props) => {
             setPaymentMethod(null);
             // send error message to cognigy
             onSendMessage('', {
-                stripeResult: 'error'
+                stripeResult: 'error',
+                error: payload.error
             });
         } else {
             console.log('[PaymentMethod]', payload.paymentMethod);
@@ -138,7 +139,8 @@ const IBANCheckoutForm = (props) => {
             setErrorMessage(null);
             // send error message to cognigy
             onSendMessage('', {
-                stripeResult: 'success'
+                stripeResult: 'success',
+                result: payload.paymentMethod
             });
         }
     };

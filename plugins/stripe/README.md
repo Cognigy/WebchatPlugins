@@ -39,11 +39,97 @@ After the above SAY node was executed by Cognigy.AI, it should show one of the f
 
 The plugin will return a data message in order to notify Cognigy.AI about the result:
 
-**Success:**
+**Success  (Credit Card):**
 
 ```json
 {
-  "stripeResult": "success"
+    "stripeResult": "success",
+    "result": {
+        "id": "pm_1I...",
+        "object": "payment_method",
+        "billing_details": {
+            "address": {
+                "city": null,
+                "country": null,
+                "line1": null,
+                "line2": null,
+                "postal_code": null,
+                "state": null
+            },
+            "email": "a.teusz@cognigy.com",
+            "name": "Alex Teusz",
+            "phone": "015142326427"
+        },
+        "card": {
+            "brand": "mastercard",
+            "checks": {
+                "address_line1_check": null,
+                "address_postal_code_check": null,
+                "cvc_check": null
+            },
+            "country": "DE",
+            "exp_month": 1,
+            "exp_year": 2022,
+            "funding": "debit",
+            "generated_from": null,
+            "last4": "1234",
+            "networks": {
+                "available": [
+                    "mastercard"
+                ],
+                "preferred": null
+            },
+            "three_d_secure_usage": {
+                "supported": true
+            },
+            "wallet": null
+        },
+        "created": 123,
+        "customer": null,
+        "livemode": false,
+        "type": "card"
+    }
+}
+```
+
+
+**Success  (IBAN):**
+
+```json
+{
+    "stripeResult": "success",
+    "result": {
+        "id": "pm_1I...",
+        "object": "payment_method",
+        "billing_details": {
+            "address": {
+                "city": null,
+                "country": null,
+                "line1": null,
+                "line2": null,
+                "postal_code": null,
+                "state": null
+            },
+            "email": "a.teusz@cognigy.com",
+            "name": "Alex Teusz",
+            "phone": null
+        },
+        "created": 1234,
+        "customer": null,
+        "livemode": false,
+        "sepa_debit": {
+            "bank_code": "32451234",
+            "branch_code": "",
+            "country": "DE",
+            "fingerprint": "123",
+            "generated_from": {
+                "charge": null,
+                "setup_attempt": null
+            },
+            "last4": "1234"
+        },
+        "type": "sepa_debit"
+    }
 }
 ```
 
@@ -51,7 +137,8 @@ The plugin will return a data message in order to notify Cognigy.AI about the re
 
 ```json
 {
-  "stripeResult": "error"
+  "stripeResult": "error",
+  "error": "..."
 }
 ```
 
