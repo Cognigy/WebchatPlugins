@@ -10,6 +10,15 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 const getStylesMemo = memoize(getStyles);
 
 const getMuiDatatableTheme = createMuiTheme({
+    breakpoints: {
+        values: {
+            xs: 0,
+            sm: 1,
+            md: 2,
+            lg: 1280,
+            xl: 1920
+        }
+    },
     overrides: {
         MuiModal: {
             root: {
