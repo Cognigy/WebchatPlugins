@@ -12,13 +12,13 @@ https://developer.paypal.com/classic-home/
 You can either use a [Say](https://docs.cognigy.com/docs/say-nodes) or [Code](https://docs.cognigy.com/docs/code) node to trigger this webchat plugin. The following example shows a Code node, while you could use the second parameter (object) as `data` information in a Say node. 
 
 ``` js
-actions.output('', {
+{
 	"_plugin": {
 		"type": "paypal",
 		"amount": 0.01, // The amount the user has to pay
 		"clientId": "<INSERT-YOUR-PAYPAL-DEVELOPER-CLIENT-ID>"
 	}
-})
+}
 ```
 
 This will open the following example:
