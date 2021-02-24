@@ -1,12 +1,14 @@
 import * as React from 'react';
 
+const processedMessages = new Set();
+
 const GetUserLocation = (props) => {
 
 	// get info from Cogngiy data
-	const { onSendMessage } = props;
+	const { onSendMessage, message } = props;
 
 	// Try to get the user's location with the browser geolocation API
-	const getFindUser = () => {
+	const geoFindUser = () => {
 
 		// Extract the location (longitude, latitude) on success
 		function success(position) {
@@ -45,10 +47,15 @@ const GetUserLocation = (props) => {
 		}
 	};
 
-	// Execute the function
-	getFindUser();
+	// Only execute the plugin once
+	if (!processedMessages.has(message.traceId)) {
+		if (message.source === 'bot' && message.data?._plugin?.type === 'location') {
+			processedMessages.add(message.traceId);
+			geoFindUser();
+		}
+	}
 
-	return <div></div>
+	return null;
 }
 
 const getUserLocationPlugin = {
