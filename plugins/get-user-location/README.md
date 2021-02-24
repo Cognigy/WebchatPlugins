@@ -24,6 +24,19 @@ In a Cognigy.AI Flow, create a SAY Node and insert the following JSON data into 
 }
 ```
 
-After the above SAY node was executed by Cognigy.AI, it should show the following :
+After the above SAY node was executed by Cognigy.AI, it should send the folloing DATA_ONLY message:
+
+- `{{input.data.location}}`
+
+```json
+{
+  "location": {
+    "longitude": "...",
+    "latitude": "..."
+  }
+}
+```
+
+that could be displayed in the chat such as:
 
 <img src="./docs/successUserBrowserLocation.png"></img>
