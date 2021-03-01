@@ -81,7 +81,6 @@ const UserRating = (props) => {
 				variant === 'heart'
 					?
 					<StyledRating
-						name="user-rating"
 						size={size}
 						max={maxRatingValue}
 						precision={precision}
@@ -95,7 +94,6 @@ const UserRating = (props) => {
 					variant === 'emoji'
 						?
 						<Rating
-							name="user-rating-emoji"
 							size={size}
 							max={maxRatingValue}
 							precision={precision}
@@ -108,7 +106,6 @@ const UserRating = (props) => {
 						/>
 						:
 						<Rating
-							name="user-rating-heart"
 							size={size}
 							max={maxRatingValue}
 							precision={precision}
