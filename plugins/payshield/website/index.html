@@ -35,22 +35,21 @@
 
 	<!-- Insert your Webchat Plugin here -->
 	<!-- <script src="<path-to-webchat-plugin.js>"></script> -->
-	<script src="https://github.com/Cognigy/WebchatWidget/releases/download/v2.19.4/webchat.js"></script>
+	<script src="https://github.com/Cognigy/WebchatWidget/releases/download/v2.25.1/webchat.js"></script>
 
 	<!-- Load Webchat Plugins via a script tag -->
 	<script src="./payshield.webchat-plugin.js"></script>
 
 
 	<!-- Import your custom CSS Stylesheet here -->
-	<!-- <link rel="stylesheet" href="./style.css" /> -->
+	<link rel="stylesheet" href="./style.css" />
 	<!--
 	<link rel="stylesheet" href="./payshield.styles.css" />
 	-->
 
 	<script>
 		// Insert here the Webchat Config Url, from the Cognigy Webchat Endpoint:
-		// const webchatUrl = 'https://endpoint-trial.cognigy.ai/685f8ab69c40216e92b81b7ef01f72ae192f076182a6b3d66a10972d3fd90e1b';   // Agent: 'Payshield POC'
-		const webchatUrl = 'https://endpoint-trial.cognigy.ai/7a64021bdc531595d438fe724de02826bdd20ee4cb0c1401d9522906277d7053';   // Agent: 'PN Demo Mobile'
+		const webchatUrl = 'https://endpoint-trial.cognigy.ai/3d8362fc359984e5b458b98ffffa216b06f8d8f89b0e378d165d5efde933add7';   // Agent: 'PN Demo Mobile'
 		/* Initialize the Cognigy.AI Webchat */
 		initWebchat(webchatUrl, {
 			forceWebsockets: true,

@@ -16,9 +16,6 @@
     "parcel": "^1.12.3"
   },
   "dependencies": {
-    "@material-ui/core": "^4.9.12",
-    "@material-ui/lab": "^4.0.0-alpha.51",
-    "@material-ui/styles": "^4.9.10",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
