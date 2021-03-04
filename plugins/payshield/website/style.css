@@ -1,0 +1,205 @@
+
+
+[data-cognigy-webchat-root] [data-cognigy-webchat].webchat {
+  position: fixed;
+  width: 480px;
+  height: 640px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+div.payshield-frame {
+	background: LightBlue;
+}
+
+/* 
+[data-cognigy-webchat-root] [data-cognigy-webchat-toggle].webchat-toggle-button {
+    background: #ffd803;
+  }
+  
+  [data-cognigy-webchat-root] [data-cognigy-webchat].webchat {
+    animation: rotate 1s;
+    border: 1px solid #272343;
+  }
+  
+  [data-cognigy-webchat-root] [data-cognigy-webchat].webchat .webchat-header-bar {
+    background: #fffffe;
+    color: #272343;
+    border-bottom:  1px solid #272343;
+    box-shadow: none;
+  }
+  
+  [data-cognigy-webchat-root] [data-cognigy-webchat].webchat .regular-message {
+  
+    border:2px solid  #fffffe;
+    background: #e3f6f5;
+    color:#2d334a;
+    box-shadow: #272343;
+  
+  }
+  
+  [data-cognigy-webchat-root] [data-cognigy-webchat].webchat .webchat-typing-indicator {
+  
+    background: #bae8e8;
+    color: black;
+  }
+  
+  
+  [data-cognigy-webchat-root] .webchat-quick-reply-template-root{
+  }
+  
+  [data-cognigy-webchat-root] .webchat-quick-reply-template-header-message { 
+    border:2px solid  #fffffe;
+    border-radius: 0;
+    text-align: center;
+    background: #e3f6f5;
+    color: #272343;
+    animation: easeOutElastic 1s ;
+  }
+  
+  [data-cognigy-webchat-root] .webchat-quick-reply-template-replies-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  [data-cognigy-webchat-root]
+    .webchat-quick-reply-template-replies-container
+    .webchat-quick-reply-template-reply {
+      animation: easeOutElastic 1s ;
+      border-color:#272343;
+      color: #2d334a;
+  
+  }
+  
+  [data-cognigy-webchat-root] .webchat-buttons-template-root {
+    border-radius: 0;
+    animation: easeOutElastic 1s ;
+  
+  }
+  
+  [data-cognigy-webchat-root] .webchat-buttons-template-header {
+    text-align: center;
+    font-weight: bold;
+    background: #e3f6f5;
+  }
+  
+  [data-cognigy-webchat-root] .webchat-buttons-template-root .webchat-buttons-template-button {
+      background-color: #fffffe;
+      color: #2d334a;
+  }
+  
+  [data-cognigy-webchat-root] .webchat-buttons-template-root .webchat-buttons-template-button:hover {
+    animation: swing 1s ease;
+  animation-iteration-count: 1;
+  font-weight: bold;
+  }
+  
+  [data-cognigy-webchat-root] .webchat-carousel-template-root {
+    background: #e3f6f5;
+  
+  }
+  
+  
+  [data-cognigy-webchat-root] .webchat-carousel-template-content {
+    background: #e3f6f5;
+  
+  }
+  
+  [data-cognigy-webchat-root] .webchat-carousel-template-title {
+  }
+  
+  [data-cognigy-webchat-root] .webchat-carousel-template-subtitle {
+  }
+  
+  [data-cognigy-webchat-root] .webchat-carousel-template-button {
+    color: #272343;
+    background: #ffd803;
+  }
+  
+  [data-cognigy-webchat-root] .webchat-carousel-template-button:hover {
+    background: #cfb000;
+  }
+  
+  [data-cognigy-webchat-root] .webchat-media-template-image {
+    animation: rotate 1s;
+  }
+  
+  [data-cognigy-webchat-root] .webchat-list-template-root {
+    border-radius: 0;
+  }
+  
+  [data-cognigy-webchat-root] .webchat-list-template-header-button {
+    background: #ffd803;
+    color: #272343;
+  }
+  
+  [data-cognigy-webchat-root] .webchat-list-template-header-button:hover {
+    background: #cfb000;
+  }
+  
+  
+  [data-cognigy-webchat-root] .webchat-list-template-element {
+    background: #e3f6f5;
+  }
+  
+  
+  [data-cognigy-webchat-root] .webchat-list-template-element-button {
+    border-color: #ffd803;
+    background-color: #fffffe;
+      color: #272343;
+  }
+  
+  [data-cognigy-webchat-root] .webchat-list-template-element-button:hover {
+    background-color: #cfb00071;
+  }
+  
+  @keyframes easeOutElastic {
+      0% {
+        transform: translateX(-100%);
+      }
+    
+      20% {
+        transform: translateX(10%);
+      }
+    
+      60% {
+        transform: translateX(20%);
+      }
+    
+      100% {
+        transform: translateX(0%);
+      }
+    }
+  
+  
+  @keyframes rotate {
+  
+    0%{
+    transform: rotateX(0deg);
+    }
+    100% {
+    transform: rotateX(360deg);
+    }
+  }
+  
+  
+  @keyframes swing {
+      15% {
+      transform: translateX(5px);
+      }
+      30% {
+      transform: translateX(-5px);
+      }
+      50% {
+      transform: translateX(3px);
+      }
+      65% {
+      transform: translateX(-3px);
+      }
+      80% {
+      transform: translateX(2px);
+      }
+      100% {
+      transform: translateX(0);
+  } */

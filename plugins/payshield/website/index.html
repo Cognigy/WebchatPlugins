@@ -1,0 +1,97 @@
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- <link rel="manifest" href="/manifest.webmanifest"> -->
+
+	<style>
+		#img-cover {
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		[data-cognigy-webchat-root] [data-cognigy-webchat].webchat {
+			position: fixed;
+			width: 430px;
+			height: 640px;
+			top: 50%;
+			left: 50%;
+			/* bring your own prefixes */
+			transform: translate(-50%, -50%);
+		}
+	</style>
+
+</head>
+
+
+<body>
+
+	<!-- Standard 'Mobile demo' background: -->
+	<img id="img-cover" src="https://s3.eu-central-1.amazonaws.com/tempbucket-waanders/phones/background2-3.jpg" alt="">
+	<!-- https://peters-cognigy-publicread-bucket.s3-ap-southeast-2.amazonaws.com/assets/background-insurance.jpg -->
+
+
+	<!-- Insert your Webchat Plugin here -->
+	<!-- <script src="<path-to-webchat-plugin.js>"></script> -->
+	<script src="https://github.com/Cognigy/WebchatWidget/releases/download/v2.25.1/webchat.js"></script>
+
+	<!-- Load Webchat Plugins via a script tag -->
+	<script src="./payshield.webchat-plugin.js"></script>
+
+
+	<!-- Import your custom CSS Stylesheet here -->
+	<link rel="stylesheet" href="./style.css" />
+	<!--
+	<link rel="stylesheet" href="./payshield.styles.css" />
+	-->
+
+	<script>
+		// Insert here the Webchat Config Url, from the Cognigy Webchat Endpoint:
+		const webchatUrl = 'https://endpoint-trial.cognigy.ai/3d8362fc359984e5b458b98ffffa216b06f8d8f89b0e378d165d5efde933add7';   // Agent: 'PN Demo Mobile'
+		/* Initialize the Cognigy.AI Webchat */
+		initWebchat(webchatUrl, {
+			forceWebsockets: true,
+			settings: {
+				// colorScheme: '#FAB',
+				designTemplate: "2",
+			}
+		}).then(webchat => {
+			/* Make the webchat accessable through the entire web application */
+			window.cognigyWebchat = webchat;
+
+			/* Decide whether to open the webchat directly after initializing it or not */
+			webchat.open();
+
+			/* Handle Webchat events */
+			// webchat.registerAnalyticsService(event => {
+
+			// 	const { type, payload } = event;
+
+			// 	switch (type) {
+			// 		case "webchat/incoming-message":
+
+			// 			/* Handle incoming bot messages */
+			// 			console.log(payload.text);
+			// 			console.log(JSON.stringify(payload.data))
+
+			// 			/* Example: Check for data information in SAY Node */
+			// 			if (payload.data.foo === true) {
+			// 				// TODO: Do something...
+			// 			}
+
+			// 			break;
+			// 		case "webchat/outgoing-message":
+
+			// 			/* Handle outgoing user messages */
+			// 			console.log(payload.text);
+			// 			console.log(JSON.stringify(payload.data))
+			// 			break;
+			// 	}
+			// });
+		});
+	</script>
+</body>
+
+</html>
