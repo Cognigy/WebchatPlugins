@@ -1,0 +1,23 @@
+{
+  "name": "iframe",
+  "version": "1.0.0",
+  "description": "Load an iframe into [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget)",
+  "main": "./src/index.jsx",
+  "scripts": {
+    "build": "parcel build --out-file iframe.webchat-plugin.js src/index.jsx"
+  },
+  "alias": {
+    "react": "./alias/react"
+  },
+  "author": "Cognigy, Inc.",
+  "license": "ISC",
+  "devDependencies": {
+    "@cognigy/webchat": "git+https://git@github.com/Cognigy/WebchatWidget.git#v2.16.0",
+    "@types/react": "^16.9.27",
+    "parcel": "^1.12.4"
+  },
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-iframe": "^1.8.0"
+  }
+}
