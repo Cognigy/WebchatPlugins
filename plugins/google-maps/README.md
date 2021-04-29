@@ -15,16 +15,16 @@ You can call the plugin from within Cognigy by sending a data message using a Sa
 You can specify following optional parameters:
 
 
-```js
+```json
 {
   "_plugin": {
-    type: "google-maps",
-    center: {
-        lat: 51.259823489,
-        lng: 6.23432432
+    "type": "google-maps",
+    "center": {
+        "lat": 51.259823489,
+        "lng": 6.23432432
     },
-    zoom: 12,
-    apikey: "" //Google Maps JavaScript API Key
+    "zoom": 12,
+    "apikey": ""
   }
 }
 ```
