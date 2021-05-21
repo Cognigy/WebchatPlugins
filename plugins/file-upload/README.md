@@ -27,21 +27,19 @@ Allows users to upload a file to an Amazon S3 Bucket using a [Presigned URL](htt
 The Plugin will need a presigned `uploadUrl` for uploading the file, as well as a presigned `downloadUrl` to get read access to the file after uploading.
 
 
-### Message Data Structure
-```typescript
-interface UploadToS3BucketData {
-  _plugin: {
-        type: 'file-upload';
-        service: 'amazon-s3';
+### Message Data Structure in Say Node
 
-        // presigned upload url
-        uploadUrl: string;
-        
-        // presigned download url
-        downloadUrl: string;
-    }
+```json
+{
+  "_plugin": {
+    "type": "file-upload",
+    "service": "amazon-s3",
+    "uploadUrl": "",
+    "downloadUrl": ""
+  }
 }
 ```
+
 [Upload to Amazon S3 Example Message](./docs/AmazonS3.message.json)
 
 
@@ -50,23 +48,19 @@ Allows users to upload a file to an Azure Storage Containers using a [Shared acc
 The Plugin will need a presigned `sasSignature`, a `baseUrl` and the `containerName` to create a URL for uploading the file, the same URL can be use to download the file after uploading it, if the timeout property from the Custom Module didn't make the URL invalid.
 
 
-### Message Data Structure
-```typescript
-interface UploadToAzureContainer {
-   _plugin: {
-       type: 'file-upload',
-       service: 'azure',
-       
-       // Base url to build the request 
-       baseURL,
-       
-       // Shared Access Signature token
-       sasSignature,
-       
-       // Name of the container where the file will be uploaded
-       containerName,
-   }
+### Message Data Structure in Say Node
+
+```json
+{
+  "_plugin": {
+    "type": "file-upload",
+    "service": "azure",
+    "baseURL": "",
+    "sasSignature": "",
+    "containerName": ""
+  }
 }
+```
 
 
 
