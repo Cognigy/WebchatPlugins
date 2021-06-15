@@ -12,7 +12,7 @@
   "author": "Cognigy GmbH",
   "license": "MIT",
   "devDependencies": {
-    "parcel": "^1.12.4"
+    "parcel": "1.12.4"
   },
   "dependencies": {
     "react": "^16.13.1",
