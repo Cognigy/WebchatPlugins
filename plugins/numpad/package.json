@@ -10,7 +10,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/react": "^16.8.18",
-    "parcel": "^1.12.4"
+    "parcel": "1.12.4"
   },
   "dependencies": {
     "idempotent-babel-polyfill": "^7.4.4",
