@@ -1,13 +1,10 @@
 import * as React from "react";
-import * as _ from "lodash";
 import { ZoomMtg } from "@zoomus/websdk";
-
-console.log("checkSystemRequirements");
-console.log(JSON.stringify(ZoomMtg.checkSystemRequirements()));
 
 ZoomMtg.setZoomJSLib('https://jssdk.zoomus.cn/1.9.6/lib', '/av');
 ZoomMtg.preLoadWasm();
 ZoomMtg.prepareJssdk();
+
 
 const Zoom = (props) => {
 
@@ -70,7 +67,7 @@ const Zoom = (props) => {
 							meetingNumber,
 							apiKey,
 							apiSecret,
-							role: meetingConfig.role,
+							role,
 							success: function (res) {
 								console.log(res.result);
 							},
