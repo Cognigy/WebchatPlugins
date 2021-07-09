@@ -1,6 +1,13 @@
 import * as React from "react";
+import * as _ from "lodash";
 import { ZoomMtg } from "@zoomus/websdk";
-import crypto from "crypto";
+
+console.log("checkSystemRequirements");
+console.log(JSON.stringify(ZoomMtg.checkSystemRequirements()));
+
+ZoomMtg.setZoomJSLib('https://jssdk.zoomus.cn/1.9.6/lib', '/av');
+ZoomMtg.preLoadWasm();
+ZoomMtg.prepareJssdk();
 
 const Zoom = (props) => {
 
@@ -8,68 +15,96 @@ const Zoom = (props) => {
 	const { message, onSendMessage } = props;
 	const { data } = message;
 	const { _plugin } = data;
-	const { meetingNumber, joinButtonText, auth, role, leaveUrl, userEmail, userName, passWord } = _plugin;
+	const { meetingNumber, joinButtonText, title, subtitle, auth, role, leaveUrl, userEmail, userName, passWord } = _plugin;
 	const { apiKey, apiSecret } = auth;
-
-	ZoomMtg.preLoadWasm();
-	ZoomMtg.prepareJssdk();
 
 	return (
 		<div style={{
 			display: "flex",
 			flexDirection: "column",
-			padding: "5%",
 			color: "black",
 			background: "white",
 			borderRadius: 0,
 			marginLeft: 0,
 			marginRight: 0,
-			height: "120px",
-			justifyContent: "space-between"
+			// height: "150px",
+			// justifyContent: "space-between",
+			margin: "5%",
+			borderRadius: "8px"
 		}}>
-			{title.length !== 0 ? <Typography component="legend">{title}</Typography> : null}
-
-			<Button
-				variant="outlined"
+			<div
 				style={{
-					background: "#0e72ed"
+					height: "10px",
+					background: "#666",
+					width: "100%",
+					borderTopRightRadius: "8px",
+					borderTopLeftRadius: "8px"
 				}}
-				onClick={() => {
-
-					// Create Signature
-					const timestamp = new Date().getTime() - 30000
-					const msg = Buffer.from(apiKey + meetingNumber + timestamp + role).toString('base64')
-					const hash = crypto.createHmac('sha256', apiSecret).update(msg).digest('base64')
-					const signature = Buffer.from(`${apiKey}.${meetingNumber}.${timestamp}.${role}.${hash}`).toString('base64')
-
-					ZoomMtg.init({
-						leaveUrl: leaveUrl,
-						isSupportAV: true,
-						success: (success) => {
-							console.log(success)
-
-							ZoomMtg.join({
-								signature: signature,
-								meetingNumber: meetingNumber,
-								userName: userName,
-								apiKey: apiKey,
-								userEmail: userEmail,
-								passWord: passWord,
-								success: (success) => {
-									console.log(success)
-								},
-								error: (error) => {
-									console.log(error)
-								}
-							})
-
-						},
-						error: (error) => {
-							console.log(error)
-						}
-					})
+			></div>
+			<div
+				style={{
+					padding: "5%",
+					borderRight: "1px solid lightgrey",
+					borderLeft: "1px solid lightgrey",
+					borderBottom: "1px solid lightgrey",
+					borderBottomRightRadius: "8px",
+					borderBottomLeftRadius: "8px"
 				}}
-			>{joinButtonText || "Join"}</Button>
+			>
+				{title.length !== 0 ? <b style={{ color: "#666" }}>{title}</b> : <b style={{ color: "#666" }}>Zoom Meeting</b>}
+				{subtitle.length !== 0 ? <p style={{ fontSize: "small" }}>{subtitle}</p> : <p style={{ fontSize: "small" }}>Meeting ID: {meetingNumber}</p>}
+				<button
+					style={{
+						background: "#0E71EB",
+						padding: "10px 15px",
+						borderRadius: "8px",
+						cursor: "pointer",
+						color: "white",
+						border: "none"
+					}}
+					id="join_meeting"
+					onClick={() => {
+
+						// Create Signature
+						const signature = ZoomMtg.generateSignature({
+							meetingNumber,
+							apiKey,
+							apiSecret,
+							role: meetingConfig.role,
+							success: function (res) {
+								console.log(res.result);
+							},
+						});
+
+						ZoomMtg.init({
+							leaveUrl: leaveUrl,
+							isSupportAV: true,
+							success: (success) => {
+								console.log(success)
+
+								ZoomMtg.join({
+									signature: signature,
+									meetingNumber: meetingNumber,
+									userName: userName,
+									apiKey: apiKey,
+									userEmail: userEmail,
+									passWord: passWord,
+									success: (success) => {
+										console.log(success)
+									},
+									error: (error) => {
+										console.log(error)
+									}
+								})
+
+							},
+							error: (error) => {
+								console.log(error)
+							}
+						})
+					}}
+				>{joinButtonText || "Join"}</button>
+			</div>
 		</div>
 	)
 
