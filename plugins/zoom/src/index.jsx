@@ -1,19 +1,11 @@
 import * as React from "react";
-import { ZoomMtg } from "@zoomus/websdk";
-
-ZoomMtg.setZoomJSLib('https://jssdk.zoomus.cn/1.9.6/lib', '/av');
-ZoomMtg.preLoadWasm();
-ZoomMtg.prepareJssdk();
-
-
 const Zoom = (props) => {
 
 	// get info from Cogngiy data
 	const { message, onSendMessage } = props;
 	const { data } = message;
 	const { _plugin } = data;
-	const { meetingNumber, joinButtonText, title, subtitle, auth, role, leaveUrl, userEmail, userName, passWord } = _plugin;
-	const { apiKey, apiSecret } = auth;
+	const { meetingLink, meetingId, passcode, joinButtonText, title = "" } = _plugin;
 
 	return (
 		<div style={{
@@ -24,8 +16,6 @@ const Zoom = (props) => {
 			borderRadius: 0,
 			marginLeft: 0,
 			marginRight: 0,
-			// height: "150px",
-			// justifyContent: "space-between",
 			margin: "5%",
 			borderRadius: "8px"
 		}}>
@@ -49,11 +39,11 @@ const Zoom = (props) => {
 				}}
 			>
 				{title.length !== 0 ? <b style={{ color: "#666" }}>{title}</b> : <b style={{ color: "#666" }}>Zoom Meeting</b>}
-				{subtitle.length !== 0 ? <p style={{ fontSize: "small" }}>{subtitle}</p> : <p style={{ fontSize: "small" }}>Meeting ID: {meetingNumber}</p>}
+				<p style={{ fontSize: "small" }}>Meeting ID: {meetingId}<br />Passcode: {passcode}</p>
 				<button
 					style={{
 						background: "#0E71EB",
-						padding: "10px 15px",
+						padding: "10px 40px",
 						borderRadius: "8px",
 						cursor: "pointer",
 						color: "white",
@@ -61,44 +51,8 @@ const Zoom = (props) => {
 					}}
 					id="join_meeting"
 					onClick={() => {
-
-						// Create Signature
-						const signature = ZoomMtg.generateSignature({
-							meetingNumber,
-							apiKey,
-							apiSecret,
-							role,
-							success: function (res) {
-								console.log(res.result);
-							},
-						});
-
-						ZoomMtg.init({
-							leaveUrl: leaveUrl,
-							isSupportAV: true,
-							success: (success) => {
-								console.log(success)
-
-								ZoomMtg.join({
-									signature: signature,
-									meetingNumber: meetingNumber,
-									userName: userName,
-									apiKey: apiKey,
-									userEmail: userEmail,
-									passWord: passWord,
-									success: (success) => {
-										console.log(success)
-									},
-									error: (error) => {
-										console.log(error)
-									}
-								})
-
-							},
-							error: (error) => {
-								console.log(error)
-							}
-						})
+						// Open the Zoom meeting in another browser tab
+						window.open(meetingLink, "_blank");
 					}}
 				>{joinButtonText || "Join"}</button>
 			</div>
