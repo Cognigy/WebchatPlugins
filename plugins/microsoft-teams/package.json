@@ -1,0 +1,27 @@
+{
+  "name": "microsoft-teams",
+  "version": "1.0.0",
+  "description": "Provide Microsoft Teams Meetings within the Webchat",
+  "main": "build/plugin.js",
+  "scripts": {
+    "build": "parcel build --out-file microsoft-teams.webchat-plugin.js src/index.jsx"
+  },
+  "keywords": [
+    "Microsoft",
+    "Teams",
+    "Meeting"
+  ],
+  "author": "Cognigy GmbH",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^16.8.18",
+    "parcel": "1.12.3"
+  },
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "alias": {
+    "react": "./alias/react"
+  }
+}
