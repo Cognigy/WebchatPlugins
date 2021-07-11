@@ -34,7 +34,6 @@ Invite a user to a Zoom meeting in your webchat conversation.
         "joinButtonText": "Join Meeting"
     }
 }
-}
 ```
 
 After the above SAY node was executed by Cognigy.AI, it should show one of the following contents in your webchat:
