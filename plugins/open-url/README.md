@@ -1,3 +1,5 @@
+# DEPRECATED
+
 # Open Url Webchat Plugin
 
 This plugin automatically opens a provided `url` in a new browser tab. In order to use this, one has to send the following `data` SAY Node in Cognigy:
