@@ -6,8 +6,20 @@ const OpenUrl = (props) => {
 	const { _plugin } = data;
 	const { url } = _plugin;
 
-	// Open the new url
-	window.open(url, "_blank");
+	const [opened, setOpenedURL] = React.useState(false);
+
+	if (!opened) {
+
+		setOpenedURL(true);
+		// Open the new url
+		window.open(url, "_blank");
+
+		// Send confirmation to Cognigy.AI
+		onSendMessage("", {
+			openedUrl: true
+		});
+	}
+
 
 	return <div></div>
 }
