@@ -1,0 +1,21 @@
+{
+  "name": "privacy-settings",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.tsx",
+  "scripts": {
+    "build": "parcel build --out-file dist/privacy-settings.webchat-plugin.js src/index.tsx"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@cognigy/webchat": "git+https://git@github.com/Cognigy/WebchatWidget.git#v2.30.1",
+    "memoize-one": "^5.2.1",
+    "parcel": "1.12.3",
+    "typescript": "^4.3.5",
+    "react": "^17.0.2"
+  },
+  "alias": {
+    "react": "./alias/react"
+  }
+}
