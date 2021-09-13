@@ -5,19 +5,17 @@ This plugins allows answering question with multiple possible choices.
 Send specially crafted message to the Webchat. You can use e.g. Code Node to form the message
 
 ## Message Data Structure
-```typescript
-interface MultiselectMessage {
-    data: {
-        _plugin: {
-            type: 'multiselect';
-            allowUserAnswers: boolean;
-            cancelButtonLabel: string;
-            inputPlaceholder: string;
-            options: string[];
-            openButtonLabel: string;
-            submitButtonLabel: string;
-        };
-    };
+```json
+ {
+    "_plugin": {
+            "type": "multiselect",
+            "allowUserAnswers": true,
+            "cancelButtonLabel": "Cancel",
+            "inputPlaceholder": "Placeholder",
+            "options": ["Option 1","Option 2"],
+            "openButtonLabel": "Open",
+            "submitButtonLabel": "Send"
+     }
 }
 ```
 
