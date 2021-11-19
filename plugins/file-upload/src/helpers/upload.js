@@ -24,5 +24,22 @@ export const upload = async (config, file) => {
             })
                 .then(() => downloadUrl )
         }
+        case 'live-agent': {
+            const { userApiKey, host, accountId, conversationId } = config;
+            const uploadUrl = `https//${host}/api/v1/accounts/${accountId}/conversations/${conversationId}/messages`;
+            const downloadUrl = uploadUrl;
+            return fetch(uploadUrl, {
+                method: 'POST',
+                body: {
+                    content: 'file-upload',
+                    attachments: [file]
+                },
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'api_access_token': userApiKey
+                }
+            })
+                .then(() => downloadUrl )
+        }
     }
 }
