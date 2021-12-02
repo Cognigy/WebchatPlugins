@@ -16,6 +16,7 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "idempotent-babel-polyfill": "^7.4.4",
     "react-dropzone": "^10.1.7"
   },
