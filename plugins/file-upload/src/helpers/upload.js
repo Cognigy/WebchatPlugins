@@ -33,7 +33,7 @@ export const upload = async (config, file) => {
             const uploadUrl = `${host}/public/api/v1/inboxes/${inboxIdentifier}/contacts/${contactIdentifier}/conversations/${conversationId}/messages`;
             const form = new FormData();
             form.append('attachments[]', file);
-            form.append('content', 'file-upload');
+            form.append('content', 'file successfully uploaded');
 
             return Axios.post(uploadUrl, form, {
                 headers: {
