@@ -1,0 +1,25 @@
+{
+  "name": "zendesk-talk",
+  "version": "1.0.0",
+  "description": "Enables the user to request a callback from a Zendesk agent",
+  "main": "index.jsx",
+  "scripts": {
+    "build": "parcel build --out-file dist/zendesk-talk.webchat-plugin.js src/index.jsx",
+    "watch": "parcel watch --out-file dist/zendesk-talk.webchat-plugin.js src/index.jsx"
+  },
+  "author": "Cognigy GmbH",
+  "license": "MIT",
+  "devDependencies": {
+    "memoize-one": "^5.0.4",
+    "parcel": "1.12.3",
+    "react": "^16.8.6",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "idempotent-babel-polyfill": "^7.4.4"
+  },
+  "alias": {
+    "react": "./alias/react"
+  }
+}
