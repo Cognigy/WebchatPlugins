@@ -40,8 +40,13 @@ const ZendeskTalk = props => {
         headerTitle,
         submitButtonTitle,
         cancelButtonTitle,
+        inputField,
         zendesk
     } = message.data._plugin;
+
+    const {
+        placeholder,
+    } = inputField
 
     const {
         auth,
@@ -58,31 +63,30 @@ const ZendeskTalk = props => {
     const [displaySuccessMessage, setDisplaySuccessMessage] = React.useState(false);
 
     const handleOnClickRequestCallbackButton = async () => {
-        console.log(requesterPhoneNumber);
-
-        try {
-            await axios({
-                method: 'post',
-                url: `https://${subdomain}.zendesk.com/api/v2/channels/voice/callback_requests`,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                auth: {
-                    username,
-                    password
-                },
-                data: {
-                    callback_request: {
-                        phone_number_id: phoneNumerId,
-                        requester_phone_number: requesterPhoneNumber
-                    }
-
+        const response = await axios({
+            method: 'post',
+            url: `https://${subdomain}.zendesk.com/api/v2/channels/voice/callback_requests`,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            auth: {
+                username,
+                password
+            },
+            data: {
+                callback_request: {
+                    phone_number_id: phoneNumerId,
+                    requester_phone_number: requesterPhoneNumber
                 }
-            });
 
+            }
+        });
+
+        console.log(response)
+
+        // Check if the status code is 201 Created
+        if (response.status === 201) {
             setDisplaySuccessMessage(true);
-        } catch (error) {
-            console.log(error);
         }
     }
 
@@ -130,11 +134,13 @@ const ZendeskTalk = props => {
                         textAlign: 'justify',
                     }}
                 >
-                  {text}
+                    {text}
                 </p>
                 <br />
                 <input
-                    placeholder="+123456789"
+                    type='tel'
+                    id='phone'
+                    placeholder={placeholder || '+123456789'}
                     value={requesterPhoneNumber}
                     onChange={(event) => setRequesterPhoneNumber(event.target.value)}
                     style={{
