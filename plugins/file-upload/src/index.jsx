@@ -111,7 +111,7 @@ const FileUpload = props => {
                 ...dialogStyles
             }}
         >
-            {(service === 'amazon-s3' || service === 'azure' || service === 'live-agent') &&
+            {(service === 'amazon-s3' || service === 'azure' || service === 'live-agent' || service === 'salesforce') &&
                 (!isUploading && !pluginBusy ? (
                     <>
                         <header style={headerStyles}>{titleText || 'File Upload'}</header>

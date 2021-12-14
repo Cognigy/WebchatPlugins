@@ -16,7 +16,7 @@ export const upload = async (config, file) => {
         }
         case 'azure': {
             const { baseURL, sasSignature, containerName } = config;
-            const uploadUrl =  baseURL+containerName+'/'+file.name+sasSignature
+            const uploadUrl = baseURL + containerName + '/' + file.name + sasSignature
             const downloadUrl = uploadUrl;
 
             return fetch(uploadUrl, {
@@ -40,7 +40,27 @@ export const upload = async (config, file) => {
                     'Content-Type': 'multipart/form-data',
                     'Accept': '*/*',
                 },
-            }).then(res => res.data.attachments[0].data_url)           
-         }
+            }).then(res => res.data.attachments[0].data_url)
+        }
+        case 'salesforce': {
+            const { salesforceUrl, accesToken } = config;
+            const uploadUrl = `${salesforceUrl}/services/data/v53.0/sobjects/Document/`;
+
+            const form = new FormData();
+            form.append('Body', file);
+            form.append('Description', 'File');
+            form.append('Keywords', 'File');
+            form.append('Name', file.name);
+            form.append('Type', 'txt');
+            form.append('FolderId', '005D0000001GiU7')
+
+            return Axios.post(uploadUrl, form, {
+                headers: {
+                    'Content-Type': `multipart/form-data; boundary="boundary_string"`,
+                    'Authorization': `Bearer ${accesToken}`,
+                    'Accept': '*/*',
+                },
+            }).then(res => res.data)
+        }
     }
 }
