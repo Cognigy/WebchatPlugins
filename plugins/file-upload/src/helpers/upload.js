@@ -43,24 +43,35 @@ export const upload = async (config, file) => {
             }).then(res => res.data.attachments[0].data_url)
         }
         case 'salesforce': {
-            const { salesforceUrl, accesToken } = config;
+            const { salesforceUrl, accessToken, folderId, description } = config;
             const uploadUrl = `${salesforceUrl}/services/data/v53.0/sobjects/Document/`;
 
-            const form = new FormData();
-            form.append('Body', file);
-            form.append('Description', 'File');
-            form.append('Keywords', 'File');
-            form.append('Name', file.name);
-            form.append('Type', 'txt');
-            form.append('FolderId', '005D0000001GiU7')
-
-            return Axios.post(uploadUrl, form, {
-                headers: {
-                    'Content-Type': `multipart/form-data; boundary="boundary_string"`,
-                    'Authorization': `Bearer ${accesToken}`,
-                    'Accept': '*/*',
-                },
-            }).then(res => res.data)
+            return Axios(
+                {
+                    method: 'post',
+                    url: uploadUrl,
+                    formData: {
+                        entity_document: {
+                            value: JSON.stringify({
+                                "Name": file.name,
+                                "Description": description,
+                                "FolderId": folderId,
+                                "Keywords": "File",
+                                "Type": file.type
+                            }),
+                            options: {
+                                contentType: "application/json"
+                            }
+                        },
+                        Body: file
+                    },
+                    headers: {
+                        'Content-Type': `multipart/form-data; boundary="boundary_string"`,
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Accept': '*/*'
+                    }
+                }
+            ).then(res => res.data)
         }
     }
 }

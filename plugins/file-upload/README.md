@@ -62,5 +62,36 @@ The Plugin will need a presigned `sasSignature`, a `baseUrl` and the `containerN
 }
 ```
 
+## Upload to Salesforce
 
+- [API Documentation](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/dome_sobject_insert_update_blob.htm)
+
+Allows users to upload a file to Salesforce using an OAuth Bearer token for authentication. Next to the `accessToken`, the plugin requires the URL of the used Salesforce instance (`salesforceUrl`), a `description` and `folderId`.
+
+### Authentication
+
+First, one must use the HTTP Request Flow Node and send the following POST request to Salesforce in order to receive the `accessToken`:
+
+```txt
+POST /services/oauth2/token HTTP/1.1
+Host: login.salesforce.com
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded
+grant_type=password&client_id=...&client_secret=...&username=...&password=...
+```
+
+### Message Data Structure in Say Node
+
+```json
+{
+    "_plugin": {
+        "type": "file-upload",
+        "service": "salesforce",
+        "accessToken": "...",
+        "description": "...",
+        "folderId": "...",
+        "salesforceUrl": "https://mydomain.my.salesforce.com"
+    }
+}
+```
 
