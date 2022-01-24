@@ -1,0 +1,19 @@
+{
+  "name": "dialog-example",
+  "version": "1.0.0",
+  "description": "This repository contains a dialog example plugin for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget). It is meant to be used as a starting point when building a dialog-like plugin for the Cognigy Webchat. The Dialog is styled based on the Webchat's `theme` for seamless integration.",
+  "main": "index.jsx",
+  "scripts": {
+    "build": "parcel build --out-file dist/dialog-example.webchat-plugin.js src/index.jsx"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "memoize-one": "^5.0.4",
+    "parcel": "1.12.3",
+    "react": "^16.8.6"
+  },
+  "alias": {
+    "react": "./alias/react"
+  }
+}
