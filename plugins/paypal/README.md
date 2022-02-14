@@ -15,7 +15,7 @@ You can either use a [Say](https://docs.cognigy.com/docs/say-nodes) or [Code](ht
 {
 	"_plugin": {
 		"type": "paypal",
-		"amount": 0.01, // The amount the user has to pay
+		"amount": 0.01,
 		"clientId": "<INSERT-YOUR-PAYPAL-DEVELOPER-CLIENT-ID>"
 	}
 }
