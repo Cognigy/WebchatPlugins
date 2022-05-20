@@ -41,10 +41,7 @@ const FileUpload = props => {
 				});
 				props.onSendMessage("File upload succeeded", {});
 			} else {
-				props.onSendMessage(
-					`Your file upload failed. Please verify your file is less than 40MB large and is of type jpg, jpeg, png, pdf, doc or docx.`,
-					{},
-				);
+				props.onSendMessage(result.reason, {});
 			}
 		} catch (e) {
 			console.error("uploading file failed", e);

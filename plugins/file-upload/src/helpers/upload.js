@@ -11,7 +11,13 @@ export const upload = async (config, file) => {
 			return fetch(uploadUrl, {
 				method: "PUT",
 				body: file,
-			}).then(() => downloadUrl);
+			})
+				.then(() => {
+					return { success: true, url: downloadUrl };
+				})
+				.catch(err => {
+					return { success: false, reason: `Upload failed. Error: ${err.message}` };
+				});
 		}
 		case "azure": {
 			const { baseURL, sasSignature, containerName } = config;
@@ -24,7 +30,13 @@ export const upload = async (config, file) => {
 				headers: {
 					"x-ms-blob-type": "BlockBlob",
 				},
-			}).then(() => downloadUrl);
+			})
+				.then(() => {
+					return { success: true, url: downloadUrl };
+				})
+				.catch(err => {
+					return { success: false, reason: `Upload failed. Error: ${err.message}` };
+				});
 		}
 		case "live-agent": {
 			const { inboxIdentifier, host, conversationId, contactIdentifier } = config;
@@ -43,7 +55,10 @@ export const upload = async (config, file) => {
 					return { success: true, url: res.data.attachments[0].data_url };
 				})
 				.catch(err => {
-					return { success: false, reason: err };
+					return {
+						success: false,
+						reason: `Your file upload failed. Please verify your file is less than 40MB large and is of type jpg, jpeg, png, pdf, doc or docx.`,
+					};
 				});
 		}
 	}
