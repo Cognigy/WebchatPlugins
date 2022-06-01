@@ -14,6 +14,7 @@ let pluginBusy = false;
 const FileUpload = props => {
 	const [isUploading, setIsUploading] = React.useState(false);
 	const [isRejected, setIsRejected] = React.useState(false);
+	const [errorMessage, setErrorMessage] = React.useState(null);
 
 	const { isFullscreen, onSetFullscreen, theme, message } = props;
 
@@ -40,8 +41,9 @@ const FileUpload = props => {
 					file: result.url,
 				});
 				props.onSendMessage("File upload succeeded", {});
+				setErrorMessage(null);
 			} else {
-				props.onSendMessage(result.reason, {});
+				setErrorMessage(result.reason);
 			}
 		} catch (e) {
 			console.error("uploading file failed", e);
@@ -60,6 +62,8 @@ const FileUpload = props => {
 				`File exceeds max file size of ${sizeLimit} MB. Choose another file.`}
 		</label>
 	);
+
+	const ErrorLabel = () => <label style={errorMessageStyles}>{errorMessage}</label>;
 
 	if (!isFullscreen) {
 		const { openDialogButtonStyles } = getStylesMemo(theme);
@@ -99,6 +103,7 @@ const FileUpload = props => {
 								<p>{dropLabel || "Drag a file here, or click to select one"}</p>
 							)}
 							{isRejected ? <SizeLimitError /> : null}
+							{errorMessage ? <ErrorLabel /> : null}
 						</main>
 						<footer style={footerStyles}>
 							<button
