@@ -48,6 +48,17 @@ const FileUpload = props => {
             props.onSendMessage('', {
                 file: downloadUrl
             });
+            props.onSendMessage('file-upload-1', {
+            });
+            props.onSendMessage('', {
+                _plugin: {
+                    type: "file-uploaded",
+                    url: downloadUrl,
+                    name: file.name
+                  }
+            });
+            props.onSendMessage('file-upload-2', {
+            });
         } catch (e) {
             console.error('uploading file failed', e)
             setIsUploading(false);
@@ -177,9 +188,34 @@ const Spinner = ({ theme }) => {
     );
 };
 
+const FileUploaded = (props) => {
+    const data = props.message.data
+    props.onSendMessage('file-uploaded', {
+    });
+    props.onSendMessage(JSON.stringify(data), {
+    });
+    props.onSendMessage('file-uploaded2', {
+    });
+    // return (
+    //    data._plugin.name,
+    //    <svg xmlns="http://www.w3.org/2000/svg" 
+    //         height="24px"
+    //         viewBox="0 0 24 24" 
+    //         width="24px"
+    //         fill="#000000">
+    //     </svg>
+                
+
+    // )
+}
 const fileUploadPlugin = {
     match: 'file-upload',
     component: FileUpload
+};
+
+const fileUploadedPlugin = {
+    match: 'file-uploaded',
+    component: FileUploaded
 };
 
 if (!window.cognigyWebchatMessagePlugins) {
@@ -187,3 +223,4 @@ if (!window.cognigyWebchatMessagePlugins) {
 }
 
 window.cognigyWebchatMessagePlugins.push(fileUploadPlugin);
+window.cognigyWebchatMessagePlugins.push(fileUploadedPlugin);
