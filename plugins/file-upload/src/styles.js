@@ -102,6 +102,45 @@ const button = theme => ({
     width: '100%',
   })
 
+  //  const attachFileIconContainer = theme =>({
+  //      background: '#ffffff',
+  //      width: '26px',
+  //      height: '26px',
+  //      borderRadius: '13%',
+  //      alignItems: 'center',
+  //      lineHeight: '100px',
+  //      verticalAlign: 'middle',
+  //      padding: '30px'
+  
+  //  })
+  const methods__icons = theme =>({
+    display: 'flex'
+  })
+  
+  const method__icon__container = theme =>({
+    flex: '1 0 15%',
+    margin: '5px',
+    height: '35px'
+  })
+  
+  const method__icon__outer_circle = theme =>({
+    backgroundColor: 'white',
+    borderRadius: '50%',
+    width: '15px',
+    height: '15px',
+    padding: '10px'
+  })
+  
+  const methods_icon = theme =>({
+    verticalAlign: 'middle',
+    width: '30px',
+    height: '30px',
+    marginTop: '-5px',
+    marginLeft: '-5px',
+    marginRight: '1px',
+    borderRadius: '50%'
+  })
+
   const errorMessage = theme => ({
     color: theme.errorColor || '#b74e4e',
     display: 'block',
@@ -118,6 +157,10 @@ const button = theme => ({
     const cancelButtonStyles = cancelButton(theme);
     const dialogStyles = dialog(theme);
     const spinnerContainerStyles = spinnerContainer(theme);
+    const methodIconStyles = methods__icons(theme);
+    const methodIconContainertyles = method__icon__container(theme);
+    const methodIconOuterCircleStyles = method__icon__outer_circle(theme);
+    const methodsIconStyles = methods_icon(theme);
     const errorMessageStyles = errorMessage(theme);
   
     return {
@@ -129,6 +172,10 @@ const button = theme => ({
       cancelButtonStyles,
       dialogStyles,
       spinnerContainerStyles,
+      methodIconStyles,
+      methodIconContainertyles,
+      methodIconOuterCircleStyles,
+      methodsIconStyles,
       errorMessageStyles
     }
   };
