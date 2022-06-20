@@ -5,7 +5,10 @@ import memoize from "memoize-one";
 import { getStyles } from "./styles";
 import { upload } from "./helpers/upload";
 import { useDropzone } from "react-dropzone";
+<<<<<<< HEAD
 import MessageBubble from "@cognigy/webchat/src/webchat-ui/components/presentational/MessageBubble";
+=======
+>>>>>>> master
 
 // only re-calculate if theme changed
 const getStylesMemo = memoize(getStyles);
@@ -40,10 +43,13 @@ const FileUpload = props => {
 			if (result.success) {
 				props.onSendMessage("", {
 					file: result.url,
+<<<<<<< HEAD
 					_plugin: {
 						type: "file-uploaded",
 						name: file.name,
 					},
+=======
+>>>>>>> master
 				});
 				props.onSendMessage("File upload succeeded", {});
 				setErrorMessage(null);
@@ -128,6 +134,7 @@ const FileUpload = props => {
 				))}
 		</div>
 	);
+<<<<<<< HEAD
 };
 
 const Spinner = ({ theme }) => {
@@ -198,16 +205,52 @@ const FileUploaded = props => {
            <Icon theme={theme} fileName={data._plugin.name}/>
         </MessageBubble>
     );
+=======
+};
+
+const Spinner = ({ theme }) => {
+	const { spinnerContainerStyles } = getStylesMemo(theme);
+	return (
+		<div style={spinnerContainerStyles}>
+			<svg
+				width="38"
+				height="38"
+				viewBox="0 0 38 38"
+				xmlns="http://www.w3.org/2000/svg"
+				stroke={theme.greyContrastColor}
+			>
+				<g fill="none" fillRule="evenodd">
+					<g transform="translate(1 1)" strokeWidth="2">
+						<circle strokeOpacity=".5" cx="18" cy="18" r="18" />
+						<path d="M36 18c0-9.94-8.06-18-18-18">
+							<animateTransform
+								attributeName="transform"
+								type="rotate"
+								from="0 18 18"
+								to="360 18 18"
+								dur="1s"
+								repeatCount="indefinite"
+							/>
+						</path>
+					</g>
+				</g>
+			</svg>
+		</div>
+	);
+>>>>>>> master
 };
 
 const fileUploadPlugin = {
 	match: "file-upload",
 	component: FileUpload,
+<<<<<<< HEAD
 };
 
 const fileUploadedPlugin = {
     match: 'file-uploaded',
     component: FileUploaded,
+=======
+>>>>>>> master
 };
 
 if (!window.cognigyWebchatMessagePlugins) {
@@ -215,4 +258,7 @@ if (!window.cognigyWebchatMessagePlugins) {
 }
 
 window.cognigyWebchatMessagePlugins.push(fileUploadPlugin);
+<<<<<<< HEAD
 window.cognigyWebchatMessagePlugins.push(fileUploadedPlugin);
+=======
+>>>>>>> master
