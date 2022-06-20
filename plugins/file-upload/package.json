@@ -18,7 +18,8 @@
   "dependencies": {
     "axios": "^0.24.0",
     "idempotent-babel-polyfill": "^7.4.4",
-    "react-dropzone": "^10.1.7"
+    "react-dropzone": "^10.1.7",
+    "@cognigy/webchat": "git+https://git@github.com/Cognigy/WebchatWidget.git#v2.41.1"
   },
   "alias": {
     "react": "./alias/react"
