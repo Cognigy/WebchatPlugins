@@ -1,0 +1,19 @@
+{
+  "name": "dial-vg",
+  "version": "1.0.0",
+  "description": "Let the user call a phone number with the Voice Gateway",
+  "main": "src/index.jsx",
+  "scripts": {
+    "build": "parcel build --out-file dial-vg.webchat-plugin.js src/index.jsx"
+  },
+  "author": "Cognigy GmbH",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^17.0.0",
+    "regenerator-runtime": "^0.13.7",
+    "sip.js": "^0.20.0"
+  },
+  "devDependencies": {
+    "parcel": "1.12.3"
+  }
+}
