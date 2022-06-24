@@ -3,7 +3,6 @@ import React from 'react';
 // import regeneratorRuntime from "regenerator-runtime";
 // SIP JS
 import { UserAgent, Inviter } from "sip.js";
-import { io } from 'socket.io-client';
 
 const DialVG = (props) => {
 
@@ -12,37 +11,10 @@ const DialVG = (props) => {
 	const { data } = message;
 	const { _plugin } = data;
 	const { sip } = _plugin;
+	const { aor, username, password, server } = sip;
 
 	const [callStatus, setCallStatus] = React.useState('');
 	const [sipSession, setSipSession] = React.useState();
-	const [sipUser, setSipUser] = React.useState();
-
-	const { aor, username, password, server, socketServer } = sip;
-
-	React.useEffect(() => {
-		// SIP Addresses-of-Record URI associated with the user agent.
-		const uri = UserAgent.makeURI(aor);
-
-		const userAgentOptions = {
-			uri,
-			logLevel: "log",
-			authorizationPassword: password,
-			authorizationUsername: username,
-			transportOptions: {
-				server: server
-			}
-		};
-
-		const userAgent = new UserAgent(userAgentOptions);
-		setSipUser(userAgent);
-
-		// Initialize Socket connection so service-api for event handling of webhooks
-		const jambonzSocket = io(socketServer);
-
-		jambonzSocket.on('call-status', (callStatus) => {
-			setCallStatus(callStatus.call_status);
-		});
-	}, []);
 
 	if (!isFullscreen) {
 		return (
@@ -62,12 +34,29 @@ const DialVG = (props) => {
 						cursor: 'pointer'
 					}}
 					onClick={async () => {
+
+						// SIP Addresses-of-Record URI associated with the user agent.
+						const uri = UserAgent.makeURI(aor);
+
+						const userAgentOptions = {
+							uri,
+							logLevel: "log",
+							authorizationPassword: password,
+							authorizationUsername: username,
+							transportOptions: {
+								server: server
+							}
+						};
+
+						const userAgent = new UserAgent(userAgentOptions);
+
 						onSetFullscreen();
 
-						await sipUser.start();
+						await userAgent.start();
 						const target = UserAgent.makeURI("sip:test@cognigy-alexteusz.sip.jambonz.us");
 
-						const inviter = new Inviter(sipUser, target);
+						setCallStatus("Calling");
+						const inviter = new Inviter(userAgent, target);
 						const session = await inviter.invite({
 							sessionDescriptionHandlerOptions: {
 								constraints: {
@@ -77,6 +66,7 @@ const DialVG = (props) => {
 							}
 						});
 
+						setCallStatus("Cognigy Support");
 						setSipSession(session);
 					}}
 				></button>
@@ -126,8 +116,12 @@ const DialVG = (props) => {
 								<button
 									style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}
 									onClick={() => {
-										sipSession.dtmf(dtmfOption);
+										if (sipSession !== undefined) {
+											sipSession.dtmf(dtmfOption);
+										}
+
 									}}
+									disabled={!sipSession}
 								>
 									{dtmfOption}
 								</button>
