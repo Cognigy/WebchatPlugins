@@ -2,68 +2,8 @@ import React from 'react';
 // needs to be imported in order to avoid runtime error
 // import regeneratorRuntime from "regenerator-runtime";
 // SIP JS
-import { Invitation, Registerer, UserAgent, UserAgentOptions } from "sip.js";
-
-const handleOnClickCall = async (jambonz, sip) => {
-
-	const { aor, username, password, server } = sip;
-
-	// SIP Addresses-of-Record URI associated with the user agent.
-	const uri = UserAgent.makeURI(aor);
-
-	const userAgentOptions = {
-		uri,
-		logLevel: "log",
-		authorizationPassword: password,
-		authorizationUsername: username,
-		transportOptions: {
-			server: server
-		},
-		delegate: {
-			onInvite: (invitation) => {
-				sipInvitation.set(invitation);
-				console.log(invitation);
-			},
-		}
-	};
-
-	const userAgent = new UserAgent(userAgentOptions);
-	userAgent.start();
-
-	try {
-		const response = await fetch(
-			`https://api.jambonz.us/v1/Accounts/${jambonz.accountSid}/Calls`,
-			{
-				method: "POST",
-				body: JSON.stringify({
-					application_sid: jambonz.applicationSid,
-					from: jambonz.fromPhoneNumber,
-					to: {
-						type: "phone",
-						number: jambonz.toPhoneNumber,
-					},
-				}),
-				headers: {
-					"Content-Type": "application/json",
-					Accept: "application/json",
-					Authorization: `Bearer ${jambonz.apiKey}`,
-				},
-			}
-		);
-
-		// Return the SID of the current call for further updates
-		const jambonzResponse = await response.json();
-		return jambonzResponse.sid
-	} catch (error) {
-		console.error(error);
-	}
-};
-
-const handleOnClickEndCall = (props) => {
-	const { onDismissFullscreen } = props;
-	onDismissFullscreen();
-}
-
+import { UserAgent, Inviter } from "sip.js";
+import { io } from 'socket.io-client';
 
 const DialVG = (props) => {
 
@@ -71,7 +11,38 @@ const DialVG = (props) => {
 	const { message, isFullscreen, onSetFullscreen, attributes } = props;
 	const { data } = message;
 	const { _plugin } = data;
-	const { sip, jambonz } = _plugin;
+	const { sip } = _plugin;
+
+	const [callStatus, setCallStatus] = React.useState('');
+	const [sipSession, setSipSession] = React.useState();
+	const [sipUser, setSipUser] = React.useState();
+
+	const { aor, username, password, server, socketServer } = sip;
+
+	React.useEffect(() => {
+		// SIP Addresses-of-Record URI associated with the user agent.
+		const uri = UserAgent.makeURI(aor);
+
+		const userAgentOptions = {
+			uri,
+			logLevel: "log",
+			authorizationPassword: password,
+			authorizationUsername: username,
+			transportOptions: {
+				server: server
+			}
+		};
+
+		const userAgent = new UserAgent(userAgentOptions);
+		setSipUser(userAgent);
+
+		// Initialize Socket connection so service-api for event handling of webhooks
+		const jambonzSocket = io(socketServer);
+
+		jambonzSocket.on('call-status', (callStatus) => {
+			setCallStatus(callStatus.call_status);
+		});
+	}, []);
 
 	if (!isFullscreen) {
 		return (
@@ -90,9 +61,23 @@ const DialVG = (props) => {
 						width: '50px',
 						cursor: 'pointer'
 					}}
-					onClick={() => {
+					onClick={async () => {
 						onSetFullscreen();
-						handleOnClickCall(jambonz, sip);
+
+						await sipUser.start();
+						const target = UserAgent.makeURI("sip:test@cognigy-alexteusz.sip.jambonz.us");
+
+						const inviter = new Inviter(sipUser, target);
+						const session = await inviter.invite({
+							sessionDescriptionHandlerOptions: {
+								constraints: {
+									audio: true,
+									video: false
+								}
+							}
+						});
+
+						setSipSession(session);
 					}}
 				></button>
 			</div>
@@ -118,7 +103,11 @@ const DialVG = (props) => {
 						style={{
 							fontSize: '200%'
 						}}
-					>Calling...</span>
+					>
+						{
+							callStatus
+						}
+					</span>
 				</div>
 				<div style={{
 					flex: 3,
@@ -132,19 +121,18 @@ const DialVG = (props) => {
 						flexWrap: 'wrap',
 						width: '60%'
 					}}>
-						<button style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}>1</button>
-						<button style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}>2</button>
-						<button style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}>3</button>
-						<br />
-						<button style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}>4</button>
-						<button style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}>5</button>
-						<button style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}>6</button>
-						<br />
-						<button style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}>7</button>
-						<button style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}>8</button>
-						<button style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}>9</button>
-						<br />
-						<button style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}>0</button>
+						{
+							['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'].map(dtmfOption => (
+								<button
+									style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}
+									onClick={() => {
+										sipSession.dtmf(dtmfOption);
+									}}
+								>
+									{dtmfOption}
+								</button>
+							))
+						}
 					</div>
 				</div>
 				<div style={{
@@ -164,7 +152,11 @@ const DialVG = (props) => {
 							width: '50px',
 							cursor: 'pointer'
 						}}
-						onClick={() => handleOnClickEndCall(props)}></button>
+						onClick={() => {
+							sipSession.reject();
+							sipSession.bye();
+							onDismissFullscreen();
+						}}></button>
 				</div>
 			</div>
 		);
