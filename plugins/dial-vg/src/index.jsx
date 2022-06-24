@@ -70,6 +70,7 @@ const DialVG = (props) => {
 						setSipSession(session);
 					}}
 				></button>
+				<audio autoplay></audio>
 			</div>
 		);
 	} else {
@@ -152,6 +153,7 @@ const DialVG = (props) => {
 							onDismissFullscreen();
 						}}></button>
 				</div>
+				<audio autoplay></audio>
 			</div>
 		);
 	}
