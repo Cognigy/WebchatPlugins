@@ -1,155 +1,782 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 // needs to be imported in order to avoid runtime error
 // import regeneratorRuntime from "regenerator-runtime";
 // SIP JS
-import { UserAgent, Inviter } from "sip.js";
+import * as sounds from './sounds';
+import events from 'events';
+import jssip from 'jssip';
+
+class SipSession extends events.EventEmitter {
+    constructor(rtcSession, options) {
+        super();
+        this.setMaxListeners(Infinity);
+
+        // Save given onSession handler for received INVITE with Replaces.
+        this._onSession = options.onSession;
+
+        // Save given RTCPeerConnection config.
+        this._pcConfig = options.pcConfig;
+
+        // Random unique id.
+        this._id = randomId();
+
+        // When the call starts.
+        this._startTime = new Date();
+
+        // Call status: 'init' / 'ringing' / 'answered' / 'failed' / 'ended'.
+        this._status = 'init';
+
+        // Whether this call is the active one.
+        this._active = false;
+
+        // End cause.
+        this._endInfo = {
+            originator: null,
+            cause: null,
+            description: null,
+        };
+
+        // Muted, and local/remote hold status.
+        this._muted = false;
+        this._localHold = false;
+        this._remoteHold = false;
+
+        // JsSIP.RTCSession instance.
+        this._rtcSession = rtcSession;
+
+        // Whether attended transfer is being performed.
+        this._doingAttendedTransfer = false;
+
+        // Flag indicating that this session is marked for auto merging.
+        this._autoMerge = false;
+
+        // Audio element for ringing.
+        this._ringAudio = new Audio();
+        this._ringAudio.loop = true;
+
+        if (this.isOutgoing()) {
+            this._ringAudio.src = sounds.ringing;
+            this._ringAudio.volume = 0.25;
+        } else {
+            this._ringAudio.src = sounds.ringing;
+            this._ringAudio.volume = 1.0;
+        }
+
+        // Audio element for failed call.
+        this._failedAudio = new Audio();
+        this._failedAudio.src = sounds.failed;
+        this._failedAudio.volume = 0.25;
+
+        // Audio element for answered call.
+        this._answeredAudio = new Audio();
+        this._answeredAudio.src = sounds.answered;
+        this._answeredAudio.volume = 1;
+
+        // Audio element for remote audio.
+        this._remoteAudio = new Audio();
+
+        let _attachPCListeners = (pc) => {
+            pc.addEventListener('addstream', (event) => {
+                let stream = event.stream;
+
+                // If outgoing, pause ringing.
+                if (this.isOutgoing()) {
+                    this._ringAudio.pause();
+                }
+                // Play the remote stream.
+                this._remoteAudio.srcObject = stream;
+                let playPromise = this._remoteAudio.play();
+                if (playPromise instanceof Promise) {
+                    playPromise
+                        .then(() => {
+                            console.log('remote audio started');
+                        })
+                        .catch((err) => {
+                            console.log(
+                                'remote audio failed to start (probably due to quick answer)'
+                            );
+                        });
+                }
+            });
+
+            pc.addEventListener('track', (event) => {
+                let track = event.track;
+                let stream = new MediaStream();
+
+                stream.addTrack(track);
+
+                // If outgoing, pause ringing.
+                if (this.isOutgoing()) {
+                    this._ringAudio.pause();
+                }
+                // Play the remote stream.
+                this._remoteAudio.srcObject = stream;
+                console.log('playing remote audio');
+                this._remoteAudio.play();
+            });
+        };
+
+        if (this._rtcSession._connection) {
+            _attachPCListeners(this._rtcSession._connection);
+        } else {
+            this._rtcSession.on('peerconnection', (data) => {
+                let pc = data.peerconnection;
+                _attachPCListeners(pc);
+            });
+        }
+
+        this._rtcSession.on('progress', () => {
+            this._status = 'ringing';
+            this.emit('change');
+
+            // Play ringing unless early media.
+            // Also, don't play ringing if it's an incoming/outgoing INVITE with
+            // Replaces.
+            if (this._remoteAudio.paused && !this.replaces) {
+                console.log('playing ringing sound');
+                this._ringAudio.play();
+            }
+
+            this.emit('ringing');
+        });
+
+        this._rtcSession.on('accepted', () => {
+            this._status = 'answered';
+            this.emit('change');
+
+            // Pause ringing and play answered sound.
+            this._ringAudio.pause();
+            console.log('playing answered sound');
+            this._answeredAudio.play();
+
+            this.emit('answer');
+        });
+
+        this._rtcSession.on('failed', (data) => {
+            let { originator, cause, message } = data;
+            let description;
+            let closeDelay = 1500;
+
+            if (message && originator === 'remote' && message.status_code) {
+                description = `${message.status_code}`.trim();
+            }
+
+            this._endInfo = {
+                originator: originator,
+                cause: cause,
+                description: description,
+            };
+
+            this._status = 'failed';
+            this.emit('change');
+
+            if (
+                originator === 'local' &&
+                (cause === jssip.C.causes.CANCELED || cause === jssip.C.causes.REJECTED)
+            ) {
+                closeDelay = 1000;
+            }
+
+            setTimeout(() => this.emit('close'), closeDelay);
+
+            // Pause ringing audio.
+            this._ringAudio.pause();
+            // If closed by the remote, play failed sound.
+            if (originator === 'remote') {
+                console.log('playing failed sound');
+                this._failedAudio.play();
+            }
+
+            this.emit('terminate');
+        });
+
+        this._rtcSession.on('ended', (data) => {
+            let { originator, cause, message } = data;
+            let description;
+            let closeDelay = 1500;
+
+            if (message && originator === 'remote' && message.hasHeader('Reason')) {
+                let reason = jssip.Grammar.parse(message.getHeader('Reason'), 'Reason');
+
+                if (reason) {
+                    description = `${reason.cause}`.trim();
+                }
+            }
+
+            this._endInfo = {
+                originator: originator,
+                cause: cause,
+                description: description,
+            };
+
+            this._status = 'ended';
+            this.emit('change');
+
+            if (originator === 'local' && cause === jssip.C.causes.BYE) {
+                closeDelay = 1000;
+            }
+
+            setTimeout(() => this.emit('close'), closeDelay);
+
+            this.emit('terminate');
+        });
+
+        this._rtcSession.on('muted', () => {
+            this._muted = true;
+            this.emit('change');
+        });
+
+        this._rtcSession.on('unmuted', () => {
+            this._muted = false;
+            this.emit('change');
+        });
+
+        this._rtcSession.on('hold', (data) => {
+            switch (data.originator) {
+                case 'local':
+                    this._localHold = true;
+                    this.emit('change');
+                    break;
+                case 'remote':
+                    this._remoteHold = true;
+                    this.emit('change');
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        this._rtcSession.on('unhold', (data) => {
+            switch (data.originator) {
+                case 'local':
+                    this._localHold = false;
+                    this.emit('change');
+                    break;
+                case 'remote':
+                    this._remoteHold = false;
+                    this.emit('change');
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        this._rtcSession.on('refer', (data) => {
+            let { request, accept } = data;
+
+            // Let's always accept incoming REFERs.
+            accept(
+                (rtcSession) => {
+                    // Set the replaces flag into the session so it won't play ringing.
+                    if (request.refer_to.uri.hasHeader('replaces')) {
+                        rtcSession.data.replaces = true;
+                    }
+
+                    this._onSession(rtcSession);
+                },
+                {
+                    mediaConstraints: { audio: true, video: false },
+                    pcConfig: this._pcConfig,
+                }
+            );
+        });
+
+        this._rtcSession.on('replaces', (data) => {
+            let { accept } = data;
+
+            accept((rtcSession) => {
+                // Set the replaces flag into the session so it won't ring.
+                rtcSession.data.replaces = true;
+
+                this._onSession(rtcSession);
+
+                // Auto-answer (unless already answered).
+                if (!rtcSession.isEstablished()) {
+                    rtcSession.answer({
+                        mediaConstraints: { audio: true, video: false },
+                        pcConfig: this._pcConfig,
+                    });
+                }
+            });
+        });
+
+        let candidateTypes = {
+            host: 0,
+            srflx: 0,
+            relay: 0,
+        };
+
+        this._rtcSession.on('icecandidate', (evt) => {
+            // only care about srflx candidates right now
+            // get the host
+            let type = evt.candidate.candidate.split(' ');
+            candidateTypes[type[7]]++;
+            if (candidateTypes['srflx'] >= 1 || candidateTypes['relay'] >= 1) {
+                evt.ready();
+            }
+        });
+    }
+
+    get jssipRtcSession() {
+        return this._rtcSession;
+    }
+
+    get id() {
+        return this._id;
+    }
+
+    get direction() {
+        return this.isOutgoing() ? 'out' : 'in';
+    }
+
+    get number() {
+        return this._rtcSession.remote_identity.uri.user;
+    }
+
+    get originalNumber() {
+        return this._rtcSession.data.originalNumber || this.number;
+    }
+
+    get status() {
+        return this._status;
+    }
+
+    get disposition() {
+        let causes = jssip.C.causes;
+        let cause = this._endInfo.cause;
+
+        switch (this._status) {
+            case 'failed': {
+                switch (cause) {
+                    case causes.CANCELED:
+                    case causes.NO_ANSWER:
+                    case causes.EXPIRES:
+                        return 'missed';
+                    default:
+                        return 'rejected';
+                }
+            }
+
+            case 'ended': {
+                return 'answered';
+            }
+
+            default:
+                throw new Error('cannot get call disposition while not terminated');
+        }
+    }
+
+    get answered() {
+        return this._status === 'answered';
+    }
+
+    get terminated() {
+        return this._status === 'failed' || this._status === 'ended';
+    }
+
+    get endInfo() {
+        return this._endInfo;
+    }
+
+    get active() {
+        return this._active;
+    }
+
+    get startTime() {
+        return this._startTime;
+    }
+
+    get answerTime() {
+        return this._rtcSession.start_time;
+    }
+
+    get duration() {
+        if (!this.answerTime) {
+            return 0;
+        }
+
+        let now = new Date();
+
+        return Math.floor((now - this.answerTime) / 1000);
+    }
+
+    get muted() {
+        return this._muted;
+    }
+
+    get localHold() {
+        return this._localHold;
+    }
+
+    get remoteHold() {
+        return this._remoteHold;
+    }
+
+    get autoMerge() {
+        return this._autoMerge;
+    }
+
+    set autoMerge(flag) {
+        if (this._autoMerge === flag) {
+            return;
+        }
+
+        this._autoMerge = flag;
+        this.emit('change');
+    }
+
+    get doingAttendedTransfer() {
+        return this._doingAttendedTransfer;
+    }
+
+    get replaces() {
+        return Boolean(this._rtcSession.data.replaces);
+    }
+
+    isOutgoing() {
+        return this._rtcSession.direction === 'outgoing';
+    }
+
+    isIncoming() {
+        return this._rtcSession.direction === 'incoming';
+    }
+
+    setActive(flag) {
+        let wasActive = this._active;
+
+        this._active = flag;
+
+        if (this._rtcSession.isEstablished()) {
+            if (this.replaces) {
+                return;
+            }
+
+            if (this._active) {
+                this.unhold();
+            } else {
+                this.hold();
+            }
+        }
+
+        if (this._active && !wasActive) {
+            this.emit('active');
+        }
+    }
+
+    answer() {
+        this._rtcSession.answer({
+            mediaConstraints: { audio: true, video: false },
+            pcConfig: this._pcConfig,
+        });
+
+        // NOTE: Hack. The JsSIP.RTCSession.isEstablished() return true after
+        // answer(), but the 'accepted' event takes a bit to fire (getUserMedia)
+        // so let's hardcode it.
+        if (this._rtcSession.isEstablished()) {
+            this._status = 'answered';
+        }
+    }
+
+    terminate(sipCode, sipReason) {
+        this._rtcSession.terminate({
+            status_code: sipCode,
+            reason_phrase: sipReason,
+        });
+    }
+
+    mute() {
+        console.log('muting');
+        this._rtcSession.mute({ audio: true, video: true });
+    }
+
+    unmute() {
+        console.log('unmuting');
+        this._rtcSession.unmute({ audio: true, video: true });
+    }
+
+    hold() {
+        this._rtcSession.hold();
+    }
+
+    unhold() {
+        this._rtcSession.unhold();
+    }
+
+    sendDtmf(tone) {
+        this._rtcSession.sendDTMF(tone);
+    }
+
+    attendedTransfer(sipSession) {
+        let referSubscriber = this._rtcSession.refer(sipSession.number, {
+            replaces: sipSession.jssipRtcSession,
+        });
+
+        this._doingAttendedTransfer = true;
+        this.emit('change');
+
+        referSubscriber.on('requestFailed', () => {
+            this._doingAttendedTransfer = false;
+            this.emit('change');
+        });
+
+        referSubscriber.on('accepted', () => {
+            console.log('attendedTransfer() succeeded, terminating this session');
+
+            this._doingAttendedTransfer = false;
+            this.terminate();
+        });
+
+        referSubscriber.on('failed', () => {
+            this._doingAttendedTransfer = false;
+            this.emit('change');
+        });
+    }
+}
+
+class SipClient extends events.EventEmitter {
+    constructor(client, settings) {
+        super();
+
+        this._pcConfig = settings.pcConfig;
+
+        console.log({ client, settings }, 'creating a sip client');
+        const socket = new jssip.WebSocketInterface(settings.wsUri);
+        const uri = `sip:${client.fullUsername}`;
+        this._ua = new jssip.UA({
+            uri,
+            password: client.password,
+            display_name: client.name,
+            sockets: [socket],
+            register: true,
+        });
+
+        [
+            'connecting',
+            'connected',
+            'disconnected',
+            'registered',
+            'unregistered',
+            'registrationFailed',
+        ].forEach((evtName) =>
+            this._ua.on(evtName, (data) => this.emit(evtName, { ...data, client }))
+        );
+
+        /*
+        this._ua.on('disconnected', (data) => {
+            let error = Boolean(data && data.error);
+
+            this.emit('disconnected', error, data);
+        });
+        */
+
+        this._ua.on('newRTCSession', (data) => {
+            let rtcSession = data.session;
+
+            this._onSession(rtcSession);
+        });
+    }
+
+    start() {
+        console.log('start()');
+        this._ua.start();
+    }
+
+    stop() {
+        console.log('stop()');
+        this._ua.stop();
+    }
+
+    call(number) {
+        console.log(`call() [number: ${number}]`);
+
+        let normalizedNumber = normalizeNumber(number);
+
+        this._ua.call(normalizedNumber, {
+            data: {
+                originalNumber: number,
+            },
+            mediaConstraints: { audio: true, video: false },
+            pcConfig: this._pcConfig,
+        });
+    }
+
+    _onSession(rtcSession) {
+        let session = new SipSession(rtcSession, {
+            pcConfig: this._pcConfig,
+            onSession: this._onSession.bind(this),
+        });
+
+        this.emit('session', session);
+    }
+}
 
 const DialVG = (props) => {
 
-	// get info from Cogngiy data
-	const { message, attributes } = props;
-	const { data } = message;
-	const { _plugin } = data;
-	const { sip } = _plugin;
-	const { aor, username, password, server, target } = sip;
+    // get info from Cogngiy data
+    const { message, attributes } = props;
+    const { data } = message;
+    const { _plugin } = data;
+    const { sip } = _plugin;
+    const { fullUsername, username, password, server, target } = sip;
 
-	const [callStatus, setCallStatus] = React.useState('Calling');
-	const [sipSession, setSipSession] = React.useState();
+    const [callStatus, setCallStatus] = useState('');
+    const [sipSession, setSipSession] = useState();
 
-	React.useEffect(() => {
-		// SIP Addresses-of-Record URI associated with the user agent.
-		const uri = UserAgent.makeURI(aor);
+    const [sipClientDetails, setSipClientDetails] = useState();
+	const [activeClient, setActiveClient] = useState();
+	const [activeCalls, setActiveCalls] = useState([]);
+    let sclient = useRef(null); // sip ua for currently-selected client
 
-		const userAgentOptions = {
-			uri,
-			logLevel: "log",
-			authorizationPassword: password,
-			authorizationUsername: username,
-			transportOptions: {
-				server: server
-			}
-		};
+    // let sipSession;
 
-		const userAgent = new UserAgent(userAgentOptions);
+    function placeCall(number) {
+		const ua = sclient.current;
+		if (!ua) return false;
+		ua.call(number);
+		return true;
+	}
 
-		userAgent.start().then(async () => {
-			const targetUri = UserAgent.makeURI(target);
 
-			const inviter = new Inviter(userAgent, targetUri);
-			inviter.invite({
-				sessionDescriptionHandlerOptions: {
-					constraints: {
-						audio: true,
-						video: false
-					}
-				}
-			}).then((session) => {
-				setCallStatus("Cognigy Support");
-				setSipSession(session);
-			});
-		});
+    React.useEffect(() => {
 
-	}, []);
+        /* event handlers for our sip ua */
+        function addUAEventListeners(ua) {
+            ua.on('connected', ({ client }) => {
+                console.log({ client }, 'connected');
 
-	return (
-		<div
-			{...attributes}
-			style={{
-				...attributes.styles,
-				display: 'flex',
-				flexDirection: 'column',
-				justifyContent: 'space-between'
-			}}>
-			<div style={{
-				display: 'flex',
-				flex: 1,
-				justifyContent: 'center',
-				alignItems: 'center'
-			}}>
-				<span
-					style={{
-						fontSize: '200%'
-					}}
-				>
-					{callStatus}
-				</span>
-			</div>
-			<div style={{
-				flex: 3,
-				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center'
-			}}>
-				<div style={{
-					display: 'flex',
-					justifyContent: 'center',
-					flexWrap: 'wrap',
-					width: '60%'
-				}}>
-					{
-						['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'].map(dtmfOption => (
-							<button
-								style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}
-								onClick={() => {
-									if (sipSession !== undefined) {
-										sipSession.info({
-											requestOptions: {
-												body: {
-													contentDisposition: "render",
-													contentType: "application/dtmf-relay",
-													content: `Signal=${dtmfOption}\r\nDuration=1000`
-												}
-											}
-										});
-									}
+                placeCall(target);
+            });
+            ua.on('disconnected', ({ client }) => {
+                console.log({ client }, 'disconnected');
+            });
+            ua.on('registered', ({ client }) => {
+                console.log({ client }, 'registered');
+                client.registered = true;
+                setActiveClient(client);
+            });
+            ua.on('unregistered', ({ client }) => {
+                console.log({ client }, 'unregistered');
+                client.registered = false;
+                setActiveClient(client);
+            });
+            ua.on('registrationFailed', ({ response, client }) => {
+                console.log(
+                    { client },
+                    `unregistered: registration failed with status ${response.status_code}`
+                );
+                client.registered = false;
+                setActiveClient(client);
+            });
+            ua.on('session', (session) => {
+                console.log({ session }, 'got a new session');
+                setActiveCalls((prevCalls) => [...prevCalls, session]);
+                AddSipSessionEventHandlers(ua, session);
+            });
+        }
 
-								}}
-								disabled={!sipSession}
-							>
-								{dtmfOption}
-							</button>
-						))
-					}
-				</div>
-			</div>
-			<div style={{
-				display: 'flex',
-				flex: 1,
-				alignItems: 'center',
-				justifyContent: 'center'
-			}}>
-				<button
-					style={{
-						padding: '15px',
-						borderRadius: '50px',
-						border: 'none',
-						backgroundColor: 'red',
-						color: 'white',
-						height: '50px',
-						width: '50px',
-						cursor: 'pointer'
-					}}
-					onClick={() => {
-						sipSession.reject();
-						sipSession.bye();
-						onDismissFullscreen();
-					}}></button>
-			</div>
-			<audio id="audio" autoplay></audio>
-		</div>
-	);
+        const ua = new SipClient({
+            fullUsername,
+            password,
+            name: "Cognigy"
+        }, {
+            wsUri: server
+        });
+
+        ua.start();
+
+        addUAEventListeners(ua);
+    }, []);
+
+    return (
+        <div
+            {...attributes}
+            style={{
+                ...attributes.styles,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between'
+            }}>
+            <div style={{
+                display: 'flex',
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
+                <span
+                    style={{
+                        fontSize: '200%'
+                    }}
+                >
+                    {callStatus}
+                </span>
+            </div>
+            <div style={{
+                flex: 3,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexWrap: 'wrap',
+                    width: '60%'
+                }}>
+                    {
+                        ['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'].map(dtmfOption => (
+                            <button
+                                style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}
+                                onClick={() => {
+                                    if (sipSession !== undefined) {
+                                        sipSession.sendDTMF(dtmfOption);
+                                    }
+
+                                }}
+                                disabled={!sipSession}
+                            >
+                                {dtmfOption}
+                            </button>
+                        ))
+                    }
+                </div>
+            </div>
+            <div style={{
+                display: 'flex',
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center'
+            }}>
+                <button
+                    style={{
+                        padding: '15px',
+                        borderRadius: '50px',
+                        border: 'none',
+                        backgroundColor: 'red',
+                        color: 'white',
+                        height: '50px',
+                        width: '50px',
+                        cursor: 'pointer'
+                    }}
+                    onClick={() => {
+                        sipSession.reject();
+                        sipSession.bye();
+                        onDismissFullscreen();
+                    }}></button>
+            </div>
+        </div>
+    );
 }
 
 const dialVGPlugin = {
-	match: 'dial-vg',
-	component: DialVG,
-	options: {
-		fullscreen: true
-	}
+    match: 'dial-vg',
+    component: DialVG,
+    options: {
+        fullscreen: true
+    }
 }
 
 if (!window.cognigyWebchatMessagePlugins) {
-	window.cognigyWebchatMessagePlugins = []
+    window.cognigyWebchatMessagePlugins = []
 }
 
 window.cognigyWebchatMessagePlugins.push(dialVGPlugin);
