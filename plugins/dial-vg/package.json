@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "jssip": "^3.9.1",
+    "random-string": "^0.2.0",
     "react": "^17.0.0",
     "regenerator-runtime": "^0.13.7",
     "sip.js": "^0.20.0",

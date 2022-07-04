@@ -5,6 +5,30 @@ import React, { useState, useRef } from 'react';
 import * as sounds from './sounds';
 import events from 'events';
 import jssip from 'jssip';
+import randomString from 'random-string';
+
+function randomId(prefix) {
+	if (prefix) {
+		return `${prefix}-${randomString({ length: 8 })}`;
+	} else {
+		return randomString({ length: 8 });
+	}
+}
+function normalizeNumber(number) {
+	// Don't normalize if a SIP/TEL URI.
+	if (/^(sips?|tel):/i.test(number)) {
+		return number;
+	}
+	// Don't normalize if it wanted to be a SIP URI.
+	else if (/@/i.test(number)) {
+		return number;
+	}
+	// Otherwise remove spaces and some symbols.
+	else {
+		return number.replace(/[()\-. ]*/g, '');
+	}
+}
+
 
 class SipSession extends events.EventEmitter {
     constructor(rtcSession, options) {
@@ -589,9 +613,9 @@ class SipClient extends events.EventEmitter {
     call(number) {
         console.log(`call() [number: ${number}]`);
 
-        let normalizedNumber = normalizeNumber(number);
+        // let normalizedNumber = normalizeNumber(number);
 
-        this._ua.call(normalizedNumber, {
+        this._ua.call(number, {
             data: {
                 originalNumber: number,
             },
@@ -620,31 +644,48 @@ const DialVG = (props) => {
     const { fullUsername, username, password, server, target } = sip;
 
     const [callStatus, setCallStatus] = useState('');
-    const [sipSession, setSipSession] = useState();
+    const [userAgent, setUserAgent] = useState();
+    const [session, setSession] = useState();
 
     const [sipClientDetails, setSipClientDetails] = useState();
-	const [activeClient, setActiveClient] = useState();
-	const [activeCalls, setActiveCalls] = useState([]);
+    const [activeClient, setActiveClient] = useState();
+    const [activeCalls, setActiveCalls] = useState([]);
     let sclient = useRef(null); // sip ua for currently-selected client
 
-    // let sipSession;
-
-    function placeCall(number) {
-		const ua = sclient.current;
-		if (!ua) return false;
-		ua.call(number);
-		return true;
-	}
-
-
     React.useEffect(() => {
+
+        /* event handlers for a sip session */
+        function AddSipSessionEventHandlers(ua, session) {
+            session.on('ringing', () => {
+                console.log({ activeCalls }, `session ${session.id} ringing`);
+            });
+            session.on('answer', () => {
+                console.log({ activeCalls }, `session ${session.id} answered`);
+                session.setActive(true);
+            });
+            session.on('terminate', () => {
+                console.log(
+                    { activeCalls },
+                    `session ${session.id} terminated; status ${session.status}`
+                );
+                setActiveCalls((prevCalls) => prevCalls.filter((c) => c.id !== session.id));
+            });
+
+            session.on('change', () => {
+                console.log(
+                    `got change event for session ${session.id}, resetting active calls`,
+                    { session }
+                );
+                setActiveCalls((prevCalls) => [...prevCalls]);
+            });
+        }
 
         /* event handlers for our sip ua */
         function addUAEventListeners(ua) {
             ua.on('connected', ({ client }) => {
                 console.log({ client }, 'connected');
 
-                placeCall(target);
+                userAgent.call(target);
             });
             ua.on('disconnected', ({ client }) => {
                 console.log({ client }, 'disconnected');
@@ -671,10 +712,12 @@ const DialVG = (props) => {
                 console.log({ session }, 'got a new session');
                 setActiveCalls((prevCalls) => [...prevCalls, session]);
                 AddSipSessionEventHandlers(ua, session);
+
+                setSession(session);
             });
         }
 
-        const ua = new SipClient({
+        const userAgent = new SipClient({
             fullUsername,
             password,
             name: "Cognigy"
@@ -682,9 +725,11 @@ const DialVG = (props) => {
             wsUri: server
         });
 
-        ua.start();
+        userAgent.start();
 
-        addUAEventListeners(ua);
+        addUAEventListeners(userAgent);
+
+        setUserAgent(userAgent);
     }, []);
 
     return (
@@ -727,12 +772,12 @@ const DialVG = (props) => {
                             <button
                                 style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}
                                 onClick={() => {
-                                    if (sipSession !== undefined) {
-                                        sipSession.sendDTMF(dtmfOption);
+                                    if (session !== undefined) {
+                                        session.sendDtmf(dtmfOption);
                                     }
 
                                 }}
-                                disabled={!sipSession}
+                                disabled={!userAgent}
                             >
                                 {dtmfOption}
                             </button>
