@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 // needs to be imported in order to avoid runtime error
-// import regeneratorRuntime from "regenerator-runtime";
+import regeneratorRuntime from "regenerator-runtime";
 // SIP JS
 import * as sounds from './sounds';
 import events from 'events';
@@ -8,25 +8,25 @@ import jssip from 'jssip';
 import randomString from 'random-string';
 
 function randomId(prefix) {
-	if (prefix) {
-		return `${prefix}-${randomString({ length: 8 })}`;
-	} else {
-		return randomString({ length: 8 });
-	}
+    if (prefix) {
+        return `${prefix}-${randomString({ length: 8 })}`;
+    } else {
+        return randomString({ length: 8 });
+    }
 }
 function normalizeNumber(number) {
-	// Don't normalize if a SIP/TEL URI.
-	if (/^(sips?|tel):/i.test(number)) {
-		return number;
-	}
-	// Don't normalize if it wanted to be a SIP URI.
-	else if (/@/i.test(number)) {
-		return number;
-	}
-	// Otherwise remove spaces and some symbols.
-	else {
-		return number.replace(/[()\-. ]*/g, '');
-	}
+    // Don't normalize if a SIP/TEL URI.
+    if (/^(sips?|tel):/i.test(number)) {
+        return number;
+    }
+    // Don't normalize if it wanted to be a SIP URI.
+    else if (/@/i.test(number)) {
+        return number;
+    }
+    // Otherwise remove spaces and some symbols.
+    else {
+        return number.replace(/[()\-. ]*/g, '');
+    }
 }
 
 
@@ -171,7 +171,7 @@ class SipSession extends events.EventEmitter {
             // Pause ringing and play answered sound.
             this._ringAudio.pause();
             console.log('playing answered sound');
-            this._answeredAudio.play();
+            // this._answeredAudio.play();
 
             this.emit('answer');
         });
@@ -634,23 +634,42 @@ class SipClient extends events.EventEmitter {
     }
 }
 
+const DialTime = () => {
+
+    const [seconds, setSeconds] = useState(0);
+
+    useEffect(() => {
+        setTimeout(() => setSeconds(seconds + 1), 1000);
+    }, [seconds]);
+
+    return (
+        <span
+            style={{
+                color: 'grey'
+            }}
+        >{seconds}s</span>
+    );
+}
+
 const DialVG = (props) => {
 
     // get info from Cogngiy data
-    const { message, attributes } = props;
+    const { message, attributes, onSendMessage, isFullscreen } = props;
     const { data } = message;
     const { _plugin } = data;
-    const { sip } = _plugin;
-    const { fullUsername, username, password, server, target } = sip;
+    const { sip, targetDisplayName, callEndedMessage } = _plugin;
+    const { fullUsername, password, server, target } = sip;
 
-    const [callStatus, setCallStatus] = useState('');
+    // The top text that displays DTMF or a phone number
+    const [displayText, setDisplayText] = useState('');
+
+    // The SIP softphone user agent
     const [userAgent, setUserAgent] = useState();
+    // The SIP session
     const [session, setSession] = useState();
 
-    const [sipClientDetails, setSipClientDetails] = useState();
     const [activeClient, setActiveClient] = useState();
     const [activeCalls, setActiveCalls] = useState([]);
-    let sclient = useRef(null); // sip ua for currently-selected client
 
     React.useEffect(() => {
 
@@ -658,10 +677,12 @@ const DialVG = (props) => {
         function AddSipSessionEventHandlers(ua, session) {
             session.on('ringing', () => {
                 console.log({ activeCalls }, `session ${session.id} ringing`);
+                setDisplayText('Ringing');
             });
             session.on('answer', () => {
                 console.log({ activeCalls }, `session ${session.id} answered`);
                 session.setActive(true);
+                setDisplayText(targetDisplayName || 'Support');
             });
             session.on('terminate', () => {
                 console.log(
@@ -732,6 +753,16 @@ const DialVG = (props) => {
         setUserAgent(userAgent);
     }, []);
 
+    if (!isFullscreen) {
+        return (
+            <div
+                {...attributes}
+            >
+                {callEndedMessage}
+            </div>
+        );
+    }
+
     return (
         <div
             {...attributes}
@@ -739,21 +770,31 @@ const DialVG = (props) => {
                 ...attributes.styles,
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
+                alignItems: 'center'
             }}>
             <div style={{
                 display: 'flex',
                 flex: 1,
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                flexDirection: 'column'
             }}>
                 <span
                     style={{
                         fontSize: '200%'
                     }}
                 >
-                    {callStatus}
+                    {displayText}
                 </span>
+                <br />
+                {
+                    session !== undefined && session.answered
+                        ?
+                        <DialTime />
+                        :
+                        null
+                }
             </div>
             <div style={{
                 flex: 3,
@@ -772,8 +813,15 @@ const DialVG = (props) => {
                             <button
                                 style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}
                                 onClick={() => {
+                                    setDisplayText('');
+
                                     if (session !== undefined) {
-                                        session.sendDtmf(dtmfOption);
+                                        // Add dtmf options until user clicks #
+                                        if (dtmfOption !== '#') {
+                                            setDisplayText(dtmfOption);
+                                        } else if (dtmfOption === '#') {
+                                            session.sendDtmf(displayText);
+                                        }
                                     }
 
                                 }}
@@ -789,7 +837,8 @@ const DialVG = (props) => {
                 display: 'flex',
                 flex: 1,
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'space-around',
+                width: '40%'
             }}>
                 <button
                     style={{
@@ -803,10 +852,52 @@ const DialVG = (props) => {
                         cursor: 'pointer'
                     }}
                     onClick={() => {
-                        sipSession.reject();
-                        sipSession.bye();
-                        onDismissFullscreen();
-                    }}></button>
+                        session.terminate();
+                        onSendMessage('', {
+                            callEnded: true
+                        });
+                    }}>
+                    {/* <CallEndIcon /> */}
+                </button>
+                {
+                    session !== undefined
+                        ?
+                        <button
+                            style={{
+                                padding: '15px',
+                                borderRadius: '50px',
+                                border: '1px solid grey',
+                                backgroundColor: session.muted ? 'grey' : 'transparent',
+                                color: session.muted ? 'white' : 'black',
+                                height: '50px',
+                                width: '50px',
+                                cursor: 'pointer'
+                            }}
+                            onClick={() => {
+                                if (session.muted) {
+                                    console.log("clicked unmute button")
+                                    session.unmute();
+                                } else {
+                                    session.mute();
+                                }
+                            }}>
+                            {
+                                session !== undefined && session.muted
+                                    ?
+                                    // <MicIcon />
+                                    null
+                                    :
+                                    session !== undefined && !session.muted
+                                        ?
+                                        // <MicOffIcon />
+                                        null
+                                        :
+                                        null
+                            }
+                        </button>
+                        :
+                        null
+                }
             </div>
         </div>
     );
