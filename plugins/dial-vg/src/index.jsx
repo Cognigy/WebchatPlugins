@@ -819,8 +819,8 @@ const DialVG = (props) => {
                                         // Add dtmf options until user clicks #
                                         if (displayText === targetDisplayName) {
                                             setDisplayText('');
-                                        } 
-                                        else {
+                                            setDisplayText(dtmfOption);
+                                        } else {
                                             if (dtmfOption !== '#') {
                                                 setDisplayText(displayText + dtmfOption);
                                             } else if (dtmfOption === '#') {
