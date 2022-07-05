@@ -863,7 +863,7 @@ const DialVG = (props) => {
                             callEnded: true
                         });
                     }}>
-                    {/* <CallEndIcon /> */}
+                    {/* Insert HangUp Icon here */}
                 </button>
                 {
                     session !== undefined
