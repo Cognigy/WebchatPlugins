@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
-// needs to be imported in order to avoid runtime error
-import regeneratorRuntime from "regenerator-runtime";
+import React, { useState, useEffect } from 'react';
 // SIP JS
 import * as sounds from './sounds';
 import events from 'events';
 import jssip from 'jssip';
 import randomString from 'random-string';
+
+jssip.debug.enable('JsSIP:*');
 
 function randomId(prefix) {
     if (prefix) {
@@ -14,6 +14,7 @@ function randomId(prefix) {
         return randomString({ length: 8 });
     }
 }
+
 function normalizeNumber(number) {
     // Don't normalize if a SIP/TEL URI.
     if (/^(sips?|tel):/i.test(number)) {
@@ -28,7 +29,6 @@ function normalizeNumber(number) {
         return number.replace(/[()\-. ]*/g, '');
     }
 }
-
 
 class SipSession extends events.EventEmitter {
     constructor(rtcSession, options) {
@@ -613,9 +613,9 @@ class SipClient extends events.EventEmitter {
     call(number) {
         console.log(`call() [number: ${number}]`);
 
-        // let normalizedNumber = normalizeNumber(number);
+        let normalizedNumber = normalizeNumber(number);
 
-        this._ua.call(number, {
+        this._ua.call(normalizedNumber, {
             data: {
                 originalNumber: number,
             },
@@ -671,7 +671,7 @@ const DialVG = (props) => {
     const [activeClient, setActiveClient] = useState();
     const [activeCalls, setActiveCalls] = useState([]);
 
-    React.useEffect(() => {
+    useEffect(() => {
 
         /* event handlers for a sip session */
         function AddSipSessionEventHandlers(ua, session) {
@@ -813,17 +813,22 @@ const DialVG = (props) => {
                             <button
                                 style={{ cursor: 'pointer', margin: '3%', height: '50px', width: '50px', border: '1px solid grey', padding: '15px', borderRadius: '50px', background: 'transparent' }}
                                 onClick={() => {
-                                    setDisplayText('');
 
+                                    console.log(displayText)
                                     if (session !== undefined) {
                                         // Add dtmf options until user clicks #
-                                        if (dtmfOption !== '#') {
-                                            setDisplayText(dtmfOption);
-                                        } else if (dtmfOption === '#') {
-                                            session.sendDtmf(displayText);
+                                        if (displayText === targetDisplayName) {
+                                            setDisplayText('');
+                                        } 
+                                        else {
+                                            if (dtmfOption !== '#') {
+                                                setDisplayText(displayText + dtmfOption);
+                                            } else if (dtmfOption === '#') {
+                                                session.sendDtmf(displayText);
+                                                setDisplayText(targetDisplayName);
+                                            }
                                         }
                                     }
-
                                 }}
                                 disabled={!userAgent}
                             >
@@ -851,6 +856,7 @@ const DialVG = (props) => {
                         width: '50px',
                         cursor: 'pointer'
                     }}
+                    disabled={!userAgent || !session}
                     onClick={() => {
                         session.terminate();
                         onSendMessage('', {
@@ -873,6 +879,7 @@ const DialVG = (props) => {
                                 width: '50px',
                                 cursor: 'pointer'
                             }}
+                            disabled={!userAgent || !session}
                             onClick={() => {
                                 if (session.muted) {
                                     console.log("clicked unmute button")
@@ -881,7 +888,7 @@ const DialVG = (props) => {
                                     session.mute();
                                 }
                             }}>
-                            {
+                            {/* {
                                 session !== undefined && session.muted
                                     ?
                                     // <MicIcon />
@@ -893,7 +900,7 @@ const DialVG = (props) => {
                                         null
                                         :
                                         null
-                            }
+                            } */}
                         </button>
                         :
                         null

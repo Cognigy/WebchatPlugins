@@ -2,7 +2,6 @@
   "name": "dial-vg",
   "version": "1.0.0",
   "description": "Let the user call a phone number with the Voice Gateway",
-  "main": "src/index.jsx",
   "scripts": {
     "build": "parcel build --out-file dial-vg.webchat-plugin.js src/index.jsx"
   },
@@ -11,13 +10,12 @@
   "dependencies": {
     "jssip": "^3.9.1",
     "random-string": "^0.2.0",
-    "react": "^17.0.0",
-    "regenerator-runtime": "^0.13.7",
-    "sip.js": "^0.20.0",
+    "react": "^16.8.6",
     "socket.io-client": "^4.5.1"
   },
   "devDependencies": {
-    "parcel": "1.12.3"
+    "parcel": "1.12.3",
+    "process": "^0.11.10"
   },
   "alias": {
     "react": "./alias/react"
