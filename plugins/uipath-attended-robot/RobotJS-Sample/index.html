@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html>
+​
+<head>
+    <meta charset="utf-8" />
+    <title>Robot Embedding Sample Application</title>
+    <style>
+table {border-collapse: collapse}th,td {padding: 10px;text-align: left}
+#background {
+    background-color: #e6ffff;
+}
+        form {
+            margin-top: 20px
+        }
+    </style>
+​
+​
+​
+</head>
+​
+<body>
+<center>
+    <h1>Browser Embedding Sample Application</h1>
+    <div id="port"></div>
+    <div id="username"></div> <br />
+    <div id="error-message"></div>
+	
+<table border="0">
+	<tr id="background"><td valign="top"><h3>Process List</h3></td><td valign="top"><h3>Browser Embedding Sample with Arguments</h3></td></tr>
+	<tr><td valign="top">
+    <div id="divRobots" style ="border: 1px solid black;"></div>
+    <button id="GetRobotProcesses" onclick="refreshRobotProcesses();">Refresh Robot Process</button>	
+    </td><td valign="top">
+	<a href="Process1.zip">Download sample with arguments</a>
+    <form id="example-form">
+		<table border="0" >
+			<tr><td>Name</td><td><input id="example-input-name" type="text" autofocus placeholder="string value" size="20"></td></tr>
+			<tr><td>Surname</td><td><input id="example-input-surname" type="text" autofocus placeholder="string value" size="20"></td></tr>
+			<tr><td>Age</td><td><input id="example-input-age" type="number" autofocus placeholder="int value" size="3"></td></tr>
+			<tr><td>Subscription</td><td><select name="BooleanArgIn" id="example-input-boolean"><option value="true">True</option>  <option value="false">False</option></select></td></tr>
+			<tr><td></td><td><input type="submit" value="Run Sample Process"></td></tr>
+		</table>
+	</form>
+    <ul id="process-status"></ul>
+    <div id="process-result"></div>
+	</td ></tr>
+	</center>	
+	
+	
+​
+​
+    <script src="https://uipathrobot.azureedge.net/Latest/UiPathRobot.js"></script>
+    <script src="/scripts/app.js"></script>
+	
+​
+​
+​
+​
+</body>
+​
+</html>

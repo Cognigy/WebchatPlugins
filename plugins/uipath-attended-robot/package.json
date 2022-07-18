@@ -1,0 +1,27 @@
+{
+  "name": "uipath-attended-robots",
+  "version": "1.0.0",
+  "description": "Trigger attended UiPath Robots in the webchat",
+  "main": "build/plugin.js",
+  "scripts": {
+    "build": "parcel build --out-file uipath-attended-robots.webchat-plugin.js src/index.jsx"
+  },
+  "keywords": [
+    "UiPath",
+    "Unattended",
+    "Robot"
+  ],
+  "author": "Cognigy GmbH",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^16.8.6",
+    "parcel": "1.12.4"
+  },
+  "alias": {
+    "react": "./alias/react"
+  },
+  "dependencies": {
+    "@uipath/robot": "^1.2.8",
+    "react": "^16.8.6"
+  }
+}
