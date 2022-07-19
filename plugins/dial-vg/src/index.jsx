@@ -5,6 +5,8 @@ import events from 'events';
 import jssip from 'jssip';
 import randomString from 'random-string';
 
+const processedMessages = new Set();
+
 jssip.debug.enable('JsSIP:*');
 
 function randomId(prefix) {
@@ -671,7 +673,8 @@ const DialVG = (props) => {
     const [activeClient, setActiveClient] = useState();
     const [activeCalls, setActiveCalls] = useState([]);
 
-    useEffect(() => {
+
+    const startPlugin = () => {
 
         /* event handlers for a sip session */
         function AddSipSessionEventHandlers(ua, session) {
@@ -751,7 +754,15 @@ const DialVG = (props) => {
         addUAEventListeners(userAgent);
 
         setUserAgent(userAgent);
-    }, []);
+    }
+
+    // Only execute the plugin once
+    if (!processedMessages.has(message.traceId)) {
+        if (message.data?._plugin?.type === 'dial-vg') {
+            processedMessages.add(message.traceId);
+            startPlugin();
+        }
+    }
 
     if (!isFullscreen) {
         return (
