@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "description": "Trigger attended UiPath Robots in the webchat",
   "main": "build/plugin.js",
+  "targets": {
+    "main": {
+       "includeNodeModules": true
+    }
+ },
   "scripts": {
-    "build": "parcel build --out-file uipath-attended-robots.webchat-plugin.js src/index.jsx"
+    "build": "parcel build src/index.jsx"
   },
   "keywords": [
     "UiPath",
@@ -15,7 +20,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/react": "^16.8.6",
-    "parcel": "1.12.4"
+    "parcel": "^2.6.2"
   },
   "alias": {
     "react": "./alias/react"
