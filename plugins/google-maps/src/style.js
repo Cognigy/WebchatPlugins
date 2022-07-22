@@ -1,3 +1,5 @@
+import * as mapMarker from "data-url:../assets/map-marker.png"
+
 const K_WIDTH = 40;
 const K_HEIGHT = 40;
 
@@ -14,8 +16,7 @@ const style = {
   backgroundSize: 'cover',
   backgroundRepeat: 'no-repeat',
   backgroundPosition: 'center',
-  backgroundImage: "url('https://miribucket.s3.eu-central-1.amazonaws.com/678111-map-marker-512.png')",
-  textAlign: 'center',
+  backgroundImage: `url(${mapMarker})`,
   color: 'black',
   fontSize: 16,
   fontWeight: 'bold',
