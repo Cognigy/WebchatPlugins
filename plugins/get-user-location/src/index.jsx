@@ -49,7 +49,7 @@ const GetUserLocation = (props) => {
 
 	// Only execute the plugin once
 	if (!processedMessages.has(message.traceId)) {
-		if (message.source === 'bot' && message.data?._plugin?.type === 'location') {
+		if (message.source === 'bot' && message.data && message.data._plugin && message.data._plugin.type === 'location') {
 			processedMessages.add(message.traceId);
 			geoFindUser();
 		}
