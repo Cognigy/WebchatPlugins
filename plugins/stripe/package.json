@@ -9,7 +9,7 @@
   "author": "Alexander Teusz",
   "license": "MIT",
   "devDependencies": {
-    "parcel": "1.12.4"
+    "parcel": "2.7.0"
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^1.2.2",
