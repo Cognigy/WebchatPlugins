@@ -42,16 +42,22 @@ const AvailableChannelsPreview = (props) => {
 										`data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHZpZXdCb3g9IjAgMCA4MDAgODAwIj4KIDxyYWRpYWxHcmFkaWVudCBpZD0iR3JhZGllbnQiIGN4PSIxMDEuOTI1IiBjeT0iODA5LjAwNzkiIHI9IjEuMDg5NiIgZ3JhZGllbnRUcmFuc2Zvcm09Im1hdHJpeCg4MDAgMCAwIC03OTkuOTk4NSAtODEzODYgNjQ4MDAwLjc1KSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgogIDxzdG9wIG9mZnNldD0iMCIgc3R5bGU9InN0b3AtY29sb3I6IzAwOTlGRiIvPgogIDxzdG9wIG9mZnNldD0iMC42MDk4IiBzdHlsZT0ic3RvcC1jb2xvcjojQTAzM0ZGIi8+CiAgPHN0b3Agb2Zmc2V0PSIwLjkzNDgiIHN0eWxlPSJzdG9wLWNvbG9yOiNGRjUyODAiLz4KICA8c3RvcCBvZmZzZXQ9IjEiIHN0eWxlPSJzdG9wLWNvbG9yOiNGRjcwNjEiLz4KIDwvcmFkaWFsR3JhZGllbnQ+CiA8cGF0aCBmaWxsPSJ1cmwoI0dyYWRpZW50KSIgZD0iTTQwMCwwQzE3NC43LDAsMCwxNjUuMSwwLDM4OGMwLDExNi42LDQ3LjgsMjE3LjQsMTI1LjYsMjg3YzYuNSw1LjgsMTAuNSwxNCwxMC43LDIyLjhsMi4yLDcxLjIKIGMwLjcsMjIuNywyNC4xLDM3LjUsNDQuOSwyOC4zbDc5LjQtMzVjNi43LTMsMTQuMy0zLjUsMjEuNC0xLjZjMzYuNSwxMCw3NS4zLDE1LjQsMTE1LjgsMTUuNGMyMjUuMywwLDQwMC0xNjUuMSw0MDAtMzg4CiBTNjI1LjMsMCw0MDAsMHoiLz4KIDxwYXRoIGZpbGw9IiNGRkZGRkYiIGQ9Ik0xNTkuOCw1MDEuNWwxMTcuNS0xODYuNGMxOC43LTI5LjcsNTguNy0zNyw4Ni44LTE2bDkzLjUsNzAuMWM4LjYsNi40LDIwLjQsNi40LDI4LjktMC4xCgkJCWwxMjYuMi05NS44YzE2LjgtMTIuOCwzOC44LDcuNCwyNy42LDI1LjNMNTIyLjcsNDg0LjljLTE4LjcsMjkuNy01OC43LDM3LTg2LjgsMTZsLTkzLjUtNzAuMWMtOC42LTYuNC0yMC40LTYuNC0yOC45LDAuMQoJCQlsLTEyNi4yLDk1LjhDMTcwLjUsNTM5LjUsMTQ4LjUsNTE5LjQsMTU5LjgsNTAxLjV6Ii8+Cjwvc3ZnPg==`
 										:
 										channel.name === 'phone'
-										?
-										// Source: https://icons8.com/icon/78382/phone
-										`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABIElEQVR4nO3VwSoFURwH4A+h2FAUz3ElS0l5CgsWNrJjKxs2XoDuAygegFhZiMJKdq4dC5KUhY2uTo263c4dZM50F/dXv83M1NfMnPM/dNIGWcQdrjBaFrqFekOrZaBzTWjoJyqp4ZMIHHqGrpTwWws4dD4l/JIDP2AwFXyRA4dOpoLXctBb9KaCx/HeAp6ROBsRNAyS5BnEfRP8hOEy8Al8NOGn6C8DX4l88r3Ug+Q7uxF8WwnpwUEE38nuNSZstSkMFIX34TCCH2Eoe2YaN9n1Ryyhu6iVfhzBn3Gdc7BUinrz/R9GauxIrWLkv3hP9n/rf+ylgrIc2ed5rSl4yNR+CS8oOGHRreccLKGbEmYMqzjP5vprtt1mU6KdtG++AA/oqGgeE678AAAAAElFTkSuQmCC`
-										:
-										null
+											?
+											// Source: https://icons8.com/icon/78382/phone
+											`data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAABIElEQVR4nO3VwSoFURwH4A+h2FAUz3ElS0l5CgsWNrJjKxs2XoDuAygegFhZiMJKdq4dC5KUhY2uTo263c4dZM50F/dXv83M1NfMnPM/dNIGWcQdrjBaFrqFekOrZaBzTWjoJyqp4ZMIHHqGrpTwWws4dD4l/JIDP2AwFXyRA4dOpoLXctBb9KaCx/HeAp6ROBsRNAyS5BnEfRP8hOEy8Al8NOGn6C8DX4l88r3Ug+Q7uxF8WwnpwUEE38nuNSZstSkMFIX34TCCH2Eoe2YaN9n1Ryyhu6iVfhzBn3Gdc7BUinrz/R9GauxIrWLkv3hP9n/rf+ylgrIc2ed5rSl4yNR+CS8oOGHRreccLKGbEmYMqzjP5vprtt1mU6KdtG++AA/oqGgeE678AAAAAElFTkSuQmCC`
+											:
+											null
 							}
 							id={channel.name}
 							onClick={() => {
-								// Open the link of the clicked channel in another browser tab
-								window.open(channel.link, "_blank");
+
+								if (channel.type === "link") {
+									// Open the link of the clicked channel in another browser tab
+									window.open(channel.link || "https://cognigy.com", "_blank");
+								} else if (channel.type === "postback") {
+									onSendMessage(channel.payload || "GET_STARTED");
+								}
+
 							}}
 						/>
 					})
