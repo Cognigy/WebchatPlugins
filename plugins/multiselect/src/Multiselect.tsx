@@ -4,6 +4,7 @@ import { MessageComponentProps } from '@cognigy/webchat/src/common/interfaces/me
 import { IBotMessage } from '@cognigy/webchat/src/common/interfaces/message';
 import MessageBubble from '@cognigy/webchat/src/webchat-ui/components/presentational/MessageBubble';
 import { styled } from '@cognigy/webchat/src/webchat-ui/style';
+import sanitizedData from "./utils/sanatize";
 
 interface IMultiselectMessage extends IBotMessage {
     data: {
@@ -44,7 +45,7 @@ const Multiselect: React.FC<IMultiselectProps> = props => {
                     className="regular-message bot"
                     color="primary"
                 >
-                    {props.message.text}
+                    <div dangerouslySetInnerHTML={sanitizedData(props.message.text)} />
                 </MessageBubble>
                 <OpenButton
                     theme={props.theme}

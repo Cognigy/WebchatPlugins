@@ -9,6 +9,7 @@ import { styled } from '@cognigy/webchat/src/webchat-ui/style';
 import { ThemeProvider } from 'emotion-theming';
 
 import { IMultiselectProps } from '../Multiselect';
+import sanitizedData from '../utils/sanatize';
 
 const DialogRoot = styled.div(() => ({
     display: 'flex',
@@ -271,7 +272,7 @@ const MultiselectDialog: React.FC<IMultiselectProps> = props => {
         <ThemeProvider theme={theme}>
             <DialogRoot {...props.attributes}>
                 <Header color="primary" className="webchat-header-bar">
-                    <Title>{text}</Title>
+                    <Title dangerouslySetInnerHTML={sanitizedData(text)}></Title>
                 </Header>
 
                 <Content>
@@ -296,15 +297,17 @@ const MultiselectDialog: React.FC<IMultiselectProps> = props => {
                                 onClick={handleOptionClick}
                                 key={index}
                                 tabIndex={0}
-                            >
-                                {option}
+                                dangerouslySetInnerHTML={sanitizedData(option)}>
                             </Option>
                         ))}
                     </OptionsList>
                     <ChosenOptionList>
                         {chosenOptions.map((option, index) => (
-                            <Option key={index} onClick={handleOptionClick} tabIndex={1}>
-                                {option}
+                            <Option
+                                key={index}
+                                onClick={handleOptionClick}
+                                tabIndex={1}
+                                dangerouslySetInnerHTML={sanitizedData(option)}>
                             </Option>
                         ))}
                     </ChosenOptionList>
