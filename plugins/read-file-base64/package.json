@@ -1,0 +1,27 @@
+{
+  "name": "read-file-base64",
+  "version": "1.0.0",
+  "description": "Reads the file contents in the browser, then converts it to base64 and sends the result to the flow",
+  "main": "index.jsx",
+  "scripts": {
+    "build": "parcel build --out-file dist/read-file-base64.webchat-plugin.js src/index.jsx",
+    "watch": "parcel watch --out-file dist/read-file-base64.webchat-plugin.js src/index.jsx"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "memoize-one": "^5.0.4",
+    "parcel": "1.12.3",
+    "react": "^16.8.6",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "idempotent-babel-polyfill": "^7.4.4",
+    "react-dropzone": "^10.1.7",
+    "@cognigy/webchat": "git+https://git@github.com/Cognigy/WebchatWidget.git#v2.41.1"
+  },
+  "alias": {
+    "react": "./alias/react"
+  }
+}
