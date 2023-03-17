@@ -1,0 +1,20 @@
+{
+  "name": "google-firebase-authentication",
+  "version": "1.0.0",
+  "description": "Cognigy Webchat Google Firebase Plugin",
+  "main": "build/plugin.js",
+  "scripts": {
+    "build": "parcel build --out-file google-firebase-authentication.webchat-plugin.js src/index.jsx"
+  },
+  "author": "Cognigy GmbH",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^16.8.18",
+    "parcel": "1.12.3"
+  },
+  "dependencies": {
+    "firebase": "^9.18.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
+}
