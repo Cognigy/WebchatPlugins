@@ -1,4 +1,5 @@
 # Cognigy Webchat Google Firebase Authentication Plugin
+
 This repository contains a google firebase authentication plugin for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).
 
 ![Webchat Google Firebase Authentication Plugin](./assets/google-login.png)
@@ -11,11 +12,11 @@ This repository contains a google firebase authentication plugin for the [Cognig
 4. Use that file in your Cognigy Webchat as described in the [Cognigy Docs](https://docs.cognigy.com/docs/using-additional-webchat-plugins).
 
 ## Calling the Plugin from Cognigy
+
 You can call the plugin from within Cognigy by sending a data message using a Say Node.
 You can specify following optional parameters:
 
 ```json
-{
 {
     "_plugin": {
         "type": "google-firebase-authentication",
@@ -28,7 +29,6 @@ You can specify following optional parameters:
             "appId": "1:123:web:3456"
         }
     }
-}
 }
 ```
 
