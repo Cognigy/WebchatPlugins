@@ -5,9 +5,9 @@
   "main": "build/plugin.js",
   "targets": {
     "main": {
-       "includeNodeModules": true
+      "includeNodeModules": true
     }
- },
+  },
   "scripts": {
     "build": "parcel build src/index.jsx"
   },

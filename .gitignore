@@ -2,3 +2,7 @@ node_modules
 dist
 **/.cache/*
 /**/.DS_Store
+build
+RobotJS-Sample
+.parcel-cache
+.cache

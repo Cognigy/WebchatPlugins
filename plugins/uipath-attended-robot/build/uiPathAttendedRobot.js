@@ -15746,26 +15746,28 @@ const $d8167ad463b378d6$var$processedMessages = new Set();
 const $d8167ad463b378d6$var$UiPathAttendedRobots = (props)=>{
     const { onSendMessage: onSendMessage , message: message  } = props;
     // Get local unattended robot processes
-    const getLocalProc = async ()=>{
-        const processList = await (0, $jA9qf.UiPathRobot).getProcesses();
-        if (processList.length === 0) console.log("Robot not connected or no proicesses available");
-        let sample = processList[0].name;
+    const getLocalProc = async (processList)=>{
+        processList = await (0, $jA9qf.UiPathRobot).getProcesses();
+        if (processList.length === 0) console.error("Robot not connected or no processes available");
         /*onSendMessage("it worked", {
-      processes: processList
-    });*/ return /*#__PURE__*/ $b5eacd732d171677$exports.createElement("button", {
-            type: "button",
-            onClick: ()=>onSendMessage("hi")
-        }, sample);
+       processes: processList
+     });*/ function makeButton(data) {
+            return /*#__PURE__*/ $b5eacd732d171677$exports.createElement("button", {
+                onClick: ()=>(0, $jA9qf.UiPathRobot).startJob(data.id)
+            }, "data.name");
+        }
+        return /*#__PURE__*/ $b5eacd732d171677$exports.createElement("div", null, processList.map(makeButton, undefined));
     };
-    /*// Only execute the plugin once
+    // Only execute the plugin once
+    /*
   if (!processedMessages.has(message.traceId)) {
     if (message.data?._plugin?.type === 'attended-robots') {
       processedMessages.add(message.traceId);
       getLocalProc();
     }
   }
-*/ let button = getLocalProc();
-    return button;
+*/ let processes = getLocalProc();
+    return processes;
 };
 const $d8167ad463b378d6$var$uiPathAttendedRobotsPlugin = {
     match: "attended-robots",
