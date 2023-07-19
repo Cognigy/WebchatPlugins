@@ -1,0 +1,48 @@
+{
+  "name": "sftp-file-upload",
+  "version": "1.0.0",
+  "description": "This repository contains a file upload plugin for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).",
+  "default": "src/index.jsx",
+  "scripts": {
+    "build": "parcel build src/index.jsx --dist-dir ./dist --no-cache --log-level verbose"
+  },
+  "alias": {
+    "react": "./alias/react",
+    "react/jsx-runtime": "react/jsx-runtime.js",
+    "zlib": "pako",
+    "zlib-browserify": "pako"
+  },
+  "author": "Cognigy GmbH",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "browserify-zlib": "^0.2.0",
+    "parcel": "^2.9.3",
+    "punycode": "^1.4.1",
+    "util": "^0.12.3",
+    "zlib": "^1.0.5"
+  },
+  "dependencies": {
+    "@cognigy/webchat": "git+https://git@github.com/Cognigy/WebchatWidget.git#v2.41.1",
+    "assert": "^2.0.0",
+    "crypto": "^1.0.1",
+    "crypto-browserify": "^3.12.0",
+    "events": "^3.3.0",
+    "fflate": "^0.8.0",
+    "https-browserify": "^1.0.0",
+    "idempotent-babel-polyfill": "^7.4.4",
+    "memoize-one": "^6.0.0",
+    "node-ssh": "^13.1.0",
+    "pako": "^2.1.0",
+    "path": "^0.12.7",
+    "path-browserify": "^1.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
+    "ssh2": "^1.14.0",
+    "stream": "^0.0.2",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0"
+  }
+}
