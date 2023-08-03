@@ -1,0 +1,11 @@
+{
+    "text": "",
+    "data": {
+        "_plugin": {
+            "type": "file-upload",
+            "service": "amazon-s3",
+            "uploadUrl": "<< INSERT PRESIGNED UPLOAD URL HERE >>",
+            "downloadUrl": "<< INSERT PRESIGNED DOWNLOAD URL HERE >>"
+        }
+    }
+}
