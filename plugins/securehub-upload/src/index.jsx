@@ -1,9 +1,13 @@
 import "idempotent-babel-polyfill";
 import * as React from "react";
+import { useTranslation } from 'react-i18next';
+import "./i18n";
+
 import memoize from "memoize-one";
 
 import { getStyles } from "./styles";
 import { upload } from "./helpers/upload";
+
 import { useDropzone } from "react-dropzone";
 import MessageBubble from "@cognigy/webchat/src/webchat-ui/components/presentational/MessageBubble";
 
@@ -11,15 +15,17 @@ import MessageBubble from "@cognigy/webchat/src/webchat-ui/components/presentati
 const getStylesMemo = memoize(getStyles);
 
 let pluginBusy = false;
+let isUploadError = false;
 
 const SecureHubFileUpload = props => {
 	const [isUploading, setIsUploading] = React.useState(false);
 	const [isRejected, setIsRejected] = React.useState(false);
 	const [errorMessage, setErrorMessage] = React.useState(null);
+	const { t } = useTranslation();
 
 	const { isFullscreen, onSetFullscreen, theme, message } = props;
 
-	const { openButtonLabel, sizeLimit, fileSizeLimitErrorMessage } = message.data._plugin;
+	const { sizeLimit, fileSizeLimitErrorMessage } = message.data._plugin;
 	// handles change events for the file input
 	// starts the upload
 	const onDrop = React.useCallback(async files => {
@@ -38,7 +44,7 @@ const SecureHubFileUpload = props => {
 			setIsUploading(false);
 			pluginBusy = false;
 			if (result.success) {
-				props.onSendMessage("", {
+				props.onSendMessage("File upload succeeded", {
 					file: result.url,
 					downloadUrl: result.downloadUrl,
 					_plugin: {
@@ -46,14 +52,23 @@ const SecureHubFileUpload = props => {
 						name: file.name,
 					},
 				});
-				props.onSendMessage("File upload succeeded", {});
 				setErrorMessage(null);
+				localStorage.setItem("isUploadError", "false");
 			} else {
 				setErrorMessage(result.reason);
+				setIsUploading(false);
+				isUploadError = true;
+				props.onSendMessage("", {
+					error: ("uploading file failed. Error: " +  result.reason),
+				});
 			}
 		} catch (e) {
 			console.error("uploading file failed", e);
 			setIsUploading(false);
+			isUploadError = true;
+			props.onSendMessage("", {
+				error: ("uploading file failed. Error: " +  e),
+			});
 		}
 	}, []);
 
@@ -76,15 +91,12 @@ const SecureHubFileUpload = props => {
 
 		return (
 			<button type="button" onClick={onSetFullscreen} style={openDialogButtonStyles}>
-				{openButtonLabel || "upload file"}
+				{t("fileUpload.titleText")}
 			</button>
 		);
 	}
 
 	const { attributes, onDismissFullscreen } = props;
-
-	const { titleText, dragClickLabel, dropLabel, cancelButtonLabel } =
-		message.data._plugin;
 
 	const { dialogStyles, headerStyles, contentStyles, footerStyles, cancelButtonStyles } =
 		getStylesMemo(theme);
@@ -98,35 +110,55 @@ const SecureHubFileUpload = props => {
 			}}
 		>
 			{
-				(!isUploading && !pluginBusy ? (
-					<>
-						<header style={headerStyles}>{titleText || "File Upload"}</header>
-						<main style={contentStyles} {...getRootProps()}>
-							<input {...getInputProps()} />
-							{isDragActive ? (
-								<p>{dragClickLabel || "Drop the file here"}</p>
-							) : (
-								<p>{dropLabel || "Drag a file here, or click to select one"}</p>
-							)}
-							{isRejected ? <SizeLimitError /> : null}
-							{errorMessage ? <ErrorLabel /> : null}
-						</main>
-						<footer style={footerStyles}>
-							<button
-								type="button"
-								onClick={onDismissFullscreen}
-								style={cancelButtonStyles}
-							>
-								{cancelButtonLabel || "cancel"}
-							</button>
-						</footer>
-					</>
-				) : (
-					<>
-						<header style={headerStyles}>{titleText || "File Upload"}</header>
-						<Spinner theme={theme} />
-					</>
-				))}
+
+				(
+					isUploadError ? (
+						<>
+							<header style={headerStyles}>{t("fileUpload.titleText")}</header>
+							<main style={contentStyles} {...getRootProps()}>
+								<p>{t("fileUpload.uploadError")}</p>
+								{errorMessage ? <ErrorLabel /> : null}
+							</main>
+							<footer style={footerStyles}>
+								<button
+									type="button"
+									onClick={onDismissFullscreen}
+									style={cancelButtonStyles}
+								>
+									{t("fileUpload.cancelButtonLabel")}
+								</button>
+							</footer>
+						</>
+
+					) : !isUploading && !pluginBusy ? (
+						<>
+							<header style={headerStyles}>{t("fileUpload.titleText")}</header>
+							<main style={contentStyles} {...getRootProps()}>
+								<input {...getInputProps()} />
+								{isDragActive ? (
+									<p>{t("fileUpload.dragClickLabel")}</p>
+								) : (
+									<p>{t("fileUpload.dropLabel")}</p>
+								)}
+								{isRejected ? <SizeLimitError /> : null}
+								{errorMessage ? <ErrorLabel /> : null}
+							</main>
+							<footer style={footerStyles}>
+								<button
+									type="button"
+									onClick={onDismissFullscreen}
+									style={cancelButtonStyles}
+								>
+									{t("fileUpload.cancelButtonLabel")}
+								</button>
+							</footer>
+						</>
+					) : (
+						<>
+							<header style={headerStyles}>{t("fileUpload.titleText")}</header>
+							<Spinner theme={theme} />
+						</>
+					))}
 		</div>
 	);
 };
@@ -163,42 +195,42 @@ const Spinner = ({ theme }) => {
 };
 
 const Icon = ({ theme, fileName }) => {
-    const { methodIconStyles,
-            methodIconContainertyles,
-            methodIconOuterCircleStyles,
-            methodsIconStyles } = getStylesMemo(theme);
-    return (
-        <div style={methodIconStyles}>
-            <div style={methodIconContainertyles}>              
-                <div style={methodIconOuterCircleStyles}>
-                    <div style={methodsIconStyles}>
-                        <svg 
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill= "rgb(54 118 185)"               
-                        >
-                        <path d="M0 0h24v24H0z" fill="none"/><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-            <span style={{alignSelf:'center'}}>{fileName}</span>
-        </div>
-    );
+	const { methodIconStyles,
+		methodIconContainertyles,
+		methodIconOuterCircleStyles,
+		methodsIconStyles } = getStylesMemo(theme);
+	return (
+		<div style={methodIconStyles}>
+			<div style={methodIconContainertyles}>
+				<div style={methodIconOuterCircleStyles}>
+					<div style={methodsIconStyles}>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="rgb(54 118 185)"
+						>
+							<path d="M0 0h24v24H0z" fill="none" /><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z" />
+						</svg>
+					</div>
+				</div>
+			</div>
+			<span style={{ alignSelf: 'center' }}>{fileName}</span>
+		</div>
+	);
 };
 
 const SecureHubFileUploaded = props => {
-    const data = props.message.data;
-    const { theme } = props;
-    return (
-        <MessageBubble
-            theme={props.theme}
-            align="right"
-            className="regular-message user"
-            color="primary"
-        >
-           <Icon theme={theme} fileName={data._plugin.name}/>
-        </MessageBubble>
-    );
+	const data = props.message.data;
+	const { theme } = props;
+	return (
+		<MessageBubble
+			theme={props.theme}
+			align="right"
+			className="regular-message user"
+			color="primary"
+		>
+			<Icon theme={theme} fileName={data._plugin.name} />
+		</MessageBubble>
+	);
 };
 
 const securehubFileUploadPlugin = {
@@ -207,8 +239,8 @@ const securehubFileUploadPlugin = {
 };
 
 const securehubFileUploadedPlugin = {
-    match: 'securehub-file-uploaded',
-    component: SecureHubFileUploaded,
+	match: 'securehub-file-uploaded',
+	component: SecureHubFileUploaded,
 };
 
 if (!window.cognigyWebchatMessagePlugins) {

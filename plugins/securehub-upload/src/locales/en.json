@@ -1,0 +1,9 @@
+{
+    "fileUpload": {
+      "titleText": "File Upload",
+      "dragClickLabel": "Drop the file here",
+      "dropLabel": "Drag a file here, or click to select one",
+      "cancelButtonLabel": "Cancel",
+      "uploadError": "There seems to have been a problem with the upload. Please reload the page and try again later."    }
+  }
+  

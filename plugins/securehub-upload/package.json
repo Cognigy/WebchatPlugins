@@ -19,8 +19,11 @@
     "@cognigy/webchat": "git+https://git@github.com/Cognigy/WebchatWidget.git#v2.41.1",
     "axios": "^0.24.0",
     "form-data": "^4.0.0",
+    "https": "^1.0.0",
+    "i18next": "^23.5.1",
     "idempotent-babel-polyfill": "^7.4.4",
-    "react-dropzone": "^10.1.7"
+    "react-dropzone": "^10.1.7",
+    "react-i18next": "^13.2.2"
   },
   "alias": {
     "react": "./alias/react"

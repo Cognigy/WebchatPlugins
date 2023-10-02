@@ -1,0 +1,11 @@
+{
+    "fileUpload": {
+      "titleText": "Datei hochladen",
+      "dragClickLabel": "Datei hier ablegen",
+      "dropLabel": "Ziehen Sie eine Datei hierher oder klicken Sie, um eine auszuwählen",
+      "cancelButtonLabel": "Abbrechen",
+      "uploadError": "Es scheint ein Problem beim Hochladen gegeben zu haben. Bitte laden Sie die Seite neu und versuchen Sie es später erneut."
+
+    }
+  }
+  
