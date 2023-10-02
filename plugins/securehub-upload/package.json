@@ -1,0 +1,31 @@
+{
+  "name": "securehub-file-upload",
+  "version": "1.0.0",
+  "description": "This repository contains a file upload plugin for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).",
+  "main": "index.jsx",
+  "scripts": {
+    "build": "parcel build --out-file dist/securehub-file-upload.webchat-plugin.js src/index.jsx",
+    "watch": "parcel watch --out-file dist/securehub-file-upload.webchat-plugin.js src/index.jsx"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "memoize-one": "^5.0.4",
+    "parcel": "1.12.3",
+    "react": "^16.8.6",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "@cognigy/webchat": "git+https://git@github.com/Cognigy/WebchatWidget.git#v2.41.1",
+    "axios": "^0.24.0",
+    "form-data": "^4.0.0",
+    "https": "^1.0.0",
+    "i18next": "^23.5.1",
+    "idempotent-babel-polyfill": "^7.4.4",
+    "react-dropzone": "^10.1.7",
+    "react-i18next": "^13.2.2"
+  },
+  "alias": {
+    "react": "./alias/react"
+  }
+}
