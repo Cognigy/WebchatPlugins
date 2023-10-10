@@ -1,0 +1,23 @@
+{
+  "name": "expandable",
+  "version": "1.0.0",
+  "description": "Expandable plugin for [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).",
+  "browser": "dist/expandable.webchat-plugin.js",
+  "scripts": {
+    "build": "parcel build --out-file dist/expandable.webchat-plugin.js src/index.tsx --experimental-scope-hoisting",
+    "watch": "parcel watch --out-file dist/expandable.webchat-plugin.js src/index.tsx"
+  },
+  "devDependencies": {
+    "@cognigy/webchat": "git+https://git@github.com/Cognigy/WebchatWidget.git#v2.16.0",
+    "@types/react": "^16.9.27",
+    "parcel": "^1.12.3",
+    "react": "^16.13.1",
+    "typescript": "^3.9.7"
+  },
+  "alias": {
+    "react": "./alias/react"
+  },
+  "dependencies": {
+    "registry.npmjs.org": "^1.0.1"
+  }
+}
