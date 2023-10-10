@@ -67,7 +67,6 @@ export const upload = async (config, file) => {
 		.catch(error => {
 			console.log(error)
 			return { success: false, reason: `Upload failed. Error: ${error.message}` };
-
 		});
 
 	let createDownloadLinkdata = JSON.stringify({

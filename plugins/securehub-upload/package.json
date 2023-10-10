@@ -1,6 +1,6 @@
 {
   "name": "securehub-file-upload",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This repository contains a file upload plugin for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).",
   "main": "index.jsx",
   "scripts": {
