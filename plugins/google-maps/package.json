@@ -1,20 +1,28 @@
 {
   "name": "google-maps",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Cognigy Webchat Google Maps Plugin",
   "main": "build/plugin.js",
+  "targets": {
+    "main": {
+      "includeNodeModules": true
+    }
+  },
   "scripts": {
-    "build": "parcel build --out-file google-maps.webchat-plugin.js src/index.jsx"
+    "build": "parcel build src/index.jsx"
   },
   "author": "Cognigy GmbH",
   "license": "MIT",
   "devDependencies": {
+    "@parcel/optimizer-data-url": "^2.6.2",
+    "@parcel/transformer-inline-string": "^2.6.2",
     "@types/react": "^16.8.18",
-    "parcel": "1.12.3"
+    "parcel": "^2.6.2",
+    "sharp": "^0.29.3"
   },
   "dependencies": {
-    "react": "^16.8.6",
     "google-map-react": "^1.1.4",
+    "react": "^16.8.6",
     "react-dom": "^16.8.6"
   }
 }
