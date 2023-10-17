@@ -35,7 +35,12 @@ After uploading, the plugin will send a hidden message to the bot with an URL to
     "type": "securehub-file-upload",
     "baseURL": "securehub.example.com",
     "folderName": "Name-Of-Folder",
-    "bearerToken": "Bear-Token-From-Authorization-API"
+    "bearerToken": "Bear-Token-From-Authorization-API",
+    "rejectCertificate": false,
+    "defineLinkExpiration": true,
+    "linkExpirationDate": "Date-of-Link-Expiration-In-Format-2024-01-15T11:54:34Z"
   }
 }
 ```
+
+Link expiration is only necessary if you wish to define it.

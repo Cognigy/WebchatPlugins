@@ -36,7 +36,11 @@ Nach dem Hochladen sendet das Plugin eine versteckte Nachricht mit einer URL zur
      "Typ": "securehub-file-upload",
      "baseURL": "securehub.example.com",
      "folderName": "Name-des-Ordners",
-     "bearerToken": "Bear-Token-From-Authorization-API"
+     "bearerToken": "Bear-Token-From-Authorization-API",
+     "rejectCertificate": false,
+     "defineLinkExpiration": true,
+     "linkExpirationDate": "Date-of-Link-Expiration-In-Format-2024-01-15T11:54:34Z"
    }
 }
 ```
+Der Linkablauf ist nur erforderlich, wenn Sie ihn selber festlegen möchten.

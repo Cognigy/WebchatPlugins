@@ -4,14 +4,15 @@ const https = require("https");
 
 
 export const upload = async (config, file) => {
-	const { baseUrl, bearerToken, folderName, rejectCertificate } = config;
+	const { baseUrl, bearerToken, folderName, rejectCertificate, defineLinkExpiration, linkExpirationDate } = config;
+
 
 	const agent = new https.Agent({
 		rejectUnauthorized: false,
 		requestCert: false,
 		agent: false
 	})
-	
+
 	let folderId;
 	let createFolderData = {
 		"name": folderName
@@ -27,11 +28,11 @@ export const upload = async (config, file) => {
 		},
 		data: createFolderData,
 	};
-	
-		if (rejectCertificate === false) {
-			createFolderConfig["httpsAgent"] = agent
-		}
-	
+
+	if (rejectCertificate === false) {
+		createFolderConfig["httpsAgent"] = agent
+	}
+
 	await axios.request(createFolderConfig)
 		.then((response) => {
 			folderId = response.data.id
@@ -69,9 +70,13 @@ export const upload = async (config, file) => {
 			return { success: false, reason: `Upload failed. Error: ${error.message}` };
 		});
 
-	let createDownloadLinkdata = JSON.stringify({
-		"noExpiration": false
-	});
+	let createDownloadLinkData;
+
+	if (defineLinkExpiration === true) {
+		createDownloadLinkData = JSON.stringify({ "expires": linkExpirationDate });
+	} else {
+		createDownloadLinkData = JSON.stringify({ "noExpiration": false })
+	}
 
 	let createDownloadLinkConfig = {
 		method: 'post',
@@ -81,7 +86,7 @@ export const upload = async (config, file) => {
 			'Content-Type': 'application/json',
 			'Authorization': `Bearer ${bearerToken}`,
 		},
-		data: createDownloadLinkdata,
+		data: createDownloadLinkData,
 		httpsAgent: agent
 	};
 
