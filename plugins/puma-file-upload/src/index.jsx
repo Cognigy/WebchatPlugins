@@ -1,33 +1,13 @@
 import "idempotent-babel-polyfill";
 import * as React from "react";
 import memoize from "memoize-one";
-
 import { getStyles } from "./styles";
 import { useDropzone } from "react-dropzone";
+import { upload, formatFileSize } from "./helper.ts";
 
 const getStylesMemo = memoize(getStyles);
 
 let pluginBusy = false;
-
-const upload = async (config, file) => {
-  const { uploadUrl } = config;
-
-  return fetch(uploadUrl, {
-    method: "PUT",
-    body: file,
-    headers: {
-      "x-ms-blob-type": "BlockBlob",
-      // "x-ms-tags": encodeURIComponent(file.name)
-    },
-  }).then((response) => {
-    if (response.ok) {
-      return { success: true, url: uploadUrl };
-    }
-    return { success: false, reason: `Upload failed` };
-  }).catch(error => {
-    return { success: false, reason: `Upload failed. Error: ${error.message}` };
-  });
-};
 
 const FileUpload = props => {
   const [isUploading, setIsUploading] = React.useState(false);
@@ -36,7 +16,8 @@ const FileUpload = props => {
 
   const { isFullscreen, onSetFullscreen, theme, message } = props;
 
-  const { openButtonLabel, sizeLimit, fileSizeLimitErrorMessage } = message.data._plugin;
+  const { openButtonLabel, sizeLimit, fileSizeLimitErrorMessage, otherErrorMessage } = message.data._plugin;
+
   const onDrop = React.useCallback(async files => {
     const file = files[0];
 
@@ -55,14 +36,12 @@ const FileUpload = props => {
       pluginBusy = false;
 
       if (result.success) {
-        props.onSendMessage(
-          "",
-          { uploadUrl: result.url },
-          { label: file.name }
-        );
+        const messageData = { uploadUrl: result.url, fileName: file.name, fileSize: file.size };
+        const messageLabel = { label: `"${file.name}" (${formatFileSize(file.size)})` };
+        props.onSendMessage('', messageData, messageLabel);
         setErrorMessage(null);
       } else {
-        setErrorMessage(result.reason);
+        setErrorMessage(otherErrorMessage + (result.reason || ''));
       }
     } catch (e) {
       console.error("File uplolad error", e);

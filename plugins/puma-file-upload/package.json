@@ -1,7 +1,7 @@
 {
-  "name": "file-upload",
-  "version": "1.1.0",
-  "description": "File Upload plugin customized for Puma).",
+  "name": "puma-file-upload",
+  "version": "1.0",
+  "description": "File Upload plugin customized for Puma",
   "main": "index.jsx",
   "scripts": {
     "build": "parcel build --out-file dist/puma-file-upload.webchat-plugin.js src/index.jsx",
