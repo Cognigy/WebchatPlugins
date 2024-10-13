@@ -66,7 +66,7 @@ const FileUpload = props => {
     const { openDialogButtonStyles } = getStylesMemo(theme);
 
     return (
-      <button type="button" onClick={onSetFullscreen} style={openDialogButtonStyles}>
+      <button type="button" onClick={onSetFullscreen} style={openDialogButtonStyles} class={'uploadFile'}>
         {openButtonLabel || "Upload File"}
       </button>
     );
