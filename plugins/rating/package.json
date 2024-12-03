@@ -13,7 +13,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/react": "^16.8.18",
-    "parcel": "1.12.3"
+    "parcel": "2.7.0"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.12",
