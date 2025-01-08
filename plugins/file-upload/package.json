@@ -1,6 +1,6 @@
 {
   "name": "file-upload",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "This repository contains a file upload plugin for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).",
   "main": "index.jsx",
   "scripts": {
@@ -16,10 +16,9 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
-    "axios": "^0.24.0",
+    "@cognigy/webchat": "git+https://git@github.com/Cognigy/WebchatWidget.git#v2.41.1",
     "idempotent-babel-polyfill": "^7.4.4",
-    "react-dropzone": "^10.1.7",
-    "@cognigy/webchat": "git+https://git@github.com/Cognigy/WebchatWidget.git#v2.41.1"
+    "react-dropzone": "^10.1.7"
   },
   "alias": {
     "react": "./alias/react"
