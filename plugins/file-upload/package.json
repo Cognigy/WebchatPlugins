@@ -1,6 +1,6 @@
 {
   "name": "file-upload",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "This repository contains a file upload plugin for the [Cognigy Webchat](https://github.com/Cognigy/WebchatWidget).",
   "main": "index.jsx",
   "scripts": {
