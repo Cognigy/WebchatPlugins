@@ -1,65 +1,54 @@
-import Axios from "axios";
 import FormData from "form-data";
 
 export const upload = async (config, file) => {
-	const { service } = config;
+  const { service } = config;
 
-	switch (service) {
-		case "amazon-s3": {
-			const { uploadUrl, downloadUrl } = config;
+  if (["amazon-s3", "azure"].includes(service)) {
+    const uploadUrl =
+      service === "amazon-s3"
+        ? config.uploadUrl
+        : `${config.baseURL}${config.containerName}/${file.name}${config.sasSignature}`;
+    const downloadUrl =
+      service === "amazon-s3" ? config.downloadUrl : uploadUrl;
 
-			return fetch(uploadUrl, {
-				method: "PUT",
-				body: file,
-			})
-				.then(() => {
-					return { success: true, url: downloadUrl };
-				})
-				.catch(err => {
-					return { success: false, reason: `Upload failed. Error: ${err.message}` };
-				});
-		}
-		case "azure": {
-			const { baseURL, sasSignature, containerName } = config;
-			const uploadUrl = baseURL + containerName + "/" + file.name + sasSignature;
-			const downloadUrl = uploadUrl;
+    return fetch(uploadUrl, {
+      method: "PUT",
+      body: file,
+    })
+      .then(() => ({ success: true, url: downloadUrl }))
+      .catch((err) => ({
+        success: false,
+        reason: `Upload failed. Error: ${err.message}`,
+      }));
+  } else {
+    const { inboxIdentifier, host, conversationId, contactIdentifier } = config;
+    const uploadUrl = `${host}/public/api/v1/inboxes/${inboxIdentifier}/contacts/${contactIdentifier}/conversations/${conversationId}/messages`;
+    const form = new FormData();
+    form.append("attachments[]", file);
 
-			return fetch(uploadUrl, {
-				method: "PUT",
-				body: file,
-				headers: {
-					"x-ms-blob-type": "BlockBlob",
-				},
-			})
-				.then(() => {
-					return { success: true, url: downloadUrl };
-				})
-				.catch(err => {
-					return { success: false, reason: `Upload failed. Error: ${err.message}` };
-				});
-		}
-		case "live-agent": {
-			const { inboxIdentifier, host, conversationId, contactIdentifier } = config;
-			const uploadUrl = `${host}/public/api/v1/inboxes/${inboxIdentifier}/contacts/${contactIdentifier}/conversations/${conversationId}/messages`;
-			const form = new FormData();
-			form.append("attachments[]", file);
-			form.append("content", "file successfully uploaded");
-
-			return Axios.post(uploadUrl, form, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Accept: "*/*",
-				},
-			})
-				.then(res => {
-					return { success: true, url: res.data.attachments[0].data_url };
-				})
-				.catch(err => {
-					return {
-						success: false,
-						reason: `Your file upload failed. Please verify your file is less than 40MB large and is of type jpg, jpeg, png, pdf, doc or docx.`,
-					};
-				});
-		}
-	}
+    return fetch(uploadUrl, {
+      method: "POST",
+      body: form,
+      headers: {
+        Accept: "*/*",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Failed to upload. HTTP status: ${response.status} - ${response.statusText}`
+          );
+        }
+        return response.json();
+      })
+      .then((data) => ({
+        success: true,
+        url: data.attachments[0].data_url,
+      }))
+      .catch(() => ({
+        success: false,
+        reason:
+          "File upload failed. Ensure the file is less than 40MB and of type jpg, jpeg, png, pdf, doc, or docx.",
+      }));
+  }
 };
